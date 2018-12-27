@@ -309,20 +309,32 @@ function Get( procedure )
 {
   _.assert( arguments.length === 1 );
 
+  if( _.numberIs( procedure ) )
+  {
+    let result = _.filter( _.procedure.namesMap, { id : procedure } );
+    result = _.mapVals( result );
+    if( result.length > 1 )
+    return result;
+    if( !result.length )
+    return result;
+    procedure = result[ 0 ];
+  }
+
   if( _.strIs( procedure ) )
   {
-    let result = _.procedure.namesMap[ procedure ];
-    _.assert( result instanceof Self, 'Found no procedure with name', procedure );
+    let result = _.filter( _.procedure.namesMap, { _name : procedure } );
+    result = _.mapVals( result );
+    if( result.length > 1 )
     return result;
+    if( !result.length )
+    return result;
+    procedure = result[ 0 ];
   }
 
   if( _.routineIs( procedure ) )
   {
-    // debugger;
     let result = _.filter( _.procedure.namesMap, { _routine : procedure } );
     result = _.mapVals( result );
-    // debugger;
-    // _.assert( result.length < 2, 'Found more than one ' );
     if( result.length > 1 )
     return result;
     if( !result.length )
@@ -365,7 +377,11 @@ function Begin( o )
   o._sourcePath += 1;
   o._sourcePath = _.procedure.sourcePathGet( o._sourcePath );
 
-  return new Self( o );
+  let result = new Self( o );
+
+  result.begin();
+
+  return result;
 }
 
 Begin.defaults =
