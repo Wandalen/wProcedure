@@ -523,7 +523,7 @@ let Fields =
   namesMap : Object.create( null ),
   terminating : 0,
   terminationTimer : null,
-  terminationPeriod : 2500,
+  terminationPeriod : 7500,
   terminationListInvalidated : 1,
   usingSourcePath : 1,
   counter : 0,
