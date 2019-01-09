@@ -1,6 +1,6 @@
 ( function _Procedure_s_() {
 
-'use strict'; debugger;
+'use strict';
 
 /**
   @module Tools/base/Procedure - Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures.
