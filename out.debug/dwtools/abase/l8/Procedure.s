@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wProto' );
   _.include( 'wCopyable' );
-  _.include( 'wProcedure' );
+  // _.include( 'wProcedure' );
 
 }
 
