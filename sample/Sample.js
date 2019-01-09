@@ -1,5 +1,5 @@
 
-let procedure = require( 'wProcedure' );
+let procedure = require( 'wprocedure' );
 
 /**/
 

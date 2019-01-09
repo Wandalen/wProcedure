@@ -21,6 +21,8 @@ if( typeof module !== 'undefined' )
 
 }
 
+debugger;
+
 if( _realGlobal_ !== _global_ )
 if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
 {
@@ -34,7 +36,7 @@ let _global = _global_;
 let _ = _global_.wTools;
 
 _.assert( !!_realGlobal_.wTools, 'Real global does not have wTools' );
-_.assert( _global_.wTools.procedure === undefined, 'wTools.prcedure is already defined' );
+_.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
 _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
 
 _realGlobal_.wTools.procedure = _global_.wTools.procedure = Object.create( null );
