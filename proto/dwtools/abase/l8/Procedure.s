@@ -13,17 +13,12 @@
 if( typeof module !== 'undefined' )
 {
 
-  debugger;
   let _ = require( '../../Tools.s' );
-  debugger;
 
   _.include( 'wProto' );
   _.include( 'wCopyable' );
-  // _.include( 'wProcedure' );
 
 }
-
-debugger;
 
 if( _realGlobal_ !== _global_ )
 if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
