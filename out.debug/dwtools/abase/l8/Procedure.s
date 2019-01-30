@@ -93,8 +93,6 @@ function init( o )
 
   _.assert( _.strIs( procedure._sourcePath ) );
 
-  // debugger;
-  // procedure.sourcePath( procedure._sourcePath );
   procedure._longNameMake();
 
   _.assert( _.strIs( procedure._sourcePath ) );
