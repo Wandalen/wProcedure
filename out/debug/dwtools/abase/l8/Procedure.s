@@ -11,6 +11,12 @@
  * @file Procedure.s.
  */
 
+/**
+ *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
+  @namespace "wTools.procedure"
+  @memberof module:Tools/base/Procedure
+*/
+
 if( typeof module !== 'undefined' )
 {
 
@@ -42,6 +48,12 @@ _realGlobal_.wTools.procedure = _global_.wTools.procedure = Object.create( null 
 // --
 //
 // --
+
+/**
+ * @classdesc Minimal programming interface to launch, stop and track collection of asynchronous procedures
+ * @class wProcedure
+ * @memberof module:Tools/base/Procedure
+ */
 
 let Parent = null;
 let Self = function wProcedure( o )
@@ -104,6 +116,12 @@ function init( o )
 
 //
 
+/**
+ * @summary Launches the procedure.
+ * @method begin
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
 function begin()
 {
   let procedure = this;
@@ -122,6 +140,12 @@ function begin()
 }
 
 //
+
+/**
+ * @summary Stops the procedure.
+ * @method end
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
 
 function end()
 {
@@ -149,6 +173,12 @@ function end()
 }
 
 //
+
+/**
+ * @summary Returns true if procedure is running.
+ * @method isBegun
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
 
 function isBegun()
 {
@@ -230,6 +260,15 @@ function sourcePathFirst( sourcePath )
 
 //
 
+/**
+ * @summary Getter/Setter routine for `name` property.
+ * @description
+ * Returns name of the procedure if no args provided. Sets name of procedure if provided single argument `name`.
+ * @param {String} [name] Name of the procedure.
+ * @method name
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
 function name( name )
 {
   let procedure = this;
@@ -249,6 +288,15 @@ function name( name )
 }
 
 //
+
+/**
+ * @summary Getter/Setter routine for `longName` property.
+ * @description
+ * Returns `longName` of the procedure if no args provided. Sets name of procedure if provided single argument `name`.
+ * @param {String} [longName] Full name of the procedure.
+ * @method longName
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
 
 function longName( longName )
 {
@@ -303,6 +351,22 @@ function _longNameMake()
 // static
 // --
 
+/**
+ * @summary Find procedure using id/name/routine as key.
+ * @param {Number|String|Routine} procedure Selector for procedure.
+ * @routine Get
+ * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+ /**
+ * @summary Find procedure using id/name/routine as key.
+ * @param {Number|String|Routine} procedure Selector for procedure.
+ * @routine get
+ * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
+
 function Get( procedure )
 {
   _.assert( arguments.length === 1 );
@@ -347,6 +411,22 @@ function Get( procedure )
 
 //
 
+/**
+ * @summary Find procedure using id/name/routine as key.
+ * @param {Number|String|Routine} procedure Selector for procedure.
+ * @routine GetSingleMaybe
+ * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Find procedure using id/name/routine as key.
+ * @param {Number|String|Routine} procedure Selector for procedure.
+ * @routine getSingleMaybe
+ * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
+
 function GetSingleMaybe( procedure )
 {
   _.assert( arguments.length === 1 );
@@ -357,6 +437,28 @@ function GetSingleMaybe( procedure )
 }
 
 //
+
+/**
+ * @summary Short-cut for `begin` method. Creates instance of `wProcedure` and launches the routine.
+ * @param {Object} o Options map
+ * @param {String} o._name Name of procedure.
+ * @param {Number} o._timer Timer for procedure.
+ * @param {Function} o._routine Routine to lauch.
+ * @routine Begin
+ * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Short-cut for `begin` method. Creates instance of `wProcedure` and launches the routine.
+ * @param {Object} o Options map
+ * @param {String} o._name Name of procedure.
+ * @param {Number} o._timer Timer for procedure.
+ * @param {Function} o._routine Routine to lauch.
+ * @routine begin
+ * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
 
 function Begin( o )
 {
@@ -391,6 +493,22 @@ Begin.defaults =
 
 //
 
+/**
+ * @summary Short-cut for `end` method. Selects procedure using `get` routine and stops the execution.
+ * @param {Number|String|Routine} procedure Procedure selector.
+ * @routine End
+ * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Short-cut for `end` method. Selects procedure using `get` routine and stops the execution.
+ * @param {Number|String|Routine} procedure Procedure selector.
+ * @routine end
+ * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
+
 function End( procedure )
 {
   _.assert( arguments.length === 1 );
@@ -399,6 +517,18 @@ function End( procedure )
 }
 
 //
+
+/**
+ * @summary Prints report with number of procedures that are still working.
+ * @routine TerminationReport
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Prints report with number of procedures that are still working.
+ * @routine terminationReport
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
 
 function TerminationReport()
 {
@@ -413,6 +543,18 @@ function TerminationReport()
 }
 
 //
+
+/**
+ * @summary Starts procedure of termination.
+ * @routine TerminationReport
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Starts procedure of termination.
+ * @routine terminationReport
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
 
 function TerminationBegin()
 {
@@ -456,6 +598,18 @@ function _TerminationRestart()
 }
 
 //
+
+/**
+ * @summary Increases counter of procedures and returns it value.
+ * @routine IndexAlloc
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+/**
+ * @summary Increases counter of procedures and returns it value.
+ * @routine indexAlloc
+ * @memberof module:Tools/base/Procedure.wTools.procedure
+ */
 
 function IndexAlloc()
 {
