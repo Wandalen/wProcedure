@@ -99,7 +99,7 @@ function init( o )
 {
   let procedure = this;
 
-  _.instanceInit( procedure );
+  _.workpiece.initFields( procedure );
   Object.preventExtensions( procedure );
   procedure.copy( o );
 
