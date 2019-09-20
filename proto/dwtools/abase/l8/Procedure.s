@@ -369,44 +369,58 @@ function _longNameMake()
 
 function Get( procedure )
 {
+  let Cls = this;
+
   _.assert( arguments.length === 1 );
+
+  if( _.arrayIs( procedure ) )
+  {
+    let result = procedure.map( ( p ) => Cls.Get( p ) );
+    result = _.arrayFlatten( result );
+    return result;
+  }
+
+  let result = procedure;
 
   if( _.numberIs( procedure ) )
   {
-    let result = _.filter( _.procedure.namesMap, { id : procedure } );
+    result = _.filter( _.procedure.namesMap, { id : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
     if( !result.length )
     return result;
-    procedure = result[ 0 ];
+    // procedure = result[ 0 ];
   }
 
   if( _.strIs( procedure ) )
   {
-    let result = _.filter( _.procedure.namesMap, { _name : procedure } );
+    result = _.filter( _.procedure.namesMap, { _name : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
     if( !result.length )
     return result;
-    procedure = result[ 0 ];
+    // procedure = result[ 0 ];
   }
 
   if( _.routineIs( procedure ) )
   {
-    let result = _.filter( _.procedure.namesMap, { _routine : procedure } );
+    result = _.filter( _.procedure.namesMap, { _routine : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
     if( !result.length )
     return result;
-    procedure = result[ 0 ];
+    // procedure = result[ 0 ];
   }
 
-  _.assert( procedure instanceof Self, 'Not procedure' );
+  if( _.arrayIs( result ) )
+  _.assert( result.every( ( result ) => result instanceof Self, 'Not procedure' ) );
+  else
+  _.assert( result instanceof Self, 'Not procedure' );
 
-  return procedure;
+  return result;
 }
 
 //
@@ -655,7 +669,7 @@ let Associates =
 let Statics =
 {
 
-  Get,
+  Get, /* qqq : cover static routine Get */
   GetSingleMaybe,
   Begin,
   End,
