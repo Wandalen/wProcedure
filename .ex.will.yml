@@ -23,7 +23,7 @@ about :
 path :
 
   repository : git+https:///github.com/Wandalen/wProcedure.git
-  remotes :
+  origins :
    - git+https:///github.com/Wandalen/wProcedure.git
    - npm:///wprocedure
   bugtracker : https:///github.com/Wandalen/wProcedure/issues
