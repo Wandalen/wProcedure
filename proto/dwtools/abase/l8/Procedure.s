@@ -27,12 +27,12 @@ if( typeof module !== 'undefined' )
 
 }
 
+let _global = _global_;
+let _ = _global_.wTools;
+
 if( _realGlobal_ !== _global_ )
 if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
 return ExportTo( _global_, _realGlobal_ );
-
-let _global = _global_;
-let _ = _global_.wTools;
 
 _.assert( !!_global_.wTools, 'Does not have wTools' );
 _.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
@@ -248,7 +248,7 @@ function activate( val )
     (
         procedure === _.procedure.activeProcedure
       , () => `Attempt to deactivate ${procedure._longName}`
-            + `but active procedure is ${_.procedure.activeProcedure ? _.procedure.activeProcedure._longName : _.procedure.activeProcedure}`
+            + `\nBut active procedure is ${_.procedure.activeProcedure ? _.procedure.activeProcedure._longName : _.procedure.activeProcedure}`
     );
 
     // if( procedure !== _.procedure.activeProcedure )
