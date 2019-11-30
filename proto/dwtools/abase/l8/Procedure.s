@@ -60,40 +60,11 @@ let Self = function wProcedure( o )
     return o;
   }
 
-  // if( _.strIs( o ) )
-  // o = { _name : o }
-  // else if( _.numberIs( o ) )
-  // o = { _stack : o }
-  //
-  // _.assert( arguments.length === 0 || arguments.length === 1 );
-  // _.assert( o === undefined || _.objectIs( o ) );
-  //
-  // if( o === undefined )
-  // o = Object.create( null );
-
   o = Self.OptionsFrom( ... arguments );
 
-  _.assert( o._sourcePath === undefined );
   _.assert( o._stack === undefined || _.numberIs( o._stack ) || _.strIs( o._stack ) );
 
-  // if( o._stack === undefined )
-  // o._stack = o._sourcePath;
-
-  // if( o._stack === undefined )
-  // o._stack = 1;
-  // if( _.numberIs( o._stack ) )
-  // o._stack += 1;
-  // if( _.numberIs( o._stack ) )
-  // o._stack = _.diagnosticStack([ o._stack, Infinity ]);
-  // _.assert( _.strIs( o._stack ) );
-
   o._stack = _.procedure.stack( o._stack, 1 );
-
-  // if( o._sourcePath === undefined )
-  // o._sourcePath = 1;
-  // if( _.numberIs( o._sourcePath ) )
-  // o._sourcePath += 1;
-  // o._sourcePath = _.procedure.sourcePathGet( o._sourcePath );
 
   let args = [ o ];
 
@@ -116,7 +87,6 @@ function init( o )
   Object.preventExtensions( procedure );
   procedure.copy( o );
 
-  // _.assert( _.strIs( procedure._sourcePath ) );
   _.assert( _.strIs( procedure._stack ) );
   _.assert( procedure._sourcePath === null );
 
@@ -126,9 +96,23 @@ function init( o )
 
   _.assert( _.strIs( procedure._sourcePath ) );
   _.assert( arguments.length === 1 );
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure );
+  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
   return procedure;
+}
+
+//
+
+function finit()
+{
+  let procedure = this;
+
+  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
+  _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
+
+  delete _.procedure.namesMap[ procedure._longName ];
+
+  return _.Copyable.prototype.finit.call( procedure );
 }
 
 //
@@ -136,7 +120,7 @@ function init( o )
 function isAlive()
 {
   let procedure = this;
-  return procedure.id > 0;
+  return procedure._timer !== null;
 }
 
 //
@@ -155,14 +139,14 @@ function begin()
 
   if( procedure._timer === null )
   if( procedure._object === 'entry' )
-  procedure._timer = 'entry';
+  procedure._timer = false;
   else
   procedure._timer = _.time._begin( Infinity );
 
   if( !procedure._longName )
   procedure._longNameMake();
 
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure );
+  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
   return procedure;
 }
@@ -181,17 +165,12 @@ function end()
 
   _.assert( arguments.length === 0 );
   _.assert( procedure._timer !== null, `${procedure._longName} is not alive` );
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => 'Procedure ' + _.strQuote( o._longName ) + ' not found' );
-
-  // if( procedure.isActive() )
-  // procedure.activate( 0 );
-
-  delete _.procedure.namesMap[ procedure._longName ];
 
   if( procedure._timer )
   _.time._cancel( procedure._timer );
   procedure._timer = null;
-  procedure.id = 0;
+
+  procedure.finit();
 
   if( _.procedure.terminating )
   {
@@ -204,10 +183,18 @@ function end()
 
 //
 
-function isActive()
+function isTopMost()
 {
   let procedure = this;
   return procedure === _.procedure.activeProcedure;
+}
+
+//
+
+function isActivated()
+{
+  let procedure = this;
+  return _.longHas( _.procedure.activeProcedures, procedure );
 }
 
 //
@@ -220,26 +207,21 @@ function activate( val )
   val = true;
   val = !!val;
 
-  // logger.log( `${procedure._longName} ${val ? 'activated' : 'deactivated'}` );
-  // if( procedure.id === 4 )
-  // debugger;
+  _.assert( !procedure.finitedIs() );
 
   if( val )
   {
-    // _.assert
-    // (
-    //     procedure !== _.procedure.activeProcedure
-    //   , () => `${procedure._longName} is already active`
-    // );
 
-    if( procedure === procedure.activeProcedure )
-    return procedure;
+    _.assert
+    (
+        procedure !== _.procedure.activeProcedure
+      , () => `${procedure._longName} is already active`
+    );
+
+    // if( procedure === procedure.activeProcedure )
+    // return procedure;
 
     _.procedure.activeProcedures.push( procedure );
-
-    // if( _.procedure.activeProcedure )
-    // _.procedure.activeProcedure.activate( false );
-
     _.procedure.activeProcedure = procedure;
   }
   else
@@ -482,18 +464,17 @@ function longName( longName )
 
   _.assert( arguments.length === 1 );
   _.assert( _.strDefined( longName ) );
+  _.assert( procedure.id > 0 );
 
   if( procedure._longName )
   {
-    _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => 'Procedure ' + _.strQuote( procedure._longName ) + ' not found' );
+    _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
     delete _.procedure.namesMap[ procedure._longName ];
     procedure._longName = null;
   }
 
-  if( procedure.id === 0 )
-  procedure.id = procedure._IdAlloc();
-
   procedure._longName = longName;
+  _.assert( _.procedure.namesMap[ procedure._longName ] === undefined, () => `${procedure._longName} already exist` );
   _.procedure.namesMap[ procedure._longName ] = procedure;
 
   return procedure;
@@ -505,19 +486,20 @@ function _longNameMake()
 {
   let procedure = this;
 
-  if( procedure.id === 0 )
-  procedure.id = procedure._IdAlloc();
-
   let name = procedure._name || '';
   let sourcePath = procedure._sourcePath;
 
   _.assert( arguments.length === 0 );
   _.assert( _.strIs( name ) );
-  _.assert( procedure.id > 0 );
 
-  let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? ( sourcePath + ' - ' ) : '' );
+  if( procedure.id === 0 )
+  procedure.id = procedure._IdAlloc();
+
+  let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? ( sourcePath + '' ) : '' );
 
   procedure.longName( result );
+
+  _.assert( procedure.id > 0 );
 
   return result;
 }
@@ -679,26 +661,6 @@ function From( o )
 
 function Begin( o )
 {
-
-  // if( _.strIs( o ) )
-  // o = { _name : o }
-  //
-  // _.assert( o === undefined || _.objectIs( o ) );
-  // _.assert( arguments.length === 0 || arguments.length === 1 );
-  //
-  // if( o === undefined )
-  // o = Object.create( null );
-  //
-  // o._stack = _.procedure.stack( o._stack, 1 );
-  //
-  // // if( o._sourcePath === undefined || o._sourcePath === null )
-  // // o._sourcePath = 1;
-  // // if( _.numberIs( o._sourcePath ) )
-  // // o._sourcePath += 1;
-  // // o._sourcePath = _.procedure.sourcePathGet( o._sourcePath );
-  //
-  // let result = new Self( o );
-
   let result = Self.From( ... arguments );
   result.begin();
   return result;
@@ -756,10 +718,12 @@ function TerminationReport()
   for( let p in _.procedure.namesMap )
   {
     let procedure = _.procedure.namesMap[ p ];
+    if( procedure._object === 'entry' )
+    continue;
     logger.log( procedure._longName );
   }
   _.procedure.terminationListInvalidated = 0;
-  logger.log( 'Waiting for ' + Object.keys( _.procedure.namesMap ).length + ' procedure(s) ... ' );
+  logger.log( 'Waiting for ' + ( Object.keys( _.procedure.namesMap ).length-1 ) + ' procedure(s) ... ' );
 }
 
 //
@@ -794,6 +758,7 @@ function _TerminationIteration()
 {
   _.assert( arguments.length === 1 );
   _.assert( _.procedure.terminating === 1 );
+
   _.procedure.terminationTimer = null;
   _.Procedure.TerminationReport();
   _.Procedure._TerminationRestart();
@@ -811,13 +776,15 @@ function _TerminationRestart()
 
   if( Object.keys( _.procedure.namesMap ).length-1 > 0 )
   {
-    // _.Procedure.TerminationReport();
     _.procedure.terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.procedure._terminationIteration );
   }
   else
   {
     if( _.procedure.entryProcedure && _.procedure.entryProcedure.isAlive() )
-    _.procedure.entryProcedure.end();
+    {
+      _.procedure.entryProcedure.activate( 0 );
+      _.procedure.entryProcedure.end();
+    }
   }
 
 }
@@ -838,40 +805,22 @@ function _TerminationRestart()
 
 function _IdAlloc()
 {
-  let procedure = this;
+
   _.assert( arguments.length === 0 );
   _.procedure.counter += 1;
   let result = _.procedure.counter;
 
-  // if( result === 4 )
+  // if( result === 35 )
   // debugger;
 
   return result;
 }
-
-// //
-//
-// function SourcePathGet( sourcePath )
-// {
-//   if( !Config.debug || !_.procedure.usingSourcePath )
-//   return '';
-//
-//   if( _.numberIs( sourcePath ) )
-//   sourcePath = _.diagnosticStack([ sourcePath, sourcePath+1 ]).trim();
-//
-//   _.assert( arguments.length === 1 );
-//   _.assert( _.strDefined( sourcePath ), () => 'Expects source path of procedure, but got ' + _.strType( sourcePath ) );
-//
-//   return sourcePath;
-// }
 
 //
 
 function WithObject( timer )
 {
   let result = _.filter( _.procedure.namesMap, { _object : timer } );
-  if( _.mapVals( result )[ 0 ] )
-  debugger;
   return _.mapVals( result )[ 0 ];
 }
 
@@ -927,11 +876,17 @@ function timeBegin( delay, procedure, onEnd )
   if( onEnd === undefined && !_.procedureIs( procedure ) )
   {
     onEnd = arguments[ 1 ];
-    procedure = 2;
+    procedure = 1;
   }
   if( procedure === undefined || procedure === null )
-  procedure = 2;
+  procedure = 1;
   procedure = _.Procedure( procedure );
+  let wasAlive = procedure.isAlive();
+  if( !wasAlive )
+  {
+    procedure._timer = false;
+    procedure.begin();
+  }
   let timer = _.time._begin( delay, onEnd2 );
   procedure.object( timer );
   return timer;
@@ -946,25 +901,31 @@ function timeBegin( delay, procedure, onEnd )
     }
     finally
     {
+      if( !procedure.isAlive() )
+      {
+        _.assert( procedure.finitedIs() );
+        return;
+      }
       procedure.activate( false );
+      _.assert( !procedure.isActivated() );
+      if( !wasAlive )
+      procedure.end();
     }
   }
 
 }
 
-// timeBegin.which = 'Procedure';
-
 //
 
 function timeCancel( timer )
 {
-  debugger;
   let procedure = _.Procedure.WithObject( timer );
   let result = _.time._cancel( ... arguments );
   if( procedure )
-  debugger;
-  if( procedure )
-  procedure.activate( 0 );
+  {
+    if( !procedure.isActivated() )
+    procedure.end();
+  }
   return result;
 }
 
@@ -1006,14 +967,18 @@ let Composes =
 
 let Associates =
 {
-  id : 0,
   _name : null,
   _stack : null,
-  _sourcePath : null,
   _stackExplicit : 0,
+  _object : null,
+}
+
+let Restricts =
+{
+  id : 0,
+  _sourcePath : null,
   _longName : null,
   _timer : null,
-  _object : null,
   _waitTime : Infinity,
   _routine : null,
 }
@@ -1095,12 +1060,14 @@ let ExtendClass =
   // inter
 
   init,
+  finit,
 
   isAlive,
   begin,
   end,
 
-  isActive,
+  isTopMost,
+  isActivated,
   activate,
   Activate,
 
@@ -1118,6 +1085,7 @@ let ExtendClass =
 
   Composes,
   Associates,
+  Restricts,
   Statics,
   Forbids,
 
