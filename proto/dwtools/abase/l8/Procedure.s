@@ -776,7 +776,7 @@ function _TerminationRestart()
 
   if( Object.keys( _.procedure.namesMap ).length-1 > 0 )
   {
-    _.procedure.terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.procedure._terminationIteration );
+    _.procedure.terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.Procedure._TerminationIteration );
   }
   else
   {
@@ -1007,38 +1007,6 @@ let Statics =
 
 }
 
-let Fields =
-{
-  namesMap : Object.create( null ),
-  terminating : 0,
-  terminationTimer : null,
-  terminationPeriod : 7500,
-  terminationListInvalidated : 1,
-  usingSourcePath : 1,
-  counter : 0,
-  activeProcedure : null,
-  activeProcedures : [],
-  entryProcedure : null,
-}
-
-let Routines =
-{
-
-  get : Get,
-  getSingleMaybe : GetSingleMaybe,
-  from : From,
-  begin : Begin,
-  end : End,
-  activate : Activate,
-  stack : Stack,
-
-  terminationReport : TerminationReport,
-  terminationBegin : TerminationBegin,
-  _terminationIteration : _TerminationIteration,
-  _terminationRestart : _TerminationRestart,
-
-}
-
 let Forbids =
 {
   namesMap : 'namesMap',
@@ -1051,7 +1019,7 @@ let Forbids =
 }
 
 // --
-// declare
+// define class
 // --
 
 let ExtendClass =
@@ -1102,8 +1070,66 @@ _.classDeclare
 
 _.Copyable.mixin( Self );
 
+// --
+// define namspeces
+// --
+
+let Fields =
+{
+  namesMap : Object.create( null ),
+  terminating : 0,
+  terminationTimer : null,
+  terminationPeriod : 7500,
+  terminationListInvalidated : 1,
+  usingSourcePath : 1,
+  counter : 0,
+  activeProcedure : null,
+  activeProcedures : [],
+  entryProcedure : null,
+}
+
+let Routines =
+{
+
+  get : Get,
+  getSingleMaybe : GetSingleMaybe,
+  from : From,
+  begin : Begin,
+  end : End,
+  activate : Activate,
+  stack : Stack,
+
+  terminationReport : TerminationReport,
+  terminationBegin : TerminationBegin,
+
+}
+
+// _.assert( _.routineIs( _.accessor.define.getter.alias ) );
+// debugger;
+// let alias = ( originalName ) => _.accessor.define.getter.alias({ originalName, container : Self });
+// let Routines =
+// {
+//
+//   get : alias( 'Get' ),
+//   getSingleMaybe : alias( 'GetSingleMaybe' ),
+//   from : alias( 'From' ),
+//   begin : alias( 'Begin' ),
+//   end : alias( 'End' ),
+//   activate : alias( 'Activate' ),
+//   stack : alias( 'Stack' ),
+//   terminationReport : alias( 'TerminationReport' ),
+//   terminationBegin : alias( 'TerminationBegin' ),
+//
+//   Procedure : Self,
+//
+// }
+//
+// debugger;
+// _.proto.extend( _.procedure, Routines );
+
 Object.assign( _.procedure, Routines );
 Object.assign( _.procedure, Fields );
+
 Object.assign( _, ToolsExtension );
 Object.assign( _.time, TimeExtension );
 

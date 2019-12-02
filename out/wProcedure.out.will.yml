@@ -164,6 +164,7 @@ module:
           - ../proto/dwtools/abase/l8
           - ../proto/dwtools/abase/l8/Procedure.s
           - ../proto/dwtools/abase/l8.test
+          - ../proto/dwtools/abase/l8.test/Procedure.test.s
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
     submodule:
