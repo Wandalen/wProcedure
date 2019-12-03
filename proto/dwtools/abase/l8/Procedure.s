@@ -25,6 +25,14 @@ if( typeof module !== 'undefined' )
   _.include( 'wProto' );
   _.include( 'wCopyable' );
 
+  try
+  {
+    _.include( 'wAppBasic' );
+  }
+  catch( err )
+  {
+  }
+
 }
 
 let _global = _global_;
@@ -753,6 +761,10 @@ function TerminationReport()
 
 function TerminationBegin()
 {
+
+  if( _.procedure.terminating )
+  return;
+
   _.routineOptions( TerminationBegin, arguments );
   _.procedure.terminating = 1;
   _.procedure.terminationListInvalidated = 1;
@@ -844,6 +856,33 @@ function _TerminationEnd()
       logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
     }
   });
+
+}
+
+//
+
+function _OnProcessExit()
+{
+  debugger;
+  _.Procedure.TerminationBegin();
+  debugger;
+}
+
+//
+
+function _Setup()
+{
+  _.assert( _.strIs( _.setup._entryProcedureStack ) );
+
+  if( !_.procedure.entryProcedure )
+  _.procedure.entryProcedure = _.procedure.begin({ _stack : _.setup._entryProcedureStack, _object : 'entry' });
+
+  _.assert( _.procedure.activeProcedures.length === 0 );
+
+  _.procedure.entryProcedure.activate( true );
+
+  if( _.process && _.process.exitHandlerOnce )
+  _.process.exitHandlerOnce( _.Procedure._OnProcessExit );
 
 }
 
@@ -1045,22 +1084,6 @@ function timeCancel( timer )
 }
 
 // --
-// meta
-// --
-
-function _Setup()
-{
-  _.assert( _.strIs( _.setup._entryProcedureStack ) );
-
-  if( !_.procedure.entryProcedure )
-  _.procedure.entryProcedure = _.procedure.begin({ _stack : _.setup._entryProcedureStack, _object : 'entry' });
-
-  _.assert( _.procedure.activeProcedures.length === 0 );
-
-  _.procedure.entryProcedure.activate( true );
-}
-
-// --
 // relations
 // --
 
@@ -1120,6 +1143,8 @@ let Statics =
   _TerminationIteration,
   _TerminationRestart,
   _TerminationEnd,
+  _OnProcessExit,
+  _Setup,
 
   _IdAlloc,
   WithObject,
