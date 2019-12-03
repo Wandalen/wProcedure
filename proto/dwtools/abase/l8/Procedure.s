@@ -98,6 +98,9 @@ function init( o )
   _.assert( arguments.length === 1 );
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
+  // if( procedure.id === 142 )
+  // debugger;
+
   return procedure;
 }
 
@@ -106,6 +109,9 @@ function init( o )
 function finit()
 {
   let procedure = this;
+
+  // if( procedure.id === 142 )
+  // debugger;
 
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
@@ -207,7 +213,12 @@ function activate( val )
   val = true;
   val = !!val;
 
-  _.assert( !procedure.finitedIs() );
+  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
+
+  // if( procedure.id === 142 )
+  // debugger;
+
+  _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
   if( val )
   {
@@ -745,6 +756,19 @@ function TerminationBegin()
   _.routineOptions( TerminationBegin, arguments );
   _.procedure.terminating = 1;
   _.procedure.terminationListInvalidated = 1;
+
+  _.procedure._onTerminationBegin.forEach( ( callback ) =>
+  {
+    try
+    {
+      callback();
+    }
+    catch( err )
+    {
+      logger.error( _.errOnce( 'Error in callback of event "terminationBegin"\n', err ) );
+    }
+  });
+
   _.Procedure._TerminationRestart();
 }
 
@@ -761,7 +785,9 @@ function _TerminationIteration()
 
   _.procedure.terminationTimer = null;
   _.Procedure.TerminationReport();
+
   _.Procedure._TerminationRestart();
+
 }
 
 //
@@ -769,7 +795,13 @@ function _TerminationIteration()
 function _TerminationRestart()
 {
   _.assert( arguments.length === 0 );
-  _.assert( _.procedure.terminating === 1 );
+  _.assert( _.procedure.terminating >= 1 );
+
+  if( _.procedure.terminating === 2 )
+  {
+    return;
+  }
+
   if( _.procedure.terminationTimer )
   _.time._cancel( _.procedure.terminationTimer );
   _.procedure.terminationTimer = null;
@@ -780,12 +812,38 @@ function _TerminationRestart()
   }
   else
   {
-    if( _.procedure.entryProcedure && _.procedure.entryProcedure.isAlive() )
-    {
-      _.procedure.entryProcedure.activate( 0 );
-      _.procedure.entryProcedure.end();
-    }
+    _.Procedure._TerminationEnd();
   }
+
+}
+
+//
+
+function _TerminationEnd()
+{
+  _.assert( arguments.length === 0 );
+  _.assert( _.procedure.terminating === 1 );
+  _.assert( _.procedure.terminationTimer === null );
+
+  _.procedure.terminating = 2;
+
+  if( _.procedure.entryProcedure && _.procedure.entryProcedure.isAlive() )
+  {
+    _.procedure.entryProcedure.activate( 0 );
+    _.procedure.entryProcedure.end();
+  }
+
+  _.procedure._onTerminationEnd.forEach( ( callback ) =>
+  {
+    try
+    {
+      callback();
+    }
+    catch( err )
+    {
+      logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
+    }
+  });
 
 }
 
@@ -853,8 +911,65 @@ function Stack( stack, delta )
   return stack;
 }
 
-// --
 //
+
+function On( o )
+{
+
+  if( arguments.length === 2 )
+  o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
+
+  _.assertMapHasOnly( o.callbackMap, _.Procedure.KnownEvents );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( o.callbackMap.terminationBegin )
+  _.arrayAppend( _.procedure._onTerminationBegin, o.callbackMap.terminationBegin );
+  if( o.callbackMap.terminationEnd )
+  _.arrayAppend( _.procedure._onTerminationEnd, o.callbackMap.terminationEnd );
+
+  return this;
+}
+
+On.defaults =
+{
+  callbackMap : null,
+}
+
+//
+
+function Off( o )
+{
+
+  if( arguments.length === 2 )
+  o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
+  if( _.strIs( arguments[ 0 ] ) )
+  o = { callbackMap : { [ arguments[ 0 ] ] : null } }
+
+  _.assertMapHasOnly( o.callbackMap, _.Procedure.KnownEvents );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( o.callbackMap.terminationBegin !== undefined )
+  if( o.callbackMap.terminationBegin === null )
+  _.arrayEmpty( _.procedure._onTerminationBegin );
+  else
+  _.arrayRemoveOnceStrictly( _.procedure._onTerminationBegin, o.callbackMap.terminationBegin );
+
+  if( o.callbackMap.terminationEnd !== undefined )
+  if( o.callbackMap.terminationEnd === null )
+  _.arrayEmpty( _.procedure._onTerminationBegin );
+  else
+  _.arrayRemoveOnceStrictly( _.procedure._onTerminationBegin, o.callbackMap.terminationEnd );
+
+  return this;
+}
+
+Off.defaults =
+{
+  callbackMap : null,
+}
+
+// --
+// meta
 // --
 
 function ExportTo( dstGlobal, srcGlobal )
@@ -949,6 +1064,12 @@ function _Setup()
 // relations
 // --
 
+var KnownEvents =
+{
+  terminationBegin : null,
+  terminationEnd : null,
+}
+
 let ToolsExtension =
 {
   [ Self.shortName ] : Self,
@@ -986,7 +1107,7 @@ let Restricts =
 let Statics =
 {
 
-  Get, /* xxx qqq : cover static routine Get */
+  Get, /* xxx : check. cover static routine Get */
   GetSingleMaybe,
   OptionsFrom,
   From,
@@ -998,10 +1119,15 @@ let Statics =
   TerminationBegin,
   _TerminationIteration,
   _TerminationRestart,
+  _TerminationEnd,
 
   _IdAlloc,
   WithObject,
   Stack,
+  On,
+  Off,
+
+  KnownEvents,
   ToolsExtension,
   TimeExtension,
 
@@ -1086,6 +1212,9 @@ let Fields =
   activeProcedure : null,
   activeProcedures : [],
   entryProcedure : null,
+  _onTerminationBegin : [],
+  _onTerminationEnd : [],
+  // terminationEndConsequence : new _.Consequence({ _procedure : false }),
 }
 
 let Routines =

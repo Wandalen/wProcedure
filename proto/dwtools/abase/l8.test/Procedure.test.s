@@ -439,6 +439,81 @@ timeCancelAfter.description =
 - time cancel after time out leave no zombie
 `
 
+//
+
+function terminationEndEvent( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  logger.log( _.strLinesNumber( programSourceCode ) );
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 4 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 1 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationBegin' ), 1 );
+    test.identical( _.strCount( op.output, 'timer' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationEnd' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin(.|\n|\r)*timer(.|\n|\r)*terminationEnd(.|\n|\r)*/mg ), 1 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wConsequence' );
+    _.include( 'wProcedure' );
+
+    let t = 5000;
+
+    let timer = _.time.begin( t*1, () =>
+    {
+      console.log( 'timer' );
+    });
+
+    console.log( 'v1' );
+
+    _.Procedure.On( 'terminationBegin', () =>
+    {
+      console.log( 'terminationBegin' );
+    });
+
+    _.Procedure.On( 'terminationEnd', () =>
+    {
+      console.log( 'terminationEnd' );
+    });
+
+    _.procedure.terminationPeriod = 1000;
+    _.procedure.terminationBegin();
+
+  }
+
+}
+
+terminationEndEvent.timeOut = 60000;
+terminationEndEvent.description =
+`
+- terminationEndEvent works
+`
+
 // --
 // declare
 // --
@@ -463,12 +538,16 @@ var Self =
 
   tests :
   {
+
     timeLimit,
     timeLimitWaitingEnough,
     timeLimitWaitingNotEnough,
     timeBegin,
     timeCancelBefore,
     timeCancelAfter,
+
+    terminationEndEvent,
+
   },
 
 };
