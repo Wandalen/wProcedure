@@ -52,7 +52,7 @@ function timeLimit( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -103,7 +103,7 @@ function timeLimitWaitingEnough( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -179,7 +179,7 @@ function timeLimitWaitingNotEnough( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -255,7 +255,7 @@ function timeBegin( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -317,7 +317,7 @@ function timeCancelBefore( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -382,7 +382,7 @@ function timeCancelAfter( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -517,7 +517,7 @@ function terminationEventsExplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -593,7 +593,7 @@ function terminationEventsImplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -662,6 +662,93 @@ terminationEventsImplicitTermination.description =
 - callback of event terminationEnd get called once
 `
 
+//
+
+//
+
+function terminationEventsImplicitTerminationWithConsequence( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  logger.log( _.strLinesNumber( programSourceCode ) );
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 0 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, 'timer' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+    test.identical( _.strCount( op.output, 'got:terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*timer(.|\n|\r)*terminationBegin1(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wConsequence' );
+    _.include( 'wProcedure' );
+
+    var con = new _.Consequence();
+    
+    var result = null;
+    con.thenGive( ( r ) => 
+    { 
+      result = r;
+      console.log( 'got:', r )
+    })
+
+    console.log( 'v1' );
+
+    _.Procedure.On( 'terminationBegin', () =>
+    {
+      console.log( 'terminationBegin1' );
+      con.take( 'terminationBegin1' )
+    });
+
+    _.Procedure.On( 'terminationEnd', () =>
+    {
+      console.log( 'terminationEnd1' );
+    });
+    
+    _.time.out( 5000, () => 
+    {
+      if( !result )
+      throw _.err( 'terminationBegin not executed automaticaly' );
+      return null;
+    })
+
+  }
+
+}
+
+terminationEventsImplicitTerminationWithConsequence.timeOut = 60000;
+terminationEventsImplicitTerminationWithConsequence.description =
+`
+- callback of event terminationBegin get called once
+- callback of event terminationEnd get called once
+- callback of consequence get resource
+`
+
 // --
 // declare
 // --
@@ -698,6 +785,7 @@ var Self =
 
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
+    terminationEventsImplicitTerminationWithConsequence
 
   },
 
