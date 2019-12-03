@@ -441,6 +441,77 @@ timeCancelAfter.description =
 
 //
 
+function timeOutBug( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../Layer2.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  logger.log( _.strLinesNumber( programSourceCode ) );
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
+    test.identical( _.strCount( op.output, 'xxx' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    _.include( 'wConsequence' );
+    var t = 100;
+
+    _global_.debugger = true;
+    // debugger;
+    var con1 = _.time.out( t*2, () => 1 );
+    // debugger;
+
+    console.log( 'v1' )
+    return _.time.out( t, function()
+    {
+      console.log( 'v2' )
+      con1.take( 2 );
+      con1.give( ( err, got ) =>
+      {
+        console.log( 'v3' )
+      });
+      con1.give( ( err, got ) =>
+      {
+        console.log( 'v4' )
+      });
+    })
+
+    return _.time.out( t*5 );
+  }
+
+
+}
+
+timeOutBug.timeOut = 60000;
+timeOutBug.description =
+`
+- xxx
+`
+
+//
+
 function terminationEventsExplicitTermination( test )
 {
   let context = this;
@@ -622,6 +693,8 @@ var Self =
     timeBegin,
     timeCancelBefore,
     timeCancelAfter,
+
+    timeOutBug,
 
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,

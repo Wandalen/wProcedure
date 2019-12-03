@@ -106,8 +106,9 @@ function init( o )
   _.assert( arguments.length === 1 );
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
-  // if( procedure.id === 142 )
-  // debugger;
+  if( _global_.debugger )
+  if( procedure.id === 2 )
+  debugger;
 
   return procedure;
 }
@@ -118,8 +119,9 @@ function finit()
 {
   let procedure = this;
 
-  // if( procedure.id === 142 )
-  // debugger;
+  if( _global_.debugger )
+  if( procedure.id === 2 )
+  debugger;
 
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
@@ -221,10 +223,11 @@ function activate( val )
   val = true;
   val = !!val;
 
-  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
+  console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
 
-  // if( procedure.id === 142 )
-  // debugger;
+  if( _global_.debugger )
+  if( procedure.id === 2 )
+  debugger;
 
   _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
@@ -237,9 +240,6 @@ function activate( val )
       , () => `${procedure._longName} is already active`
     );
 
-    // if( procedure === procedure.activeProcedure )
-    // return procedure;
-
     _.procedure.activeProcedures.push( procedure );
     _.procedure.activeProcedure = procedure;
   }
@@ -251,9 +251,6 @@ function activate( val )
       , () => `Attempt to deactivate ${procedure._longName}`
             + `\nBut active procedure is ${_.procedure.activeProcedure ? _.procedure.activeProcedure._longName : _.procedure.activeProcedure}`
     );
-
-    // if( procedure !== _.procedure.activeProcedure )
-    // return procedure;
 
     _.procedure.activeProcedures.pop();
     _.procedure.activeProcedure = _.procedure.activeProcedures[ _.procedure.activeProcedures.length-1 ] || null;
