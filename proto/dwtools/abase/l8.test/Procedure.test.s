@@ -120,11 +120,11 @@ program();
   {
     test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-    test.identical( _.strCount( op.output, 'Waiting for 7 procedure(s)' ), 1 );
-    test.identical( _.strCount( op.output, 'procedure::' ), 7 );
+    test.identical( _.strCount( op.output, 'Waiting for 8 procedure(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 8 );
     test.identical( _.strCount( op.output, 'Program.js:19' ), 0 );
     test.identical( _.strCount( op.output, 'Program.js:13' ), 6 );
-    test.identical( _.strCount( op.output, 'Program.js:16' ), 1 );
+    test.identical( _.strCount( op.output, 'Program.js:16' ), 2 );
     test.identical( _.strCount( op.output, /v0(.|\n|\r)*v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4/mg ), 1 );
     return null;
   });
@@ -196,9 +196,9 @@ program();
   {
     test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
-    test.identical( _.strCount( op.output, 'Waiting for 2 procedure(s)' ), 1 );
-    test.identical( _.strCount( op.output, 'procedure::' ), 2 );
-    test.identical( _.strCount( op.output, 'Program.js:17' ), 1 );
+    test.identical( _.strCount( op.output, 'Waiting for 3 procedure(s)' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 3 );
+    test.identical( _.strCount( op.output, 'Program.js:17' ), 2 );
     test.identical( _.strCount( op.output, 'Program.js:14' ), 1 );
     test.identical( _.strCount( op.output, /v0(.|\n|\r)*v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4/mg ), 1 );
     return null;
@@ -441,7 +441,7 @@ timeCancelAfter.description =
 
 //
 
-function timeOutBug( test )
+function timeOutExternalMessage( test )
 {
   let context = this;
   let visited = [];
@@ -463,7 +463,17 @@ program();
   {
     test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
-    test.identical( _.strCount( op.output, 'xxx' ), 1 );
+
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'v2' ), 1 );
+    test.identical( _.strCount( op.output, 'v3' ), 1 );
+    test.identical( _.strCount( op.output, 'v4' ), 1 );
+    test.identical( _.strCount( op.output, 'v5' ), 0 );
+    test.identical( _.strCount( op.output, 'argumentsCount 0' ), 1 );
+    test.identical( _.strCount( op.output, 'errorsCount 0' ), 1 );
+    test.identical( _.strCount( op.output, 'competitorsCount 1' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*v2(.|\n|\r)*v3(.|\n|\r)*v4(.|\n|\r)*/mg ), 1 );
+
     return null;
   });
 
@@ -478,36 +488,44 @@ program();
     _.include( 'wConsequence' );
     var t = 100;
 
-    _global_.debugger = true;
-    // debugger;
     var con1 = _.time.out( t*2, () => 1 );
-    // debugger;
 
-    console.log( 'v1' )
-    return _.time.out( t, function()
+    console.log( 'v1' );
+    _.time.out( t, function()
     {
-      console.log( 'v2' )
+      console.log( 'v2' );
       con1.take( 2 );
       con1.give( ( err, got ) =>
       {
-        console.log( 'v3' )
+        console.log( 'v3' );
       });
       con1.give( ( err, got ) =>
       {
-        console.log( 'v4' )
+        console.log( 'v4' );
+      });
+      con1.give( ( err, got ) =>
+      {
+        console.log( 'v5' );
       });
     })
 
-    return _.time.out( t*5 );
+    return _.time.out( t*5 ).then( () =>
+    {
+      console.log( 'v6' );
+      console.log( 'argumentsCount', con1.argumentsCount() );
+      console.log( 'errorsCount', con1.errorsCount() );
+      console.log( 'competitorsCount', con1.competitorsCount() );
+      con1.cancel();
+      return null;
+    });
   }
-
 
 }
 
-timeOutBug.timeOut = 60000;
-timeOutBug.description =
+timeOutExternalMessage.timeOut = 60000;
+timeOutExternalMessage.description =
 `
-- xxx
+- consequence of time out can get a message from outside of time out routine
 `
 
 //
@@ -533,7 +551,7 @@ program();
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'Waiting for' ), 4 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
     test.identical( _.strCount( op.output, 'procedure::' ), 1 );
     test.identical( _.strCount( op.output, 'v1' ), 1 );
     test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
@@ -553,7 +571,7 @@ program();
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    let t = 5000;
+    let t = 1500;
 
     let timer = _.time.begin( t*1, () =>
     {
@@ -629,7 +647,7 @@ program();
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    let t = 5000;
+    let t = 100;
 
     let timer = _.time.begin( t*1, () =>
     {
@@ -664,9 +682,7 @@ terminationEventsImplicitTermination.description =
 
 //
 
-//
-
-function terminationEventsImplicitTerminationWithConsequence( test )
+function terminationEventsTerminationWithConsequence( test )
 {
   let context = this;
   let visited = [];
@@ -690,11 +706,11 @@ program();
     test.identical( _.strCount( op.output, 'Waiting for' ), 0 );
     test.identical( _.strCount( op.output, 'procedure::' ), 0 );
     test.identical( _.strCount( op.output, 'v1' ), 1 );
-    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationBegin1' ), 2 );
     test.identical( _.strCount( op.output, 'timer' ), 1 );
     test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
-    test.identical( _.strCount( op.output, 'got:terminationBegin1' ), 1 );
-    test.identical( _.strCount( op.output, /v1(.|\n|\r)*timer(.|\n|\r)*terminationBegin1(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+    test.identical( _.strCount( op.output, 'got terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*got terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
     return null;
   });
 
@@ -709,12 +725,12 @@ program();
     _.include( 'wProcedure' );
 
     var con = new _.Consequence();
-    
+
     var result = null;
-    con.thenGive( ( r ) => 
-    { 
+    con.thenGive( ( r ) =>
+    {
       result = r;
-      console.log( 'got:', r )
+      console.log( 'got', r )
     })
 
     console.log( 'v1' );
@@ -729,20 +745,22 @@ program();
     {
       console.log( 'terminationEnd1' );
     });
-    
-    _.time.out( 5000, () => 
+
+    _.time.out( 500, () =>
     {
+      console.log( 'timer' );
       if( !result )
       throw _.err( 'terminationBegin not executed automaticaly' );
       return null;
     })
 
+    _.Procedure.TerminationBegin();
   }
 
 }
 
-terminationEventsImplicitTerminationWithConsequence.timeOut = 60000;
-terminationEventsImplicitTerminationWithConsequence.description =
+terminationEventsTerminationWithConsequence.timeOut = 60000;
+terminationEventsTerminationWithConsequence.description =
 `
 - callback of event terminationBegin get called once
 - callback of event terminationEnd get called once
@@ -781,11 +799,11 @@ var Self =
     timeCancelBefore,
     timeCancelAfter,
 
-    timeOutBug,
+    timeOutExternalMessage,
 
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
-    terminationEventsImplicitTerminationWithConsequence
+    terminationEventsTerminationWithConsequence
 
   },
 

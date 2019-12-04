@@ -106,9 +106,9 @@ function init( o )
   _.assert( arguments.length === 1 );
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
-  if( _global_.debugger )
-  if( procedure.id === 2 )
-  debugger;
+  // if( _global_.debugger )
+  // if( procedure.id === 2 )
+  // debugger;
 
   return procedure;
 }
@@ -119,9 +119,9 @@ function finit()
 {
   let procedure = this;
 
-  if( _global_.debugger )
-  if( procedure.id === 2 )
-  debugger;
+  // if( _global_.debugger )
+  // if( procedure.id === 2 )
+  // debugger;
 
   _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
@@ -223,11 +223,11 @@ function activate( val )
   val = true;
   val = !!val;
 
-  console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
+  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
 
-  if( _global_.debugger )
-  if( procedure.id === 2 )
-  debugger;
+  // if( _global_.debugger )
+  // if( procedure.id === 2 )
+  // debugger;
 
   _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
