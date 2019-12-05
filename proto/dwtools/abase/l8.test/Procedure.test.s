@@ -47,6 +47,59 @@ function onSuiteEnd()
 // test
 // --
 
+function trivial( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  logger.log( _.strLinesNumber( programSourceCode ) );
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 2 ); /* zzz : make single procedure */
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    let t = 250;
+    _.include( 'wConsequence' );
+    _.include( 'wProcedure' );
+    _.time.out( t*2 );
+    _.procedure.terminationPeriod = t;
+    debugger;
+    _.procedure.terminationBegin();
+    debugger;
+  }
+
+}
+
+trivial.timeOut = 30000;
+trivial.description =
+`
+- application does not have to wait for procedures
+`
+
+//
+
 function timeLimit( test )
 {
   let context = this;
@@ -156,7 +209,7 @@ program();
     _.time.out( t*2, () =>
     {
       console.log( 'v3' );
-      _.procedure.terminationPeriod = 1000;
+      _.Procedure.TerminationPeriod = 1000;
       _.procedure.terminationBegin();
     });
 
@@ -232,7 +285,7 @@ program();
     _.time.out( t*2, () =>
     {
       console.log( 'v3' );
-      _.procedure.terminationPeriod = t*2;
+      _.Procedure.TerminationPeriod = t*2;
       _.procedure.terminationBegin();
     });
 
@@ -296,7 +349,7 @@ program();
 
     console.log( 'v1' );
 
-    _.procedure.terminationPeriod = 1000;
+    _.Procedure.TerminationPeriod = 1000;
     _.procedure.terminationBegin();
 
     return _.time.out( t*2 );
@@ -361,7 +414,7 @@ program();
 
     console.log( 'v1' );
 
-    _.procedure.terminationPeriod = 1000;
+    _.Procedure.TerminationPeriod = 1000;
     _.procedure.terminationBegin();
 
     return _.time.out( t*3 );
@@ -425,7 +478,7 @@ program();
 
     console.log( 'v1' );
 
-    _.procedure.terminationPeriod = 1000;
+    _.Procedure.TerminationPeriod = 1000;
     _.procedure.terminationBegin();
 
     return _.time.out( t*3 );
@@ -590,7 +643,7 @@ program();
       console.log( 'terminationEnd1' );
     });
 
-    _.procedure.terminationPeriod = 1000;
+    _.Procedure.TerminationPeriod = 1000;
     _.procedure.terminationBegin();
 
   }
@@ -666,7 +719,7 @@ program();
       console.log( 'terminationEnd1' );
     });
 
-    // _.procedure.terminationPeriod = 1000;
+    // _.Procedure.TerminationPeriod = 1000;
     // _.procedure.terminationBegin();
 
   }
@@ -791,6 +844,8 @@ var Self =
 
   tests :
   {
+
+    trivial,
 
     timeLimit,
     timeLimitWaitingEnough,

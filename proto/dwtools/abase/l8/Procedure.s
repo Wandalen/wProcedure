@@ -104,7 +104,7 @@ function init( o )
 
   _.assert( _.strIs( procedure._sourcePath ) );
   _.assert( arguments.length === 1 );
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
+  _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
   // if( _global_.debugger )
   // if( procedure.id === 2 )
@@ -123,10 +123,10 @@ function finit()
   // if( procedure.id === 2 )
   // debugger;
 
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
+  _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
 
-  delete _.procedure.namesMap[ procedure._longName ];
+  delete _.Procedure.NamesMap[ procedure._longName ];
 
   return _.Copyable.prototype.finit.call( procedure );
 }
@@ -162,7 +162,7 @@ function begin()
   if( !procedure._longName )
   procedure._longNameMake();
 
-  _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
+  _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
 
   return procedure;
 }
@@ -188,9 +188,9 @@ function end()
 
   procedure.finit();
 
-  if( _.procedure.terminating )
+  if( _.Procedure.Terminating )
   {
-    _.procedure.terminationListInvalidated = 1;
+    _.Procedure.TerminationListInvalidated = 1;
     _.Procedure._TerminationRestart();
   }
 
@@ -202,7 +202,7 @@ function end()
 function isTopMost()
 {
   let procedure = this;
-  return procedure === _.procedure.activeProcedure;
+  return procedure === _.Procedure.ActiveProcedure;
 }
 
 //
@@ -210,7 +210,7 @@ function isTopMost()
 function isActivated()
 {
   let procedure = this;
-  return _.longHas( _.procedure.activeProcedures, procedure );
+  return _.longHas( _.Procedure.ActiveProcedures, procedure );
 }
 
 //
@@ -223,11 +223,7 @@ function activate( val )
   val = true;
   val = !!val;
 
-  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.procedure.activeProcedures.length : _.procedure.activeProcedures.length-1}` );
-
-  // if( _global_.debugger )
-  // if( procedure.id === 2 )
-  // debugger;
+  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
 
   _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
@@ -236,24 +232,24 @@ function activate( val )
 
     _.assert
     (
-        procedure !== _.procedure.activeProcedure
+        procedure !== _.Procedure.ActiveProcedure
       , () => `${procedure._longName} is already active`
     );
 
-    _.procedure.activeProcedures.push( procedure );
-    _.procedure.activeProcedure = procedure;
+    _.Procedure.ActiveProcedures.push( procedure );
+    _.Procedure.ActiveProcedure = procedure;
   }
   else
   {
     _.assert
     (
-        procedure === _.procedure.activeProcedure
+        procedure === _.Procedure.ActiveProcedure
       , () => `Attempt to deactivate ${procedure._longName}`
-            + `\nBut active procedure is ${_.procedure.activeProcedure ? _.procedure.activeProcedure._longName : _.procedure.activeProcedure}`
+            + `\nBut active procedure is ${_.Procedure.ActiveProcedure ? _.Procedure.ActiveProcedure._longName : _.Procedure.ActiveProcedure}`
     );
 
-    _.procedure.activeProcedures.pop();
-    _.procedure.activeProcedure = _.procedure.activeProcedures[ _.procedure.activeProcedures.length-1 ] || null;
+    _.Procedure.ActiveProcedures.pop();
+    _.Procedure.ActiveProcedure = _.Procedure.ActiveProcedures[ _.Procedure.ActiveProcedures.length-1 ] || null;
   }
 
   return procedure;
@@ -349,7 +345,7 @@ function stackElse( stack )
 // {
 //   let procedure = this;
 //
-//   if( !Config.debug || !_.procedure.usingSourcePath )
+//   if( !Config.debug || !_.Procedure.UsingSourcePath )
 //   {
 //     if( !procedure._sourcePath )
 //     procedure._sourcePath = '';
@@ -384,7 +380,7 @@ function stackElse( stack )
 // {
 //   let procedure = this;
 //
-//   if( !Config.debug || !_.procedure.usingSourcePath )
+//   if( !Config.debug || !_.Procedure.UsingSourcePath )
 //   {
 //     if( !procedure._sourcePath )
 //     procedure._sourcePath = '';
@@ -484,14 +480,14 @@ function longName( longName )
 
   if( procedure._longName )
   {
-    _.assert( _.procedure.namesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
-    delete _.procedure.namesMap[ procedure._longName ];
+    _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
+    delete _.Procedure.NamesMap[ procedure._longName ];
     procedure._longName = null;
   }
 
   procedure._longName = longName;
-  _.assert( _.procedure.namesMap[ procedure._longName ] === undefined, () => `${procedure._longName} already exist` );
-  _.procedure.namesMap[ procedure._longName ] = procedure;
+  _.assert( _.Procedure.NamesMap[ procedure._longName ] === undefined, () => `${procedure._longName} already exist` );
+  _.Procedure.NamesMap[ procedure._longName ] = procedure;
 
   return procedure;
 }
@@ -557,7 +553,7 @@ function Get( procedure )
 
   if( _.numberIs( procedure ) )
   {
-    result = _.filter( _.procedure.namesMap, { id : procedure } );
+    result = _.filter( _.Procedure.NamesMap, { id : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
@@ -568,7 +564,7 @@ function Get( procedure )
 
   if( _.strIs( procedure ) )
   {
-    result = _.filter( _.procedure.namesMap, { _name : procedure } );
+    result = _.filter( _.Procedure.NamesMap, { _name : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
@@ -579,7 +575,7 @@ function Get( procedure )
 
   if( _.routineIs( procedure ) )
   {
-    result = _.filter( _.procedure.namesMap, { _routine : procedure } );
+    result = _.filter( _.Procedure.NamesMap, { _routine : procedure } );
     result = _.mapVals( result );
     if( result.length > 1 )
     return result;
@@ -730,16 +726,16 @@ function End( procedure )
 
 function TerminationReport()
 {
-  if( _.procedure.terminationListInvalidated )
-  for( let p in _.procedure.namesMap )
+  if( _.Procedure.TerminationListInvalidated )
+  for( let p in _.Procedure.NamesMap )
   {
-    let procedure = _.procedure.namesMap[ p ];
+    let procedure = _.Procedure.NamesMap[ p ];
     if( procedure._object === 'entry' )
     continue;
     logger.log( procedure._longName );
   }
-  _.procedure.terminationListInvalidated = 0;
-  logger.log( 'Waiting for ' + ( Object.keys( _.procedure.namesMap ).length-1 ) + ' procedure(s) ... ' );
+  _.Procedure.TerminationListInvalidated = 0;
+  logger.log( 'Waiting for ' + ( Object.keys( _.Procedure.NamesMap ).length-1 ) + ' procedure(s) ... ' );
 }
 
 //
@@ -759,14 +755,16 @@ function TerminationReport()
 function TerminationBegin()
 {
 
-  if( _.procedure.terminating )
+  _.assert( this === _.Procedure );
+
+  if( _.Procedure.Terminating )
   return;
 
   _.routineOptions( TerminationBegin, arguments );
-  _.procedure.terminating = 1;
-  _.procedure.terminationListInvalidated = 1;
+  _.Procedure.Terminating = 1;
+  _.Procedure.TerminationListInvalidated = 1;
 
-  _.procedure._onTerminationBegin.forEach( ( callback ) =>
+  _.Procedure._OnTerminationBegin.forEach( ( callback ) =>
   {
     try
     {
@@ -790,9 +788,9 @@ TerminationBegin.defaults =
 function _TerminationIteration()
 {
   _.assert( arguments.length === 1 );
-  _.assert( _.procedure.terminating === 1 );
+  _.assert( _.Procedure.Terminating === 1 );
 
-  _.procedure.terminationTimer = null;
+  _.Procedure.TerminationTimer = null;
   _.Procedure.TerminationReport();
 
   _.Procedure._TerminationRestart();
@@ -804,20 +802,20 @@ function _TerminationIteration()
 function _TerminationRestart()
 {
   _.assert( arguments.length === 0 );
-  _.assert( _.procedure.terminating >= 1 );
+  _.assert( _.Procedure.Terminating >= 1 );
 
-  if( _.procedure.terminating === 2 )
+  if( _.Procedure.Terminating === 2 )
   {
     return;
   }
 
-  if( _.procedure.terminationTimer )
-  _.time._cancel( _.procedure.terminationTimer );
-  _.procedure.terminationTimer = null;
+  if( _.Procedure.TerminationTimer )
+  _.time._cancel( _.Procedure.TerminationTimer );
+  _.Procedure.TerminationTimer = null;
 
-  if( Object.keys( _.procedure.namesMap ).length-1 > 0 )
+  if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 )
   {
-    _.procedure.terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.Procedure._TerminationIteration );
+    _.Procedure.TerminationTimer = _.time._begin( _.Procedure.TerminationPeriod, _.Procedure._TerminationIteration );
   }
   else
   {
@@ -831,18 +829,18 @@ function _TerminationRestart()
 function _TerminationEnd()
 {
   _.assert( arguments.length === 0 );
-  _.assert( _.procedure.terminating === 1 );
-  _.assert( _.procedure.terminationTimer === null );
+  _.assert( _.Procedure.Terminating === 1 );
+  _.assert( _.Procedure.TerminationTimer === null );
 
-  _.procedure.terminating = 2;
+  _.Procedure.Terminating = 2;
 
-  if( _.procedure.entryProcedure && _.procedure.entryProcedure.isAlive() )
+  if( _.Procedure.EntryProcedure && _.Procedure.EntryProcedure.isAlive() )
   {
-    _.procedure.entryProcedure.activate( 0 );
-    _.procedure.entryProcedure.end();
+    _.Procedure.EntryProcedure.activate( 0 );
+    _.Procedure.EntryProcedure.end();
   }
 
-  _.procedure._onTerminationEnd.forEach( ( callback ) =>
+  _.Procedure._OnTerminationEnd.forEach( ( callback ) =>
   {
     try
     {
@@ -871,12 +869,12 @@ function _Setup()
 {
   _.assert( _.strIs( _.setup._entryProcedureStack ) );
 
-  if( !_.procedure.entryProcedure )
-  _.procedure.entryProcedure = _.procedure.begin({ _stack : _.setup._entryProcedureStack, _object : 'entry' });
+  if( !_.Procedure.EntryProcedure )
+  _.Procedure.EntryProcedure = _.procedure.begin({ _stack : _.setup._entryProcedureStack, _object : 'entry' });
 
-  _.assert( _.procedure.activeProcedures.length === 0 );
+  _.assert( _.Procedure.ActiveProcedures.length === 0 );
 
-  _.procedure.entryProcedure.activate( true );
+  _.Procedure.EntryProcedure.activate( true );
 
   if( _.process && _.process.exitHandlerOnce )
   _.process.exitHandlerOnce( _.Procedure._OnProcessExit );
@@ -901,8 +899,8 @@ function _IdAlloc()
 {
 
   _.assert( arguments.length === 0 );
-  _.procedure.counter += 1;
-  let result = _.procedure.counter;
+  _.Procedure.Counter += 1;
+  let result = _.Procedure.Counter;
 
   // if( result === 35 )
   // debugger;
@@ -914,7 +912,7 @@ function _IdAlloc()
 
 function WithObject( timer )
 {
-  let result = _.filter( _.procedure.namesMap, { _object : timer } );
+  let result = _.filter( _.Procedure.NamesMap, { _object : timer } );
   return _.mapVals( result )[ 0 ];
 }
 
@@ -923,7 +921,7 @@ function WithObject( timer )
 function Stack( stack, delta )
 {
 
-  if( !Config.debug || !_.procedure.usingSourcePath )
+  if( !Config.debug || !_.Procedure.UsingSourcePath )
   return '';
 
   _.assert( delta === undefined || _.numberIs( delta ) );
@@ -959,9 +957,9 @@ function On( o )
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
   if( o.callbackMap.terminationBegin )
-  _.arrayAppend( _.procedure._onTerminationBegin, o.callbackMap.terminationBegin );
+  _.arrayAppend( _.Procedure._OnTerminationBegin, o.callbackMap.terminationBegin );
   if( o.callbackMap.terminationEnd )
-  _.arrayAppend( _.procedure._onTerminationEnd, o.callbackMap.terminationEnd );
+  _.arrayAppend( _.Procedure._OnTerminationEnd, o.callbackMap.terminationEnd );
 
   return this;
 }
@@ -986,15 +984,15 @@ function Off( o )
 
   if( o.callbackMap.terminationBegin !== undefined )
   if( o.callbackMap.terminationBegin === null )
-  _.arrayEmpty( _.procedure._onTerminationBegin );
+  _.arrayEmpty( _.Procedure._OnTerminationBegin );
   else
-  _.arrayRemoveOnceStrictly( _.procedure._onTerminationBegin, o.callbackMap.terminationBegin );
+  _.arrayRemoveOnceStrictly( _.Procedure._OnTerminationBegin, o.callbackMap.terminationBegin );
 
   if( o.callbackMap.terminationEnd !== undefined )
   if( o.callbackMap.terminationEnd === null )
-  _.arrayEmpty( _.procedure._onTerminationBegin );
+  _.arrayEmpty( _.Procedure._OnTerminationBegin );
   else
-  _.arrayRemoveOnceStrictly( _.procedure._onTerminationBegin, o.callbackMap.terminationEnd );
+  _.arrayRemoveOnceStrictly( _.Procedure._OnTerminationBegin, o.callbackMap.terminationEnd );
 
   return this;
 }
@@ -1127,6 +1125,23 @@ let Restricts =
 let Statics =
 {
 
+  // fields
+
+  NamesMap : Object.create( null ),
+  Terminating : 0,
+  TerminationTimer : null,
+  TerminationPeriod : 7500,
+  TerminationListInvalidated : 1,
+  UsingSourcePath : 1,
+  Counter : 0,
+  ActiveProcedure : null,
+  ActiveProcedures : [],
+  EntryProcedure : null,
+  _OnTerminationBegin : [],
+  _OnTerminationEnd : [],
+
+  // routines
+
   Get, /* xxx : check. cover static routine Get */
   GetSingleMaybe,
   OptionsFrom,
@@ -1157,6 +1172,7 @@ let Statics =
 
 let Forbids =
 {
+
   namesMap : 'namesMap',
   terminating : 'terminating',
   terminationTimer : 'terminationTimer',
@@ -1164,6 +1180,12 @@ let Forbids =
   terminationListInvalidated : 'terminationListInvalidated',
   usingSourcePath : 'usingSourcePath',
   counter : 'counter',
+  activeProcedure : 'activeProcedure',
+  activeProcedures : 'activeProcedures',
+  entryProcedure : 'entryProcedure',
+  _onTerminationBegin : '_onTerminationBegin',
+  _onTerminationEnd : '_onTerminationEnd',
+
 }
 
 // --
@@ -1222,64 +1244,77 @@ _.Copyable.mixin( Self );
 // define namspeces
 // --
 
-let Fields =
-{
-  namesMap : Object.create( null ),
-  terminating : 0,
-  terminationTimer : null,
-  terminationPeriod : 7500,
-  terminationListInvalidated : 1,
-  usingSourcePath : 1,
-  counter : 0,
-  activeProcedure : null,
-  activeProcedures : [],
-  entryProcedure : null,
-  _onTerminationBegin : [],
-  _onTerminationEnd : [],
-  // terminationEndConsequence : new _.Consequence({ _procedure : false }),
-}
+// let Fields =
+// {
+//   namesMap : Object.create( null ),
+//   terminating : 0,
+//   terminationTimer : null,
+//   terminationPeriod : 7500,
+//   terminationListInvalidated : 1,
+//   usingSourcePath : 1,
+//   counter : 0,
+//   activeProcedure : null,
+//   activeProcedures : [],
+//   entryProcedure : null,
+//   _onTerminationBegin : [],
+//   _onTerminationEnd : [],
+// }
 
-let Routines =
-{
-
-  get : Get,
-  getSingleMaybe : GetSingleMaybe,
-  from : From,
-  begin : Begin,
-  end : End,
-  activate : Activate,
-  stack : Stack,
-
-  terminationReport : TerminationReport,
-  terminationBegin : TerminationBegin,
-
-}
-
-// _.assert( _.routineIs( _.accessor.define.getter.alias ) );
-// debugger;
-// let alias = ( originalName ) => _.accessor.define.getter.alias({ originalName, container : Self });
 // let Routines =
 // {
 //
-//   get : alias( 'Get' ),
-//   getSingleMaybe : alias( 'GetSingleMaybe' ),
-//   from : alias( 'From' ),
-//   begin : alias( 'Begin' ),
-//   end : alias( 'End' ),
-//   activate : alias( 'Activate' ),
-//   stack : alias( 'Stack' ),
-//   terminationReport : alias( 'TerminationReport' ),
-//   terminationBegin : alias( 'TerminationBegin' ),
+//   get : Get,
+//   getSingleMaybe : GetSingleMaybe,
+//   from : From,
+//   begin : Begin,
+//   end : End,
+//   activate : Activate,
+//   stack : Stack,
 //
-//   Procedure : Self,
+//   terminationReport : TerminationReport,
+//   terminationBegin : TerminationBegin,
 //
 // }
-//
-// debugger;
-// _.proto.extend( _.procedure, Routines );
 
-Object.assign( _.procedure, Routines );
-Object.assign( _.procedure, Fields );
+_.assert( _.routineIs( _.accessor.define.getter.alias ) );
+_.assert( _.routineIs( _.accessor.define.suite.alias ) );
+
+let alias = ( originalName ) => _.accessor.define.suite.alias({ originalName, container : Self });
+let join = ( originalName ) => _.routineJoin( Self, Self[ originalName ] );
+let NamespaceBlueprint =
+{
+
+  // fields
+
+  namesMap : alias( 'NamesMap' ),
+  terminating : alias( 'Terminating' ),
+  terminationTimer : alias( 'TerminationTimer' ),
+  terminationPeriod : alias( 'TerminationPeriod' ),
+  terminationListInvalidated : alias( 'TerminationListInvalidated' ),
+  usingSourcePath : alias( 'UsingSourcePath' ),
+  counter : alias( 'Counter' ),
+  activeProcedure : alias( 'ActiveProcedure' ),
+  activeProcedures : alias( 'ActiveProcedures' ),
+  entryProcedure : alias( 'EntryProcedure' ),
+
+  // routines
+
+  get : join( 'Get' ),
+  getSingleMaybe : join( 'GetSingleMaybe' ),
+  from : join( 'From' ),
+  begin : join( 'Begin' ),
+  end : join( 'End' ),
+  activate : join( 'Activate' ),
+  stack : join( 'Stack' ),
+  terminationReport : join( 'TerminationReport' ),
+  terminationBegin : join( 'TerminationBegin' ),
+
+}
+
+_.construction.extend( _.procedure, NamespaceBlueprint );
+
+// Object.assign( _.procedure, Routines );
+// Object.assign( _.procedure, Fields );
 
 Object.assign( _, ToolsExtension );
 Object.assign( _.time, TimeExtension );
@@ -1287,6 +1322,9 @@ Object.assign( _.time, TimeExtension );
 _[ Self.shortName ] = Self;
 
 _Setup();
+
+_.assert( _.routineIs( _.procedure.get ) );
+_.assert( _.routineIs( Self.Get ) );
 
 // --
 // export
