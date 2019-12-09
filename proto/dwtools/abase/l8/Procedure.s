@@ -153,6 +153,9 @@ function begin()
 
   _.assert( arguments.length === 0 );
 
+  // if( procedure.id === 35 )
+  // debugger;
+
   if( procedure._timer === null )
   if( procedure._object === 'entry' )
   procedure._timer = false;
@@ -179,6 +182,9 @@ function end()
 {
   let procedure = this;
 
+  // if( procedure.id === 35 )
+  // debugger;
+
   _.assert( arguments.length === 0 );
   _.assert( procedure._timer !== null, `${procedure._longName} is not alive` );
 
@@ -188,9 +194,9 @@ function end()
 
   procedure.finit();
 
-  if( _.Procedure.Terminating )
+  if( _.Procedure._Terminating )
   {
-    _.Procedure.TerminationListInvalidated = 1;
+    _.Procedure._TerminationListInvalidated = 1;
     _.Procedure._TerminationRestart();
   }
 
@@ -224,6 +230,9 @@ function activate( val )
   val = !!val;
 
   // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
+
+  // if( procedure.id === 35 )
+  // debugger;
 
   _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
@@ -726,7 +735,7 @@ function End( procedure )
 
 function TerminationReport()
 {
-  if( _.Procedure.TerminationListInvalidated )
+  if( _.Procedure._TerminationListInvalidated )
   for( let p in _.Procedure.NamesMap )
   {
     let procedure = _.Procedure.NamesMap[ p ];
@@ -734,8 +743,8 @@ function TerminationReport()
     continue;
     logger.log( procedure._longName );
   }
-  _.Procedure.TerminationListInvalidated = 0;
-  logger.log( 'Waiting for ' + ( Object.keys( _.Procedure.NamesMap ).length-1 ) + ' procedure(s) ... ' );
+  _.Procedure._TerminationListInvalidated = 0;
+  logger.log( 'Waiting for ' + ( Object.keys( _.Procedure.NamesMap ).length-1 ) + ' procedure(s) ...' );
 }
 
 //
@@ -757,24 +766,26 @@ function TerminationBegin()
 
   _.assert( this === _.Procedure );
 
-  if( _.Procedure.Terminating )
+  if( _.Procedure._Terminating )
   return;
 
   _.routineOptions( TerminationBegin, arguments );
-  _.Procedure.Terminating = 1;
-  _.Procedure.TerminationListInvalidated = 1;
+  _.Procedure._Terminating = 1;
+  _.Procedure._TerminationListInvalidated = 1;
 
-  _.Procedure._OnTerminationBegin.forEach( ( callback ) =>
-  {
-    try
-    {
-      callback();
-    }
-    catch( err )
-    {
-      logger.error( _.errOnce( 'Error in callback of event "terminationBegin"\n', err ) );
-    }
-  });
+  _.Procedure._EventTerminationBeginHandle();
+
+  // _.Procedure._EventCallbackMap.terminationBegin.forEach( ( callback ) =>
+  // {
+  //   try
+  //   {
+  //     callback.call( _.procedure );
+  //   }
+  //   catch( err )
+  //   {
+  //     logger.error( _.errOnce( 'Error in callback of event "terminationBegin"\n', err ) );
+  //   }
+  // });
 
   _.Procedure._TerminationRestart();
 }
@@ -788,9 +799,9 @@ TerminationBegin.defaults =
 function _TerminationIteration()
 {
   _.assert( arguments.length === 1 );
-  _.assert( _.Procedure.Terminating === 1 );
+  _.assert( _.Procedure._Terminating === 1 );
 
-  _.Procedure.TerminationTimer = null;
+  _.Procedure._TerminationTimer = null;
   _.Procedure.TerminationReport();
 
   _.Procedure._TerminationRestart();
@@ -802,20 +813,20 @@ function _TerminationIteration()
 function _TerminationRestart()
 {
   _.assert( arguments.length === 0 );
-  _.assert( _.Procedure.Terminating >= 1 );
+  _.assert( _.Procedure._Terminating >= 1 );
 
-  if( _.Procedure.Terminating === 2 )
+  if( _.Procedure._Terminating === 2 )
   {
     return;
   }
 
-  if( _.Procedure.TerminationTimer )
-  _.time._cancel( _.Procedure.TerminationTimer );
-  _.Procedure.TerminationTimer = null;
+  if( _.Procedure._TerminationTimer )
+  _.time._cancel( _.Procedure._TerminationTimer );
+  _.Procedure._TerminationTimer = null;
 
-  if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 )
+  if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 && !_.Procedure._Exiting )
   {
-    _.Procedure.TerminationTimer = _.time._begin( _.Procedure.TerminationPeriod, _.Procedure._TerminationIteration );
+    _.Procedure._TerminationTimer = _.time._begin( _.Procedure.TerminationPeriod, _.Procedure._TerminationIteration );
   }
   else
   {
@@ -828,23 +839,110 @@ function _TerminationRestart()
 
 function _TerminationEnd()
 {
-  _.assert( arguments.length === 0 );
-  _.assert( _.Procedure.Terminating === 1 );
-  _.assert( _.Procedure.TerminationTimer === null );
 
-  _.Procedure.Terminating = 2;
-
-  if( _.Procedure.EntryProcedure && _.Procedure.EntryProcedure.isAlive() )
+  try
   {
-    _.Procedure.EntryProcedure.activate( 0 );
-    _.Procedure.EntryProcedure.end();
+
+    _.assert( arguments.length === 0 );
+    _.assert( _.Procedure._Terminating === 1 );
+    _.assert( _.Procedure._TerminationTimer === null );
+
+    _.Procedure._Terminating = 2;
+
+    if( !_.Procedure._Exiting || _.Procedure.EntryProcedure === _.Procedure.ActiveProcedure )
+    if( _.Procedure.EntryProcedure && _.Procedure.EntryProcedure.isAlive() )
+    {
+      _.Procedure.EntryProcedure.activate( 0 );
+      _.Procedure.EntryProcedure.end();
+    }
+
+    /* end all timers */
+
+    _.Procedure._TimersEnd();
+    // for( let p in _.Procedure.NamesMap )
+    // {
+    //   let procedure = _.Procedure.NamesMap[ p ];
+    //   if( !_.timerIs( procedure._object ) )
+    //   {
+    //     logger.log( 'not end', procedure._longName );
+    //     continue;
+    //   }
+    //   logger.log( 'end', procedure._longName );
+    //   _.time.cancel( procedure._object );
+    // }
+
+    /* end all timers */
+
+    _.Procedure._EventTerminationEndHandle();
+    // _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
+    // {
+    //   try
+    //   {
+    //     callback.call( _.procedure );
+    //   }
+    //   catch( err )
+    //   {
+    //     logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
+    //   }
+    // });
+
+  }
+  catch( err )
+  {
+    _.setup._errUnhandledHandler2( err, 'unhandled error in procedures termination routine' )
   }
 
-  _.Procedure._OnTerminationEnd.forEach( ( callback ) =>
+}
+
+//
+
+function _TimersEnd()
+{
+
+  for( let p in _.Procedure.NamesMap )
+  {
+    let procedure = _.Procedure.NamesMap[ p ];
+    if( !_.timerIs( procedure._object ) )
+    {
+      // logger.log( 'not end', procedure._longName );
+      continue;
+    }
+    // logger.log( 'end', procedure._longName );
+    _.time.cancel( procedure._object );
+  }
+
+}
+
+//
+
+function _EventTerminationBeginHandle()
+{
+
+  _.Procedure._EventCallbackMap.terminationBegin.forEach( ( callback ) =>
   {
     try
     {
-      callback();
+      callback.call( _.procedure );
+    }
+    catch( err )
+    {
+      logger.error( _.errOnce( 'Error in callback of event "terminationBegin"\n', err ) );
+    }
+  });
+
+}
+
+//
+
+function _EventTerminationEndHandle()
+{
+
+  _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
+  {
+    try
+    {
+      /* namespace should be in the context */
+      callback.call( _.procedure );
     }
     catch( err )
     {
@@ -854,18 +952,47 @@ function _TerminationEnd()
 
 }
 
+// //
+//
+// function time()
+// {
+//   _.assert( arguments.length === 0 );
+//   _.assert( _.Procedure._Terminating === 1 );
+//   _.assert( _.Procedure._TerminationTimer === null );
+//
+//   _.Procedure._Terminating = 2;
+//
+//   if( _.Procedure.EntryProcedure && _.Procedure.EntryProcedure.isAlive() )
+//   {
+//     _.Procedure.EntryProcedure.activate( 0 );
+//     _.Procedure.EntryProcedure.end();
+//   }
+//
+//   _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
+//   {
+//     try
+//     {
+//       callback();
+//     }
+//     catch( err )
+//     {
+//       logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
+//     }
+//   });
+//
+// }
+
 //
 
-function _OnProcessExit()
+function _EventProcessExitHandle()
 {
-  debugger;
+  _.Procedure._Exiting = 1;
   _.Procedure.TerminationBegin();
-  debugger;
 }
 
 //
 
-function _Setup()
+function _Setup1()
 {
   _.assert( _.strIs( _.setup._entryProcedureStack ) );
 
@@ -876,8 +1003,15 @@ function _Setup()
 
   _.Procedure.EntryProcedure.activate( true );
 
-  if( _.process && _.process.exitHandlerOnce )
-  _.process.exitHandlerOnce( _.Procedure._OnProcessExit );
+  _.assert( !!_.process && !!_.process.on );
+  _.process.on( 'available', 'exit', 'exit', _.Procedure._EventProcessExitHandle );
+
+  // // if( _.process && _.process.exitHandlerOnce )
+  // _.process.on( 'available', () =>
+  // {
+  //   _.process.on( 'exit', _.Procedure._EventProcessExitHandle );
+  //   // _.process.exitHandlerOnce( _.Procedure._EventProcessExitHandle );
+  // });
 
 }
 
@@ -902,7 +1036,7 @@ function _IdAlloc()
   _.Procedure.Counter += 1;
   let result = _.Procedure.Counter;
 
-  // if( result === 35 )
+  // if( result === 2 )
   // debugger;
 
   return result;
@@ -950,18 +1084,24 @@ function Stack( stack, delta )
 function On( o )
 {
 
-  if( arguments.length === 2 )
-  o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
+  // if( arguments.length === 2 )
+  // o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
 
-  _.assertMapHasOnly( o.callbackMap, _.Procedure.KnownEvents );
-  _.assert( arguments.length === 1 || arguments.length === 2 );
+  o = _.event.on.pre( _.event.on, arguments );
+  o.registeredCallbackMap = _.Procedure._EventCallbackMap;
+  _.event.on( o );
 
-  if( o.callbackMap.terminationBegin )
-  _.arrayAppend( _.Procedure._OnTerminationBegin, o.callbackMap.terminationBegin );
-  if( o.callbackMap.terminationEnd )
-  _.arrayAppend( _.Procedure._OnTerminationEnd, o.callbackMap.terminationEnd );
-
-  return this;
+  // _.assertMapHasOnly( o.callbackMap, _.Procedure._EventCallbackMap );
+  // _.assert( arguments.length === 1 || arguments.length === 2 );
+  //
+  // for( let c in o.callbackMap )
+  // {
+  //   let callback = o.callbackMap[ c ];
+  //   _.assert( _.routineIs( callback ) );
+  //   _.arrayAppend( _.Procedure._EventCallbackMap[ c ], callback );
+  // }
+  //
+  // return this;
 }
 
 On.defaults =
@@ -974,27 +1114,27 @@ On.defaults =
 function Off( o )
 {
 
-  if( arguments.length === 2 )
-  o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
-  if( _.strIs( arguments[ 0 ] ) )
-  o = { callbackMap : { [ arguments[ 0 ] ] : null } }
+  // if( arguments.length === 2 )
+  // o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
+  // if( _.strIs( arguments[ 0 ] ) )
+  // o = { callbackMap : { [ arguments[ 0 ] ] : null } }
 
-  _.assertMapHasOnly( o.callbackMap, _.Procedure.KnownEvents );
-  _.assert( arguments.length === 1 || arguments.length === 2 );
+  o = _.event.off.pre( _.event.off, arguments );
+  o.registeredCallbackMap = _.Procedure._EventCallbackMap;
+  _.event.off( o );
 
-  if( o.callbackMap.terminationBegin !== undefined )
-  if( o.callbackMap.terminationBegin === null )
-  _.arrayEmpty( _.Procedure._OnTerminationBegin );
-  else
-  _.arrayRemoveOnceStrictly( _.Procedure._OnTerminationBegin, o.callbackMap.terminationBegin );
-
-  if( o.callbackMap.terminationEnd !== undefined )
-  if( o.callbackMap.terminationEnd === null )
-  _.arrayEmpty( _.Procedure._OnTerminationBegin );
-  else
-  _.arrayRemoveOnceStrictly( _.Procedure._OnTerminationBegin, o.callbackMap.terminationEnd );
-
-  return this;
+  // _.assertMapHasOnly( o.callbackMap, _.Procedure._EventCallbackMap );
+  // _.assert( arguments.length === 1 || arguments.length === 2 );
+  //
+  // for( let c in o.callbackMap )
+  // {
+  //   if( o.callbackMap[ c ] === null )
+  //   _.arrayEmpty( _.Procedure._EventCallbackMap[ c ] );
+  //   else
+  //   _.arrayRemoveOnceStrictly( _.Procedure._EventCallbackMap[ c ], o.callbackMap[ c ] );
+  // }
+  //
+  // return this;
 }
 
 Off.defaults =
@@ -1019,74 +1159,242 @@ function ExportTo( dstGlobal, srcGlobal )
 // time
 // --
 
-function timeBegin( delay, procedure, onEnd )
+function _timeBegin( o )
 {
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-  if( onEnd === undefined && !_.procedureIs( procedure ) )
-  {
-    onEnd = arguments[ 1 ];
-    procedure = 1;
-  }
-  if( procedure === undefined || procedure === null )
-  procedure = 1;
-  procedure = _.Procedure( procedure );
-  let wasAlive = procedure.isAlive();
+
+  _.assertRoutineOptions( _timeBegin, arguments );
+
+  if( o.procedure === undefined || o.procedure === null )
+  o.procedure = 1;
+  o.procedure = _.Procedure( o.procedure );
+  let wasAlive = o.procedure.isAlive();
   if( !wasAlive )
   {
-    procedure._timer = false;
-    procedure.begin();
+    o.procedure._timer = false;
+    o.procedure.begin();
   }
-  let timer = _.time._begin( delay, onEnd2 );
-  procedure.object( timer );
+  let timer;
+  if( o.method.name === 'periodic' )
+  debugger;
+  // if( o.method.name === 'periodic' )
+  // timer = o.method.call( _.time, o.delay, onPeriodicTime2, onCancel2 );
+  // else
+  // timer = o.method.call( _.time, o.delay, onTime2, onCancel2 );
+  timer = o.method.call( _.time, o.delay, o.onTime, o.onCancel );
+  timer.procedure = o.procedure;
+  o.procedure.object( timer );
+
+  let _time = timer._time;
+  let _cancel = timer._cancel;
+  timer._time = o.method.name === 'periodic' ? timePeriodic : time;
+  timer._cancel = cancel;
+
+  // if( o.procedure.id === 43 )
+  // debugger;
+
   return timer;
 
-  function onEnd2()
+  /* */
+
+  function time()
   {
-    procedure.activate( true );
+
+    // if( o.procedure.id === 43 )
+    // debugger;
+
+    o.procedure.activate( true );
     try
     {
-      if( onEnd )
-      return onEnd( ... arguments );
+      return _time.apply( this, arguments );
     }
     finally
     {
-      if( !procedure.isAlive() )
+      if( !o.procedure.isAlive() )
       {
-        _.assert( procedure.finitedIs() );
+        _.assert( o.procedure.finitedIs() );
         return;
       }
-      procedure.activate( false );
-      _.assert( !procedure.isActivated() );
+      o.procedure.activate( false );
+      _.assert( !o.procedure.isActivated() );
       if( !wasAlive )
-      procedure.end();
+      o.procedure.end();
     }
   }
 
+  /* */
+
+  function timePeriodic()
+  {
+    o.procedure.activate( true );
+    try
+    {
+      return _time.apply( this, arguments );
+    }
+    finally
+    {
+      _.assert( !o.procedure.finitedIs() );
+      o.procedure.activate( false );
+      _.assert( !o.procedure.isActivated() );
+    }
+  }
+
+  /* */
+
+  function cancel()
+  {
+
+    // if( o.procedure.id === 43 )
+    // debugger;
+
+    if( timer.state !== 0 )
+    {
+      // debugger;
+      return;
+    }
+
+    // let wasActivated = o.procedure.isActivated();
+    // if( !wasActivated )
+    o.procedure.activate( true );
+    try
+    {
+      return _cancel( this, arguments );
+      // return timer._cancel( ... arguments );
+    }
+    finally
+    {
+      // if( wasActivated )
+      // {
+      //   debugger;
+      //   return;
+      // }
+      if( !o.procedure.isAlive() )
+      {
+        _.assert( o.procedure.finitedIs() );
+        return;
+      }
+      o.procedure.activate( false );
+      _.assert( !o.procedure.isActivated() );
+      if( !wasAlive )
+      o.procedure.end();
+    }
+
+  }
+
+  /* */
+
+}
+
+_timeBegin.defaults =
+{
+  delay : null,
+  procedure : null,
+  onTime : null,
+  onCancel : null,
+  method : _.time._begin,
 }
 
 //
 
-function timeCancel( timer )
+function timeBegin( delay, procedure, onTime, onCancel )
 {
-  let procedure = _.Procedure.WithObject( timer );
-  let result = _.time._cancel( ... arguments );
-  if( procedure )
+  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
+
+  if( !_.procedureIs( procedure ) )
   {
-    if( !procedure.isActivated() )
-    procedure.end();
+    onTime = arguments[ 1 ];
+    onCancel = arguments[ 2 ];
+    procedure = 1;
   }
-  return result;
+
+  let o2 = Object.create( null );
+  o2.delay = delay;
+  o2.procedure = procedure;
+  o2.onTime = onTime;
+  o2.onCancel = onCancel || null;
+  o2.method = _.time._begin;
+
+  return _timeBegin.call( this, o2 );
 }
+
+//
+
+function timeFinally( delay, procedure, onTime )
+{
+  _.assert( arguments.length === 2 || arguments.length === 3 );
+
+  if( !_.procedureIs( procedure ) )
+  {
+    onTime = arguments[ 1 ];
+    procedure = 1;
+  }
+
+  let o2 = Object.create( null );
+  o2.delay = delay;
+  o2.procedure = procedure;
+  o2.onTime = onTime;
+  o2.onCancel = onTime;
+  o2.method = _.time._begin;
+  // o2.method = _.time._finally;
+
+  let timer = _timeBegin.call( this, o2 );
+  return timer;
+}
+
+//
+
+function timePeriodic( delay, procedure, onTime, onCancel )
+{
+  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
+
+  if( !_.procedureIs( procedure ) )
+  {
+    onTime = arguments[ 1 ];
+    onCancel = arguments[ 2 ];
+    procedure = 1;
+  }
+
+  let o2 = Object.create( null );
+  o2.delay = delay;
+  o2.procedure = procedure;
+  o2.onTime = onTime;
+  o2.onCancel = onCancel || null;
+  o2.method = _.time._periodic;
+
+  return _timeBegin.call( this, o2 );
+}
+
+//
+
+// function timeCancel( timer )
+// {
+//   let procedure = _.Procedure.WithObject( timer );
+//   let result = _.time._cancel( ... arguments );
+//
+//   /*
+//     Finnalable timer was ended by its already called callback,
+//     Activated procedure should not be ended here. It has its own ending call.
+//   */
+//
+//   if( procedure )
+//   if( timer.kind !== 'finnalabe' )
+//   if( !procedure.isActivated() )
+//   {
+//     procedure.end();
+//   }
+//   return result;
+// }
 
 // --
 // relations
 // --
 
-var KnownEvents =
+let _EventCallbackMap =
 {
-  terminationBegin : null,
-  terminationEnd : null,
+  terminationBegin : [],
+  terminationEnd : [],
 }
+
+Object.freeze( _EventCallbackMap );
 
 let ToolsExtension =
 {
@@ -1097,7 +1405,9 @@ let ToolsExtension =
 let TimeExtension =
 {
   begin : timeBegin,
-  cancel : timeCancel,
+  finally : timeFinally,
+  periodic : timePeriodic,
+  // cancel : timeCancel,
 }
 
 let Composes =
@@ -1128,17 +1438,20 @@ let Statics =
   // fields
 
   NamesMap : Object.create( null ),
-  Terminating : 0,
-  TerminationTimer : null,
+  _Terminating : 0,
+  _Exiting : 0,
+  _TerminationTimer : null,
+  _TerminationListInvalidated : 1,
   TerminationPeriod : 7500,
-  TerminationListInvalidated : 1,
   UsingSourcePath : 1,
   Counter : 0,
   ActiveProcedure : null,
   ActiveProcedures : [],
   EntryProcedure : null,
-  _OnTerminationBegin : [],
-  _OnTerminationEnd : [],
+
+  _EventCallbackMap,
+  ToolsExtension,
+  TimeExtension,
 
   // routines
 
@@ -1155,18 +1468,17 @@ let Statics =
   _TerminationIteration,
   _TerminationRestart,
   _TerminationEnd,
-  _OnProcessExit,
-  _Setup,
+  _TimersEnd,
+  _EventTerminationBeginHandle,
+  _EventTerminationEndHandle,
+  _EventProcessExitHandle,
+  _Setup1,
 
   _IdAlloc,
   WithObject,
   Stack,
   On,
   Off,
-
-  KnownEvents,
-  ToolsExtension,
-  TimeExtension,
 
 }
 
@@ -1287,10 +1599,7 @@ let NamespaceBlueprint =
   // fields
 
   namesMap : alias( 'NamesMap' ),
-  terminating : alias( 'Terminating' ),
-  terminationTimer : alias( 'TerminationTimer' ),
   terminationPeriod : alias( 'TerminationPeriod' ),
-  terminationListInvalidated : alias( 'TerminationListInvalidated' ),
   usingSourcePath : alias( 'UsingSourcePath' ),
   counter : alias( 'Counter' ),
   activeProcedure : alias( 'ActiveProcedure' ),
@@ -1306,6 +1615,8 @@ let NamespaceBlueprint =
   end : join( 'End' ),
   activate : join( 'Activate' ),
   stack : join( 'Stack' ),
+  on : join( 'On' ),
+  off : join( 'Off' ),
   terminationReport : join( 'TerminationReport' ),
   terminationBegin : join( 'TerminationBegin' ),
 
@@ -1321,7 +1632,7 @@ Object.assign( _.time, TimeExtension );
 
 _[ Self.shortName ] = Self;
 
-_Setup();
+_.Procedure._Setup1();
 
 _.assert( _.routineIs( _.procedure.get ) );
 _.assert( _.routineIs( Self.Get ) );
