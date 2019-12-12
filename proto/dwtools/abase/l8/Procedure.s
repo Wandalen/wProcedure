@@ -25,13 +25,13 @@ if( typeof module !== 'undefined' )
   _.include( 'wProto' );
   _.include( 'wCopyable' );
 
-  try
-  {
-    _.include( 'wAppBasic' );
-  }
-  catch( err )
-  {
-  }
+  // try
+  // {
+  //   _.include( 'wAppBasic' );
+  // }
+  // catch( err )
+  // {
+  // }
 
 }
 
