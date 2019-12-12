@@ -10,10 +10,6 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
 
-  // _.include( 'wLogger' );
-  // _.include( 'wAppBasic' );
-  // _.include( 'wFiles' );
-
 }
 
 var _global = _global_;
@@ -52,19 +48,11 @@ function trivial( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
-  let programSourceCode =
-`
-var toolsPath = '${toolsPath}';
-${program.toString()}
-program();
-`
+  let programPath = a.program( program );
 
   /* */
 
-  logger.log( _.strLinesNumber( programSourceCode ) );
-  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  a.jsNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -103,19 +91,11 @@ function terminationEventsExplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
-  let programSourceCode =
-`
-var toolsPath = '${toolsPath}';
-${program.toString()}
-program();
-`
+  let programPath = a.program( program );
 
   /* */
 
-  logger.log( _.strLinesNumber( programSourceCode ) );
-  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  a.jsNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -179,19 +159,11 @@ function terminationEventsImplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
-  let programSourceCode =
-`
-var toolsPath = '${toolsPath}';
-${program.toString()}
-program();
-`
+  let programPath = a.program( program );
 
   /* */
 
-  logger.log( _.strLinesNumber( programSourceCode ) );
-  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  a.jsNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -234,9 +206,6 @@ program();
       console.log( 'terminationEnd1' );
     });
 
-    // _.Procedure.TerminationPeriod = 1000;
-    // _.procedure.terminationBegin();
-
   }
 
 }
@@ -255,19 +224,11 @@ function terminationEventsTerminationWithConsequence( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../Tools.s' ) ) );
-  let programSourceCode =
-`
-var toolsPath = '${toolsPath}';
-${program.toString()}
-program();
-`
+  let programPath = a.program( program );
 
   /* */
 
-  logger.log( _.strLinesNumber( programSourceCode ) );
-  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  a.jsNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
