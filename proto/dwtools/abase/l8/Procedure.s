@@ -884,7 +884,7 @@ function _TerminationEnd()
   }
   catch( err )
   {
-    _.setup._errUnhandledHandler2( err, 'unhandled error in procedures termination routine' )
+    _.setup._errUncaughtHandler2( err, 'uncaught error in procedures termination routine' )
   }
 
 }
@@ -1067,7 +1067,7 @@ function Stack( stack, delta )
   if( delta )
   stack += delta;
   if( _.numberIs( stack ) )
-  stack = _.diagnosticStack([ stack, Infinity ]);
+  stack = _.introspector.stack([ stack, Infinity ]);
 
   _.assert( _.strIs( stack ) );
 

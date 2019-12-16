@@ -186,6 +186,7 @@ function terminationEventsImplicitTermination( test )
     let _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
+    _.include( 'wAppBasic' );
 
     let t = 100;
 
@@ -296,6 +297,69 @@ terminationEventsTerminationWithConsequence.description =
 - callback of consequence get resource
 `
 
+//
+
+function activeProcedureSourcePath( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:31/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:21/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback1.*program.js:8/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback2.*program.js:13/ ), 1 );
+    test.identical( _.strCount( op.output, 'sourcePath::' ), 4 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    var con = _.Consequence()
+    con.then( function callback1( arg )
+    {
+      console.log( 'sourcePath::callback1 ' + _.Procedure.ActiveProcedure._sourcePath );
+      return 'callback1';
+    })
+    con.then( function callback2( arg )
+    {
+      console.log( 'sourcePath::callback2 ' + _.Procedure.ActiveProcedure._sourcePath );
+      /* _.procedure.terminationBegin();*/
+      return 'callback2';
+    })
+
+    console.log( 'sourcePath::program ' + _.Procedure.ActiveProcedure._sourcePath );
+    _.time.out( 100, function timeOut1()
+    {
+      console.log( 'sourcePath::timeout ' + _.Procedure.ActiveProcedure._sourcePath );
+      con.take( 'timeout1' );
+    });
+
+  }
+
+}
+
+activeProcedureSourcePath.timeOut = 30000;
+activeProcedureSourcePath.description =
+`
+proper procedure is active
+active procedure has proper source path
+`
 // --
 // declare
 // --
@@ -325,7 +389,9 @@ var Self =
 
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
-    terminationEventsTerminationWithConsequence
+    terminationEventsTerminationWithConsequence,
+
+    activeProcedureSourcePath,
 
   },
 
