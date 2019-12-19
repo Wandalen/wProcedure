@@ -379,7 +379,7 @@ var Self =
     timeAccuracy : 1,
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
-    defaultJsPath : null,
+    execJsPath : null,
   },
 
   tests :
