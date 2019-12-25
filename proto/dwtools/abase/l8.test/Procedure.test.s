@@ -6,9 +6,10 @@ if( typeof module !== 'undefined' )
 {
 
   var _ = require( '../../Tools.s' );
-  require( '../l8/Procedure.s' );
 
   _.include( 'wTesting' );
+
+  require( '../l8/Procedure.s' );
 
 }
 
@@ -82,6 +83,200 @@ trivial.timeOut = 30000;
 trivial.description =
 `
 - application does not have to wait for procedures
+`
+
+//
+
+function activeProcedureSourcePath( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:31/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:21/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback1.*program.js:8/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback2.*program.js:13/ ), 1 );
+    test.identical( _.strCount( op.output, 'sourcePath::' ), 4 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    var con = _.Consequence()
+    con.then( function callback1( arg )
+    {
+      console.log( 'sourcePath::callback1 ' + _.Procedure.ActiveProcedure._sourcePath );
+      return 'callback1';
+    })
+    con.then( function callback2( arg )
+    {
+      console.log( 'sourcePath::callback2 ' + _.Procedure.ActiveProcedure._sourcePath );
+      /* _.procedure.terminationBegin();*/
+      return 'callback2';
+    })
+
+    console.log( 'sourcePath::program ' + _.Procedure.ActiveProcedure._sourcePath );
+    _.time.out( 100, function timeOut1()
+    {
+      console.log( 'sourcePath::timeout ' + _.Procedure.ActiveProcedure._sourcePath );
+      con.take( 'timeout1' );
+    });
+
+  }
+
+}
+
+activeProcedureSourcePath.timeOut = 30000;
+activeProcedureSourcePath.description =
+`
+proper procedure is active
+active procedure has proper source path
+`
+
+//
+
+function quasiProcedure( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'procedure::entry' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 2 );
+    test.identical( _.strCount( op.output, 'program.js:5' ), 1 );
+    test.identical( _.strCount( op.output, 'program.js:12' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wConsequence' );
+    _.procedure.begin({ _name : 'quasi', _quasi : true, _waitTimer : false });
+    logger.log( _.procedure.exportInfo() );
+    console.log( 'program.end' );
+  }
+
+}
+
+quasiProcedure.timeOut = 30000;
+quasiProcedure.description =
+`
+quasi procedure is not waited in the end
+`
+
+//
+
+function accounting( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /program.end(.|\n|\r)*timeout1(.|\n|\r)*timeout2/mg ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 5 );
+
+    test.identical( _.strCount( op.output, 'procedure::entry' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::time.begin' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::time.out' ), 2 );
+    test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
+
+    test.identical( _.strCount( op.output, 'program.js:39' ), 1 );
+    test.identical( _.strCount( op.output, 'program.js:6' ), 1 );
+    test.identical( _.strCount( op.output, 'program.js:11' ), 2 );
+    test.identical( _.strCount( op.output, 'program.js:16' ), 1 );
+
+    test.identical( _.strCount( op.output, 'entry r:null o:String wt:false' ), 1 );
+    test.identical( _.strCount( op.output, 'time.begin r:timeOut1 o:Timer wt:false' ), 1 );
+    test.identical( _.strCount( op.output, 'time.out r:timeGot o:Competitor wt:Timer' ), 1 );
+    test.identical( _.strCount( op.output, 'time.out r:timeEnd o:Timer wt:false' ), 1 );
+    test.identical( _.strCount( op.output, 'quasi r:null o:Null wt:false' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wConsequence' );
+
+    _.time.begin( 50, function timeOut1()
+    {
+      console.log( 'timeout1' );
+    });
+
+    _.time.out( 100, function timeOut1()
+    {
+      console.log( 'timeout2' );
+    });
+
+    _.procedure.begin({ _name : 'quasi', _quasi : true, _waitTimer : false });
+    logger.log( _.procedure.exportInfo() );
+
+    console.log( 'program.end' );
+
+    for( let p in _.Procedure.NamesMap )
+    {
+      let procedure = _.Procedure.NamesMap[ p ];
+      let rou = ( procedure._routine ? procedure._routine.name : procedure._routine );
+      let obj = _.strType( procedure._object );
+      if( _.timerIs( procedure._object ) )
+      obj = 'Timer';
+      if( _.competitorIs( procedure._object ) )
+      obj = 'Competitor';
+      let wt = _.timerIs( procedure._waitTimer ) ? 'Timer' : procedure._waitTimer;
+      debugger;
+      logger.log( `${procedure.name()} r:${rou} o:${obj} wt:${wt}` );
+    }
+
+  }
+
+}
+
+accounting.timeOut = 30000;
+accounting.description =
+`
+- time outs produce one procedure
+- source path of procedures are correct
 `
 
 //
@@ -297,69 +492,6 @@ terminationEventsTerminationWithConsequence.description =
 - callback of consequence get resource
 `
 
-//
-
-function activeProcedureSourcePath( test )
-{
-  let context = this;
-  let visited = [];
-  let a = test.assetFor( false );
-  let programPath = a.program( program );
-
-  /* */
-
-  a.jsNonThrowing({ execPath : programPath })
-  .then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:31/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:21/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::callback1.*program.js:8/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::callback2.*program.js:13/ ), 1 );
-    test.identical( _.strCount( op.output, 'sourcePath::' ), 4 );
-    return null;
-  });
-
-  /* */
-
-  return a.ready;
-
-  function program()
-  {
-    let _ = require( toolsPath );
-    _.include( 'wFiles' );
-    _.include( 'wConsequence' );
-
-    var con = _.Consequence()
-    con.then( function callback1( arg )
-    {
-      console.log( 'sourcePath::callback1 ' + _.Procedure.ActiveProcedure._sourcePath );
-      return 'callback1';
-    })
-    con.then( function callback2( arg )
-    {
-      console.log( 'sourcePath::callback2 ' + _.Procedure.ActiveProcedure._sourcePath );
-      /* _.procedure.terminationBegin();*/
-      return 'callback2';
-    })
-
-    console.log( 'sourcePath::program ' + _.Procedure.ActiveProcedure._sourcePath );
-    _.time.out( 100, function timeOut1()
-    {
-      console.log( 'sourcePath::timeout ' + _.Procedure.ActiveProcedure._sourcePath );
-      con.take( 'timeout1' );
-    });
-
-  }
-
-}
-
-activeProcedureSourcePath.timeOut = 30000;
-activeProcedureSourcePath.description =
-`
-proper procedure is active
-active procedure has proper source path
-`
 // --
 // declare
 // --
@@ -386,12 +518,13 @@ var Self =
   {
 
     trivial,
+    activeProcedureSourcePath,
+    quasiProcedure,
+    accounting,
 
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
     terminationEventsTerminationWithConsequence,
-
-    activeProcedureSourcePath,
 
   },
 

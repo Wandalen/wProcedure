@@ -38,15 +38,15 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
-if( _realGlobal_ !== _global_ )
-if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
-return ExportTo( _global_, _realGlobal_ );
+// if( _realGlobal_ !== _global_ )
+// if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
+// return ExportTo( _global_, _realGlobal_ );
 
 _.assert( !!_global_.wTools, 'Does not have wTools' );
 _.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
 _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
 
-_global_.wTools.procedure = Object.create( null );
+_global_.wTools.procedure = _global_.wTools.procedure || Object.create( null );
 
 // --
 // inter
@@ -72,7 +72,12 @@ let Self = function wProcedure( o )
 
   _.assert( o._stack === undefined || _.numberIs( o._stack ) || _.strIs( o._stack ) );
 
+  if( !o._stack )
+  debugger;
+  // if( o._stack )
+  // debugger;
   o._stack = _.procedure.stack( o._stack, 1 );
+  // o._stack = o._stack || _.procedure.stack( 1 );
 
   let args = [ o ];
 
@@ -115,7 +120,7 @@ function finit()
 {
   let procedure = this;
 
-  // if( procedure.id === 301 )
+  // if( procedure.id === 30 )
   // debugger;
 
   _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
@@ -131,7 +136,7 @@ function finit()
 function isAlive()
 {
   let procedure = this;
-  return procedure._timer !== null;
+  return procedure._waitTimer !== null;
 }
 
 //
@@ -148,14 +153,11 @@ function begin()
 
   _.assert( arguments.length === 0 );
 
-  // if( procedure.id === 301 )
-  // debugger;
-
-  if( procedure._timer === null )
-  if( procedure._object === 'entry' )
-  procedure._timer = false;
-  else
-  procedure._timer = _.time._begin( Infinity );
+  if( procedure._waitTimer === null )
+  // if( procedure._object === 'entry' )
+  // procedure._waitTimer = false;
+  // else
+  procedure._waitTimer = _.time._begin( Infinity );
 
   if( !procedure._longName )
   procedure._longNameMake();
@@ -177,15 +179,12 @@ function end()
 {
   let procedure = this;
 
-  // if( procedure.id === 301 )
-  // debugger;
-
   _.assert( arguments.length === 0 );
-  _.assert( procedure._timer !== null, `${procedure._longName} is not alive` );
+  _.assert( procedure._waitTimer !== null, `${procedure._longName} is not alive` );
 
-  if( procedure._timer )
-  _.time._cancel( procedure._timer );
-  procedure._timer = null;
+  if( procedure._waitTimer )
+  _.time._cancel( procedure._waitTimer );
+  procedure._waitTimer = null;
 
   procedure.finit();
 
@@ -224,10 +223,10 @@ function activate( val )
   val = true;
   val = !!val;
 
-  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
-
-  // if( procedure.id === 301 )
+  // if( procedure.id === 30 )
   // debugger;
+
+  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
 
   _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
 
@@ -272,6 +271,42 @@ function Activate( procedure, val )
 
 //
 
+function use()
+{
+  let procedure = this;
+  let result = procedure.isUsed();
+  _.assert( arguments.length === 0 );
+  _.assert( procedure._counter >= 0 );
+  _.assert( !procedure.finitedIs() );
+  procedure._counter += 1;
+  return result;
+}
+
+//
+
+function unuse()
+{
+  let procedure = this;
+  _.assert( arguments.length === 0 );
+  _.assert( !procedure.finitedIs() );
+  procedure._counter -= 1;
+  _.assert( procedure._counter >= 0 );
+  let result = procedure.isUsed();
+  return result;
+}
+
+//
+
+function isUsed()
+{
+  let procedure = this;
+  _.assert( arguments.length === 0 );
+  _.assert( procedure._counter >= 0 );
+  return procedure._counter > 0;
+}
+
+//
+
 /**
  * @summary Returns true if procedure is running.
  * @method isBegun
@@ -282,7 +317,7 @@ function isBegun()
 {
   let procedure = this;
   _.assert( arguments.length === 0 );
-  return !!procedure._timer;
+  return !!procedure._waitTimer;
 }
 
 //
@@ -336,83 +371,12 @@ function stackElse( stack )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  if( procedure._stack && procedure._stackExplicit )
+  if( procedure._stack && procedure._explicit )
   return procedure;
-  procedure._stackExplicit = 1;
+  procedure._explicit = true;
 
   return procedure.stack( stack );
 }
-
-//
-
-// function sourcePath( sourcePath )
-// {
-//   let procedure = this;
-//
-//   if( !Config.debug || !_.Procedure.UsingSourcePath )
-//   {
-//     if( !procedure._sourcePath )
-//     procedure._sourcePath = '';
-//     return procedure;
-//   }
-//
-//   if( arguments.length === 0 )
-//   return procedure._sourcePath;
-//
-//   _.assert( arguments.length === 1 );
-//
-//   if( sourcePath === undefined )
-//   sourcePath = 1;
-//   if( _.numberIs( sourcePath ) )
-//   sourcePath += 1;
-//   if( _.numberIs( sourcePath ) )
-//   sourcePath = _.procedure.sourcePathGet( sourcePath );
-//
-//   _.assert( _.strIs( sourcePath ) );
-//
-//   procedure._sourcePath = sourcePath;
-//
-//   if( procedure._longName )
-//   procedure._longNameMake();
-//
-//   return procedure;
-// }
-//
-// //
-//
-// function sourcePathFirst( sourcePath )
-// {
-//   let procedure = this;
-//
-//   if( !Config.debug || !_.Procedure.UsingSourcePath )
-//   {
-//     if( !procedure._sourcePath )
-//     procedure._sourcePath = '';
-//     return procedure;
-//   }
-//
-//   if( arguments.length === 0 )
-//   return procedure._sourcePath;
-//
-//   _.assert( arguments.length === 0 || arguments.length === 1 );
-//
-//   if( procedure._sourcePath && procedure._stackExplicit )
-//   return procedure;
-//
-//   procedure._stackExplicit = 1;
-//
-//   if( sourcePath === undefined )
-//   sourcePath = 1;
-//   if( _.numberIs( sourcePath ) )
-//   sourcePath += 1;
-//
-//   let result = procedure.sourcePath( sourcePath );
-//
-//   // if( procedure && procedure._sourcePath && _.strHas( procedure._sourcePath, '\Consequence.s:' ) )
-//   // debugger;
-//
-//   return result;
-// }
 
 //
 
@@ -458,6 +422,52 @@ function nameElse( name )
   return procedure;
 
   return procedure.name( name );
+}
+
+//
+
+/**
+ * @summary Getter/Setter routine for `routine` property.
+ * @description
+ * Returns routine of the procedure if no args provided. Sets routine of procedure if provided single argument `routine`.
+ * @param {String} [routine] Name of the procedure.
+ * @method routine
+ * @memberof module:Tools/base/Procedure.wProcedure
+ */
+
+function routine( routine )
+{
+  let procedure = this;
+
+  if( arguments.length === 0 )
+  return procedure._routine;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.routineIs( routine ), () => 'Expects routine, but got ' + _.strType( routine ) );
+
+  procedure._routine = routine;
+
+  if( procedure._longName )
+  procedure._longNameMake();
+
+  return procedure;
+}
+
+//
+
+function routineElse( routine )
+{
+  let procedure = this;
+
+  if( arguments.length === 0 )
+  return procedure._routine;
+
+  _.assert( arguments.length === 1 );
+
+  if( procedure._routine )
+  return procedure;
+
+  return procedure.routine( routine );
 }
 
 //
@@ -526,72 +536,90 @@ function _longNameMake()
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} procedure Selector for procedure.
- * @routine Get
+ * @param {Number|String|Routine} filter Filter to filter procedures.
+ * @routine Filter
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
  * @memberof module:Tools/base/Procedure.wProcedure
  */
 
  /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} procedure Selector for procedure.
- * @routine get
+ * @param {Number|String|Routine} filter Filter to filter procedures.
+ * @routine Filter
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
  * @memberof module:Tools/base/Procedure.wTools.procedure
  */
 
-function Get( procedure )
+function Filter( filter )
 {
   let Cls = this;
 
   _.assert( arguments.length === 1 );
 
-  if( _.arrayIs( procedure ) )
+  if( _.arrayIs( filter ) )
   {
-    let result = procedure.map( ( p ) => Cls.Get( p ) );
+    let result = filter.map( ( p ) => Cls.Filter( p ) );
     result = _.arrayFlatten( result );
     return result;
   }
 
-  let result = procedure;
+  let result = filter;
+  let procedures = _.mapVals( _.Procedure.NamesMap );
 
-  if( _.numberIs( procedure ) )
+  if( _.mapIs( filter ) )
   {
-    result = _.filter( _.Procedure.NamesMap, { id : procedure } );
-    result = _.mapVals( result );
-    if( result.length > 1 )
-    return result;
+    if( filter._quasi === null )
+    delete filter._quasi;
+    if( _.boolLike( filter._quasi ) )
+    filter._quasi = !!filter._quasi;
+
+    if( filter.procedures )
+    procedures = filter.procedures;
+    delete filter.procedures;
+
+    _.assert( _.arrayIs( procedures ) );
+    result = _.filter( procedures, filter );
+    // result = _.mapVals( result );
+    // if( result.length > 1 )
+    // return result;
     if( !result.length )
     return result;
-    // procedure = result[ 0 ];
   }
 
-  if( _.strIs( procedure ) )
+  if( _.numberIs( filter ) )
   {
-    result = _.filter( _.Procedure.NamesMap, { _name : procedure } );
-    result = _.mapVals( result );
-    if( result.length > 1 )
-    return result;
+    result = _.filter( procedures, { id : filter } );
+    // result = _.mapVals( result );
+    // if( result.length > 1 )
+    // return result;
     if( !result.length )
     return result;
-    // procedure = result[ 0 ];
   }
 
-  if( _.routineIs( procedure ) )
+  if( _.strIs( filter ) )
   {
-    result = _.filter( _.Procedure.NamesMap, { _routine : procedure } );
-    result = _.mapVals( result );
-    if( result.length > 1 )
-    return result;
+    result = _.filter( procedures, { _name : filter } );
+    // result = _.mapVals( result );
+    // if( result.length > 1 )
+    // return result;
     if( !result.length )
     return result;
-    // procedure = result[ 0 ];
+  }
+
+  if( _.routineIs( filter ) )
+  {
+    result = _.filter( procedures, { _routine : filter } );
+    // result = _.mapVals( result );
+    // if( result.length > 1 )
+    // return result;
+    if( !result.length )
+    return result;
   }
 
   if( _.arrayIs( result ) )
-  _.assert( result.every( ( result ) => result instanceof Self, 'Not procedure' ) );
+  _.assert( result.every( ( result ) => result instanceof Self, 'Not a filter' ) );
   else
-  _.assert( result instanceof Self, 'Not procedure' );
+  _.assert( result instanceof Self, `${_.strType( result )} is not a filter` );
 
   return result;
 }
@@ -600,7 +628,7 @@ function Get( procedure )
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} procedure Selector for procedure.
+ * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine GetSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
  * @memberof module:Tools/base/Procedure.wProcedure
@@ -608,19 +636,60 @@ function Get( procedure )
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} procedure Selector for procedure.
+ * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine getSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
  * @memberof module:Tools/base/Procedure.wTools.procedure
  */
 
-function GetSingleMaybe( procedure )
+function GetSingleMaybe( filter )
 {
   _.assert( arguments.length === 1 );
-  let result = _.procedure.get( procedure );
+  // let result = _.procedure.get( filter );
+  let result = this.Filter( filter );
   if( _.arrayIs( result ) && result.length !== 1 )
   return null;
   return result;
+}
+
+//
+
+function ExportInfo( o )
+{
+  let result = '';
+
+  if( _.longIs( arguments[ 0 ] ) )
+  o = { procedures : o }
+  o = _.routineOptions( ExportInfo, o );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+
+  let procedures = this.Filter( o );
+
+  for( let p = 0 ; p < procedures.length ; p++ )
+  {
+    let procedure = procedures[ p ];
+    result += procedure._longName + '\n';
+  }
+
+  // for( let p in _.Procedure.NamesMap )
+  // {
+  //   let procedure = _.Procedure.NamesMap[ p ];
+  //   if( !o.withQuasi && procedure._quasi )
+  //   continue;
+  //   if( !o.withNotQuasi && procedure._quasi )
+  //   continue;
+  //   result += procedure._longName + '\n';
+  // }
+
+  return result;
+}
+
+ExportInfo.defaults =
+{
+  procedures : null,
+  _quasi : null,
+  // withQuasi : 1,
+  // withNotQuasi : 1,
 }
 
 //
@@ -657,7 +726,7 @@ function From( o )
  * @summary Short-cut for `begin` method. Creates instance of `wProcedure` and launches the routine.
  * @param {Object} o Options map
  * @param {String} o._name Name of procedure.
- * @param {Number} o._timer Timer for procedure.
+ * @param {Number} o._waitTimer Timer for procedure.
  * @param {Function} o._routine Routine to lauch.
  * @routine Begin
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
@@ -668,7 +737,7 @@ function From( o )
  * @summary Short-cut for `begin` method. Creates instance of `wProcedure` and launches the routine.
  * @param {Object} o Options map
  * @param {String} o._name Name of procedure.
- * @param {Number} o._timer Timer for procedure.
+ * @param {Number} o._waitTimer Timer for procedure.
  * @param {Function} o._routine Routine to lauch.
  * @routine begin
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
@@ -685,7 +754,7 @@ function Begin( o )
 Begin.defaults =
 {
   _name : null,
-  _timer : null,
+  _waitTimer : null,
   _routine : null,
 }
 
@@ -710,7 +779,7 @@ Begin.defaults =
 function End( procedure )
 {
   _.assert( arguments.length === 1 );
-  procedure = _.procedure.get( procedure );
+  procedure = _.procedure.find( procedure );
   return procedure.end();
 }
 
@@ -730,16 +799,34 @@ function End( procedure )
 
 function TerminationReport()
 {
+
+  let procedures = this.Filter({ _quasi : 0 });
   if( _.Procedure._TerminationListInvalidated )
-  for( let p in _.Procedure.NamesMap )
-  {
-    let procedure = _.Procedure.NamesMap[ p ];
-    if( procedure._object === 'entry' )
-    continue;
-    logger.log( procedure._longName );
-  }
+  logger.log( this.ExportInfo( procedures ) );
+  // logger.log( this.ExportInfo({ _quasi : 0 }) );
+  // logger.log( this.ExportInfo({ withQuasi : 0 }) );
+
+  // for( let p in _.Procedure.NamesMap )
+  // {
+  //   let procedure = _.Procedure.NamesMap[ p ];
+  //   // if( procedure._object === 'entry' )
+  //   // continue;
+  //   if( procedure._quasi )
+  //   continue;
+  //   logger.log( procedure._longName );
+  // }
+
+  // let count = 0;
+  // for( let p in _.Procedure.NamesMap )
+  // {
+  //   let procedure = _.Procedure.NamesMap[ p ];
+  //   if( procedure._quasi )
+  //   continue;
+  //   count += 1;
+  // }
+
   _.Procedure._TerminationListInvalidated = 0;
-  logger.log( 'Waiting for ' + ( Object.keys( _.Procedure.NamesMap ).length-1 ) + ' procedure(s) ...' );
+  logger.log( `Waiting for ${procedures.length} procedure(s) ...` );
 }
 
 //
@@ -769,19 +856,6 @@ function TerminationBegin()
   _.Procedure._TerminationListInvalidated = 1;
 
   _.Procedure._EventTerminationBeginHandle();
-
-  // _.Procedure._EventCallbackMap.terminationBegin.forEach( ( callback ) =>
-  // {
-  //   try
-  //   {
-  //     callback.call( _.procedure );
-  //   }
-  //   catch( err )
-  //   {
-  //     logger.error( _.errOnce( 'Error in callback of event "terminationBegin"\n', err ) );
-  //   }
-  // });
-
   _.Procedure._TerminationRestart();
 }
 
@@ -819,7 +893,9 @@ function _TerminationRestart()
   _.time._cancel( _.Procedure._TerminationTimer );
   _.Procedure._TerminationTimer = null;
 
-  if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 && !_.Procedure._Exiting )
+  let procedures = this.Filter({ _quasi : 0 });
+  // if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 && !_.Procedure._Exiting )
+  if( procedures.length && !_.Procedure._Exiting )
   {
     _.Procedure._TerminationTimer = _.time._begin( _.Procedure.TerminationPeriod, _.Procedure._TerminationIteration );
   }
@@ -854,32 +930,10 @@ function _TerminationEnd()
     /* end all timers */
 
     _.Procedure._TimersEnd();
-    // for( let p in _.Procedure.NamesMap )
-    // {
-    //   let procedure = _.Procedure.NamesMap[ p ];
-    //   if( !_.timerIs( procedure._object ) )
-    //   {
-    //     logger.log( 'not end', procedure._longName );
-    //     continue;
-    //   }
-    //   logger.log( 'end', procedure._longName );
-    //   _.time.cancel( procedure._object );
-    // }
 
     /* end all timers */
 
     _.Procedure._EventTerminationEndHandle();
-    // _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
-    // {
-    //   try
-    //   {
-    //     callback.call( _.procedure );
-    //   }
-    //   catch( err )
-    //   {
-    //     logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
-    //   }
-    // });
 
   }
   catch( err )
@@ -899,10 +953,8 @@ function _TimersEnd()
     let procedure = _.Procedure.NamesMap[ p ];
     if( !_.timerIs( procedure._object ) )
     {
-      // logger.log( 'not end', procedure._longName );
       continue;
     }
-    // logger.log( 'end', procedure._longName );
     _.time.cancel( procedure._object );
   }
 
@@ -947,36 +999,6 @@ function _EventTerminationEndHandle()
 
 }
 
-// //
-//
-// function time()
-// {
-//   _.assert( arguments.length === 0 );
-//   _.assert( _.Procedure._Terminating === 1 );
-//   _.assert( _.Procedure._TerminationTimer === null );
-//
-//   _.Procedure._Terminating = 2;
-//
-//   if( _.Procedure.EntryProcedure && _.Procedure.EntryProcedure.isAlive() )
-//   {
-//     _.Procedure.EntryProcedure.activate( 0 );
-//     _.Procedure.EntryProcedure.end();
-//   }
-//
-//   _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
-//   {
-//     try
-//     {
-//       callback();
-//     }
-//     catch( err )
-//     {
-//       logger.error( _.errOnce( 'Error in callback of event "terminationEnd"\n', err ) );
-//     }
-//   });
-//
-// }
-
 //
 
 function _EventProcessExitHandle()
@@ -992,7 +1014,14 @@ function _Setup1()
   _.assert( _.strIs( _.setup._entryProcedureStack ) );
 
   if( !_.Procedure.EntryProcedure )
-  _.Procedure.EntryProcedure = _.procedure.begin({ _stack : _.setup._entryProcedureStack, _object : 'entry' });
+  _.Procedure.EntryProcedure = _.procedure.begin
+  ({
+    _stack : _.setup._entryProcedureStack,
+    _object : 'entry',
+    _name : 'entry',
+    _quasi : true,
+    _waitTimer : false,
+  });
 
   _.assert( _.Procedure.ActiveProcedures.length === 0 );
 
@@ -1000,13 +1029,6 @@ function _Setup1()
 
   _.assert( !!_.process && !!_.process.on );
   _.process.on( 'available', 'exit', 'exit', _.Procedure._EventProcessExitHandle );
-
-  // // if( _.process && _.process.exitHandlerOnce )
-  // _.process.on( 'available', () =>
-  // {
-  //   _.process.on( 'exit', _.Procedure._EventProcessExitHandle );
-  //   // _.process.exitHandlerOnce( _.Procedure._EventProcessExitHandle );
-  // });
 
 }
 
@@ -1031,9 +1053,6 @@ function _IdAlloc()
   _.Procedure.Counter += 1;
   let result = _.Procedure.Counter;
 
-  // if( result === 2 )
-  // debugger;
-
   return result;
 }
 
@@ -1050,7 +1069,7 @@ function WithObject( timer )
 function Stack( stack, delta )
 {
 
-  if( !Config.debug || !_.Procedure.UsingSourcePath )
+  if( !Config.debug || !_.Procedure.UsingStack )
   return '';
 
   _.assert( delta === undefined || _.numberIs( delta ) );
@@ -1079,24 +1098,10 @@ function Stack( stack, delta )
 function On( o )
 {
 
-  // if( arguments.length === 2 )
-  // o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
-
   o = _.event.on.pre( _.event.on, arguments );
   o.registeredCallbackMap = _.Procedure._EventCallbackMap;
   _.event.on( o );
 
-  // _.assertMapHasOnly( o.callbackMap, _.Procedure._EventCallbackMap );
-  // _.assert( arguments.length === 1 || arguments.length === 2 );
-  //
-  // for( let c in o.callbackMap )
-  // {
-  //   let callback = o.callbackMap[ c ];
-  //   _.assert( _.routineIs( callback ) );
-  //   _.arrayAppend( _.Procedure._EventCallbackMap[ c ], callback );
-  // }
-  //
-  // return this;
 }
 
 On.defaults =
@@ -1109,27 +1114,10 @@ On.defaults =
 function Off( o )
 {
 
-  // if( arguments.length === 2 )
-  // o = { callbackMap : { [ arguments[ 0 ] ] : arguments[ 1 ] } }
-  // if( _.strIs( arguments[ 0 ] ) )
-  // o = { callbackMap : { [ arguments[ 0 ] ] : null } }
-
   o = _.event.off.pre( _.event.off, arguments );
   o.registeredCallbackMap = _.Procedure._EventCallbackMap;
   _.event.off( o );
 
-  // _.assertMapHasOnly( o.callbackMap, _.Procedure._EventCallbackMap );
-  // _.assert( arguments.length === 1 || arguments.length === 2 );
-  //
-  // for( let c in o.callbackMap )
-  // {
-  //   if( o.callbackMap[ c ] === null )
-  //   _.arrayEmpty( _.Procedure._EventCallbackMap[ c ] );
-  //   else
-  //   _.arrayRemoveOnceStrictly( _.Procedure._EventCallbackMap[ c ], o.callbackMap[ c ] );
-  // }
-  //
-  // return this;
 }
 
 Off.defaults =
@@ -1141,14 +1129,17 @@ Off.defaults =
 // meta
 // --
 
-function ExportTo( dstGlobal, srcGlobal )
-{
-  _.assert( _.mapIs( srcGlobal.wTools.Procedure.ToolsExtension ) );
-  _.mapExtend( dstGlobal.wTools, srcGlobal.wTools.Procedure.ToolsExtension );
-  dstGlobal.wTools.time = _.mapExtend( dstGlobal.wTools.time || Object.create( null ), srcGlobal.wTools.Procedure.TimeExtension );
-  if( typeof module !== 'undefined' && module !== null );
-  module[ 'exports' ] = dstGlobal.wTools.procedure;
-}
+// function ExportTo( dstGlobal, srcGlobal )
+// {
+//   _.assert( _.mapIs( srcGlobal.wTools.Procedure.ToolsExtension ) );
+//   _.mapExtend( dstGlobal.wTools, srcGlobal.wTools.Procedure.ToolsExtension );
+//   dstGlobal.wTools.procedure = srcGlobal.wTools.procedure;
+//   dstGlobal.wTools.Procedure = srcGlobal.wTools.Procedure;
+//   dstGlobal.wTools.time = _.mapExtend( dstGlobal.wTools.time || Object.create( null ), srcGlobal.wTools.Procedure.TimeExtension );
+//   if( typeof module !== 'undefined' && module !== null );
+//   module[ 'exports' ] = dstGlobal.wTools.procedure;
+//   debugger;
+// }
 
 // --
 // time
@@ -1160,21 +1151,30 @@ function _timeBegin( o )
   _.assertRoutineOptions( _timeBegin, arguments );
 
   if( o.procedure === undefined || o.procedure === null )
-  o.procedure = 1;
+  o.procedure = 0;
+  if( _.numberIs( o.procedure ) )
+  {
+    _.assert( _.intIs( o.procedure ) );
+    o.procedure += 1;
+  }
   o.procedure = _.Procedure( o.procedure );
+  o.procedure.nameElse( 'time.begin' );
+  o.procedure.routineElse( o.onTime );
+
+  // if( o.procedure.id === 30 )
+  // debugger;
+
   let wasAlive = o.procedure.isAlive();
   if( !wasAlive )
   {
-    o.procedure._timer = false;
+    _.assert( o.procedure._waitTimer === null );
+    o.procedure._waitTimer = false;
     o.procedure.begin();
   }
   let timer;
+
   if( o.method.name === 'periodic' )
   debugger;
-  // if( o.method.name === 'periodic' )
-  // timer = o.method.call( _.time, o.delay, onPeriodicTime2, onCancel2 );
-  // else
-  // timer = o.method.call( _.time, o.delay, onTime2, onCancel2 );
   timer = o.method.call( _.time, o.delay, o.onTime, o.onCancel );
   timer.procedure = o.procedure;
   o.procedure.object( timer );
@@ -1184,9 +1184,6 @@ function _timeBegin( o )
   timer._time = o.method.name === 'periodic' ? timePeriodic : time;
   timer._cancel = cancel;
 
-  // if( o.procedure.id === 43 )
-  // debugger;
-
   return timer;
 
   /* */
@@ -1194,24 +1191,31 @@ function _timeBegin( o )
   function time()
   {
 
-    // if( o.procedure.id === 43 )
+    // if( o.procedure.id === 30 )
     // debugger;
 
+    if( !o.procedure.use() )
     o.procedure.activate( true );
+
     try
     {
       return _time.apply( this, arguments );
     }
     finally
     {
-      if( !o.procedure.isAlive() )
-      {
-        _.assert( o.procedure.finitedIs() );
-        return;
-      }
+      o.procedure.unuse();
+      if( o.procedure.isUsed() )
+      return;
+      // if( o.procedure._routine )
+      // return;
+      // if( !o.procedure.isAlive() )
+      // {
+      //   _.assert( o.procedure.finitedIs() );
+      //   return;
+      // }
       o.procedure.activate( false );
       _.assert( !o.procedure.isActivated() );
-      if( !wasAlive )
+      // if( !wasAlive )
       o.procedure.end();
     }
   }
@@ -1238,39 +1242,44 @@ function _timeBegin( o )
   function cancel()
   {
 
-    // if( o.procedure.id === 43 )
+    // if( o.procedure.id === 30 )
     // debugger;
 
     if( timer.state !== 0 )
     {
-      // debugger;
       return;
     }
 
-    // let wasActivated = o.procedure.isActivated();
-    // if( !wasActivated )
+    if( !o.procedure.use() )
     o.procedure.activate( true );
+
+    // let isActivated = o.procedure.isActivated();
+    // if( !isActivated )
+    // o.procedure.activate( true );
+    //
+    // o.procedure.use();
+
     try
     {
       return _cancel( this, arguments );
-      // return timer._cancel( ... arguments );
     }
     finally
     {
-      // if( wasActivated )
+      o.procedure.unuse();
+      if( o.procedure.isUsed() )
+      return;
+      // if( !o.procedure.isAlive() )
       // {
-      //   debugger;
+      //   _.assert( o.procedure.finitedIs() );
       //   return;
       // }
-      if( !o.procedure.isAlive() )
+      // if( !isActivated )
       {
-        _.assert( o.procedure.finitedIs() );
-        return;
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+        // if( !wasAlive )
+        o.procedure.end();
       }
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
-      if( !wasAlive )
-      o.procedure.end();
     }
 
   }
@@ -1329,7 +1338,6 @@ function timeFinally( delay, procedure, onTime )
   o2.onTime = onTime;
   o2.onCancel = onTime;
   o2.method = _.time._begin;
-  // o2.method = _.time._finally;
 
   let timer = _timeBegin.call( this, o2 );
   return timer;
@@ -1358,27 +1366,6 @@ function timePeriodic( delay, procedure, onTime, onCancel )
   return _timeBegin.call( this, o2 );
 }
 
-//
-
-// function timeCancel( timer )
-// {
-//   let procedure = _.Procedure.WithObject( timer );
-//   let result = _.time._cancel( ... arguments );
-//
-//   /*
-//     Finnalable timer was ended by its already called callback,
-//     Activated procedure should not be ended here. It has its own ending call.
-//   */
-//
-//   if( procedure )
-//   if( timer.kind !== 'finnalabe' )
-//   if( !procedure.isActivated() )
-//   {
-//     procedure.end();
-//   }
-//   return result;
-// }
-
 // --
 // relations
 // --
@@ -1394,7 +1381,7 @@ Object.freeze( _EventCallbackMap );
 let ToolsExtension =
 {
   [ Self.shortName ] : Self,
-  procedure : _.procedure,
+  // procedure : _.procedure,
 }
 
 let TimeExtension =
@@ -1402,7 +1389,6 @@ let TimeExtension =
   begin : timeBegin,
   finally : timeFinally,
   periodic : timePeriodic,
-  // cancel : timeCancel,
 }
 
 let Composes =
@@ -1413,18 +1399,20 @@ let Associates =
 {
   _name : null,
   _stack : null,
-  _stackExplicit : 0,
   _object : null,
+  _waitTimer : null,
+  _explicit : false,
+  _quasi : false,
 }
 
 let Restricts =
 {
   id : 0,
+  _counter : 0,
   _sourcePath : null,
   _longName : null,
-  _timer : null,
-  _waitTime : Infinity,
   _routine : null,
+  _waitTime : Infinity,
 }
 
 let Statics =
@@ -1438,7 +1426,7 @@ let Statics =
   _TerminationTimer : null,
   _TerminationListInvalidated : 1,
   TerminationPeriod : 7500,
-  UsingSourcePath : 1,
+  UsingStack : 1,
   Counter : 0,
   ActiveProcedure : null,
   ActiveProcedures : [],
@@ -1450,8 +1438,9 @@ let Statics =
 
   // routines
 
-  Get, /* xxx : check. cover static routine Get */
-  GetSingleMaybe,
+  Filter, /* qqq : cover please. one test routine per type of input data */
+  GetSingleMaybe, /* xxx : rename to Get or Single? */
+  ExportInfo,
   OptionsFrom,
   From,
   Begin,
@@ -1492,6 +1481,7 @@ let Forbids =
   entryProcedure : 'entryProcedure',
   _onTerminationBegin : '_onTerminationBegin',
   _onTerminationEnd : '_onTerminationEnd',
+  _timer : '_timer',
 
 }
 
@@ -1516,6 +1506,10 @@ let ExtendClass =
   activate,
   Activate,
 
+  use,
+  unuse,
+  isUsed,
+
   isBegun,
 
   object,
@@ -1523,6 +1517,8 @@ let ExtendClass =
   stackElse,
   name,
   nameElse,
+  routine,
+  routineElse,
   longName,
   _longNameMake,
 
@@ -1551,38 +1547,6 @@ _.Copyable.mixin( Self );
 // define namspeces
 // --
 
-// let Fields =
-// {
-//   namesMap : Object.create( null ),
-//   terminating : 0,
-//   terminationTimer : null,
-//   terminationPeriod : 7500,
-//   terminationListInvalidated : 1,
-//   usingSourcePath : 1,
-//   counter : 0,
-//   activeProcedure : null,
-//   activeProcedures : [],
-//   entryProcedure : null,
-//   _onTerminationBegin : [],
-//   _onTerminationEnd : [],
-// }
-
-// let Routines =
-// {
-//
-//   get : Get,
-//   getSingleMaybe : GetSingleMaybe,
-//   from : From,
-//   begin : Begin,
-//   end : End,
-//   activate : Activate,
-//   stack : Stack,
-//
-//   terminationReport : TerminationReport,
-//   terminationBegin : TerminationBegin,
-//
-// }
-
 _.assert( _.routineIs( _.accessor.define.getter.alias ) );
 _.assert( _.routineIs( _.accessor.define.suite.alias ) );
 
@@ -1595,7 +1559,7 @@ let NamespaceBlueprint =
 
   namesMap : alias( 'NamesMap' ),
   terminationPeriod : alias( 'TerminationPeriod' ),
-  usingSourcePath : alias( 'UsingSourcePath' ),
+  usingSourcePath : alias( 'UsingStack' ),
   counter : alias( 'Counter' ),
   activeProcedure : alias( 'ActiveProcedure' ),
   activeProcedures : alias( 'ActiveProcedures' ),
@@ -1603,7 +1567,7 @@ let NamespaceBlueprint =
 
   // routines
 
-  get : join( 'Get' ),
+  find : join( 'Filter' ),
   getSingleMaybe : join( 'GetSingleMaybe' ),
   from : join( 'From' ),
   begin : join( 'Begin' ),
@@ -1614,13 +1578,11 @@ let NamespaceBlueprint =
   off : join( 'Off' ),
   terminationReport : join( 'TerminationReport' ),
   terminationBegin : join( 'TerminationBegin' ),
+  exportInfo : join( 'ExportInfo' ),
 
 }
 
 _.construction.extend( _.procedure, NamespaceBlueprint );
-
-// Object.assign( _.procedure, Routines );
-// Object.assign( _.procedure, Fields );
 
 Object.assign( _, ToolsExtension );
 Object.assign( _.time, TimeExtension );
@@ -1629,15 +1591,15 @@ _[ Self.shortName ] = Self;
 
 _.Procedure._Setup1();
 
-_.assert( _.routineIs( _.procedure.get ) );
-_.assert( _.routineIs( Self.Get ) );
+_.assert( _.routineIs( _.procedure.find ) );
+_.assert( _.routineIs( Self.Filter ) );
 
 // --
 // export
 // --
 
-if( _realGlobal_ !== _global_ )
-return ExportTo( _realGlobal_, _global_ );
+// if( _realGlobal_ !== _global_ )
+// return ExportTo( _realGlobal_, _global_ );
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = _.procedure;
