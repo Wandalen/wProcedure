@@ -1191,9 +1191,6 @@ function _timeBegin( o )
   function time()
   {
 
-    // if( o.procedure.id === 30 )
-    // debugger;
-
     if( !o.procedure.use() )
     o.procedure.activate( true );
 
@@ -1241,9 +1238,6 @@ function _timeBegin( o )
 
   function cancel()
   {
-
-    // if( o.procedure.id === 30 )
-    // debugger;
 
     if( timer.state !== 0 )
     {
