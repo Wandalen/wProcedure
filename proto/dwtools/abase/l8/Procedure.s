@@ -151,7 +151,7 @@ function begin()
 {
   let procedure = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( procedure._waitTimer === null )
   // if( procedure._object === 'entry' )
@@ -179,7 +179,7 @@ function end()
 {
   let procedure = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( procedure._waitTimer !== null, `${procedure._longName} is not alive` );
 
   if( procedure._waitTimer )
@@ -228,7 +228,7 @@ function activate( val )
 
   // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
 
-  _.assert( !procedure.finitedIs(), () => `${procedure._longName} is finited!` );
+  _.assert( !procedure.isFinited(), () => `${procedure._longName} is finited!` );
 
   if( val )
   {
@@ -275,9 +275,9 @@ function use()
 {
   let procedure = this;
   let result = procedure.isUsed();
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( procedure._counter >= 0 );
-  _.assert( !procedure.finitedIs() );
+  _.assert( !procedure.isFinited() );
   procedure._counter += 1;
   return result;
 }
@@ -287,8 +287,8 @@ function use()
 function unuse()
 {
   let procedure = this;
-  _.assert( arguments.length === 0 );
-  _.assert( !procedure.finitedIs() );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
+  _.assert( !procedure.isFinited() );
   procedure._counter -= 1;
   _.assert( procedure._counter >= 0 );
   let result = procedure.isUsed();
@@ -300,7 +300,7 @@ function unuse()
 function isUsed()
 {
   let procedure = this;
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( procedure._counter >= 0 );
   return procedure._counter > 0;
 }
@@ -316,7 +316,7 @@ function isUsed()
 function isBegun()
 {
   let procedure = this;
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   return !!procedure._waitTimer;
 }
 
@@ -333,7 +333,7 @@ function object( timer )
   }
   else
   {
-    _.assert( arguments.length === 0 );
+    _.assert( arguments.length === 0, 'Expects no arguments' );
     return procedure._object;
   }
 }
@@ -515,7 +515,7 @@ function _longNameMake()
   let name = procedure._name || '';
   let sourcePath = procedure._sourcePath;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.strIs( name ) );
 
   if( procedure.id === 0 )
@@ -881,7 +881,7 @@ function _TerminationIteration()
 
 function _TerminationRestart()
 {
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.Procedure._Terminating >= 1 );
 
   if( _.Procedure._Terminating === 2 )
@@ -914,7 +914,7 @@ function _TerminationEnd()
   try
   {
 
-    _.assert( arguments.length === 0 );
+    _.assert( arguments.length === 0, 'Expects no arguments' );
     _.assert( _.Procedure._Terminating === 1 );
     _.assert( _.Procedure._TerminationTimer === null );
 
@@ -1049,7 +1049,7 @@ function _Setup1()
 function _IdAlloc()
 {
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   _.Procedure.Counter += 1;
   let result = _.Procedure.Counter;
 
@@ -1207,7 +1207,7 @@ function _timeBegin( o )
       // return;
       // if( !o.procedure.isAlive() )
       // {
-      //   _.assert( o.procedure.finitedIs() );
+      //   _.assert( o.procedure.isFinited() );
       //   return;
       // }
       o.procedure.activate( false );
@@ -1228,7 +1228,7 @@ function _timeBegin( o )
     }
     finally
     {
-      _.assert( !o.procedure.finitedIs() );
+      _.assert( !o.procedure.isFinited() );
       o.procedure.activate( false );
       _.assert( !o.procedure.isActivated() );
     }
@@ -1264,7 +1264,7 @@ function _timeBegin( o )
       return;
       // if( !o.procedure.isAlive() )
       // {
-      //   _.assert( o.procedure.finitedIs() );
+      //   _.assert( o.procedure.isFinited() );
       //   return;
       // }
       // if( !isActivated )
