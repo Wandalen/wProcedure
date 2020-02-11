@@ -44,6 +44,18 @@ function onSuiteEnd()
 // test
 // --
 
+function procedureIs( test ) 
+{
+  test.case = 'instance of Procedure';
+  var src = new _.Procedure();
+  src.begin();
+  var got = _.procedureIs( src );
+  test.identical( got, true );
+  src.end();
+}
+
+//
+
 function trivial( test )
 {
   let context = this;
@@ -516,6 +528,7 @@ var Self =
 
   tests :
   {
+    procedureIs,
 
     trivial,
     activeProcedureSourcePath,
