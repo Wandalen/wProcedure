@@ -528,7 +528,7 @@ var Self =
 
   tests :
   {
-    procedureIs,
+    procedureIs, // Dmytro : the second part of routine in module wTools
 
     trivial,
     activeProcedureSourcePath,
