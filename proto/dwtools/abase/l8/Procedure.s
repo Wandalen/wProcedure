@@ -25,14 +25,6 @@ if( typeof module !== 'undefined' )
   _.include( 'wProto' );
   _.include( 'wCopyable' );
 
-  // try
-  // {
-  //   _.include( 'wAppBasic' );
-  // }
-  // catch( err )
-  // {
-  // }
-
 }
 
 let _global = _global_;
@@ -803,27 +795,6 @@ function TerminationReport()
   let procedures = this.Filter({ _quasi : 0 });
   if( _.Procedure._TerminationListInvalidated )
   logger.log( this.ExportInfo( procedures ) );
-  // logger.log( this.ExportInfo({ _quasi : 0 }) );
-  // logger.log( this.ExportInfo({ withQuasi : 0 }) );
-
-  // for( let p in _.Procedure.NamesMap )
-  // {
-  //   let procedure = _.Procedure.NamesMap[ p ];
-  //   // if( procedure._object === 'entry' )
-  //   // continue;
-  //   if( procedure._quasi )
-  //   continue;
-  //   logger.log( procedure._longName );
-  // }
-
-  // let count = 0;
-  // for( let p in _.Procedure.NamesMap )
-  // {
-  //   let procedure = _.Procedure.NamesMap[ p ];
-  //   if( procedure._quasi )
-  //   continue;
-  //   count += 1;
-  // }
 
   _.Procedure._TerminationListInvalidated = 0;
   logger.log( `Waiting for ${procedures.length} procedure(s) ...` );
@@ -965,7 +936,7 @@ function _TimersEnd()
 function _EventTerminationBeginHandle()
 {
 
-  _.Procedure._EventCallbackMap.terminationBegin.forEach( ( callback ) =>
+  _.Procedure.Ehandler.events.terminationBegin.forEach( ( callback ) =>
   {
     try
     {
@@ -984,7 +955,7 @@ function _EventTerminationBeginHandle()
 function _EventTerminationEndHandle()
 {
 
-  _.Procedure._EventCallbackMap.terminationEnd.forEach( ( callback ) =>
+  _.Procedure.Ehandler.events.terminationEnd.forEach( ( callback ) =>
   {
     try
     {
@@ -1028,7 +999,7 @@ function _Setup1()
   _.Procedure.EntryProcedure.activate( true );
 
   _.assert( !!_.process && !!_.process.on );
-  _.process.on( 'available', 'exit', 'exit', _.Procedure._EventProcessExitHandle );
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.Procedure._EventProcessExitHandle );
 
 }
 
@@ -1099,8 +1070,8 @@ function On( o )
 {
 
   o = _.event.on.pre( _.event.on, arguments );
-  o.registeredCallbackMap = _.Procedure._EventCallbackMap;
-  _.event.on( o );
+  // o.ehandler = _.Procedure.Ehandler;
+  _.event.on( _.Procedure.Ehandler, o );
 
 }
 
@@ -1115,8 +1086,8 @@ function Off( o )
 {
 
   o = _.event.off.pre( _.event.off, arguments );
-  o.registeredCallbackMap = _.Procedure._EventCallbackMap;
-  _.event.off( o );
+  // o.ehandler = _.Procedure.Ehandler;
+  _.event.off( _.Procedure.Ehandler, o );
 
 }
 
@@ -1364,18 +1335,22 @@ function timePeriodic( delay, procedure, onTime, onCancel )
 // relations
 // --
 
-let _EventCallbackMap =
+let Events =
 {
   terminationBegin : [],
   terminationEnd : [],
 }
 
-Object.freeze( _EventCallbackMap );
+Object.freeze( Events );
+
+let Ehandler =
+{
+  events : Events,
+}
 
 let ToolsExtension =
 {
   [ Self.shortName ] : Self,
-  // procedure : _.procedure,
 }
 
 let TimeExtension =
@@ -1426,7 +1401,7 @@ let Statics =
   ActiveProcedures : [],
   EntryProcedure : null,
 
-  _EventCallbackMap,
+  Ehandler,
   ToolsExtension,
   TimeExtension,
 
