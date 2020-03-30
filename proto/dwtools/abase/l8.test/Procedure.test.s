@@ -44,7 +44,7 @@ function onSuiteEnd()
 // test
 // --
 
-function procedureIs( test ) 
+function procedureIs( test )
 {
   test.case = 'instance of Procedure';
   var src = new _.Procedure();
@@ -61,7 +61,9 @@ function trivial( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
+  debugger;
   let programPath = a.program( program );
+  debugger;
 
   /* */
 
@@ -233,7 +235,7 @@ function accounting( test )
     test.identical( _.strCount( op.output, 'program.js:11' ), 2 );
     test.identical( _.strCount( op.output, 'program.js:16' ), 1 );
 
-    test.identical( _.strCount( op.output, 'entry r:null o:String wt:false' ), 1 );
+    test.identical( _.strCount( op.output, 'entry r:null o:Null wt:false' ), 1 );
     test.identical( _.strCount( op.output, 'time.begin r:timeOut1 o:Timer wt:false' ), 1 );
     test.identical( _.strCount( op.output, 'time.out r:timeGot o:Competitor wt:Timer' ), 1 );
     test.identical( _.strCount( op.output, 'time.out r:timeEnd o:Timer wt:false' ), 1 );
@@ -504,6 +506,326 @@ terminationEventsTerminationWithConsequence.description =
 - callback of consequence get resource
 `
 
+//
+
+function nativeWatchingSetTimeout( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'Error' ), 0 );
+
+    test.identical( _.strCount( op.output, 'a count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /a0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'b count : 2' ), 1 );
+    test.identical( _.strCount( op.output, /b0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:8:5/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'c count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /c0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    _.Procedure.NativeWatchingEnable();
+
+    log( 'a' );
+    setTimeout( () =>
+    {
+      log( 'c' );
+    }, 1000 );
+    log( 'b' );
+
+    function log( msg )
+    {
+      console.log( `${msg || ''} count : ${_.Procedure.InstancesArray.length}` );
+      for( let i = 0 ; i < _.Procedure.InstancesArray.length ; i++ )
+      {
+        let procedure = _.Procedure.InstancesArray[ i ];
+        console.log( `  ${msg}${i} : ${procedure._longName}` );
+      }
+    }
+  }
+
+}
+
+nativeWatchingSetTimeout.description =
+`
+- setTimeout makes a procedure
+- timeout of setTimeout removes the made procedure
+`
+
+//
+
+function nativeWatchingСlearTimeout( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'Error' ), 0 );
+
+    test.identical( _.strCount( op.output, 'a count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /a0 : procedure::entry#1/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:8:18/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:12:18/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    _.Procedure.NativeWatchingEnable();
+
+    log( 'a' );
+    let timer1 = setTimeout( () =>
+    {
+      log( 'c' );
+    }, 1000 );
+    let timer2 = setTimeout( () =>
+    {
+      clearTimeout();
+      clearTimeout( timer1 );
+      log( 'd' );
+    }, 500 );
+    log( 'b' );
+
+    function log( msg )
+    {
+      console.log( `${msg || ''} count : ${_.Procedure.InstancesArray.length}` );
+      for( let i = 0 ; i < _.Procedure.InstancesArray.length ; i++ )
+      {
+        let procedure = _.Procedure.InstancesArray[ i ];
+        console.log( `  ${msg}${i} : ${procedure._longName}` );
+      }
+    }
+  }
+
+}
+
+nativeWatchingСlearTimeout.description =
+`
+- clearTimeout removes procedure made by setTimeout
+`
+
+//
+
+function nativeWatchingSetInterval( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'Error' ), 0 );
+
+    test.identical( _.strCount( op.output, 'a count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /a0 : procedure::entry#1/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, '0c count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /0c0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, '1c count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /1c0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    let counter = 0;
+    _.include( 'wProcedure' );
+    _.Procedure.NativeWatchingEnable();
+
+    log( 'a' );
+    let timer1 = setInterval( () =>
+    {
+      log( `${counter}c` );
+      counter += 1;
+    }, 800 );
+    let timer2 = setTimeout( () =>
+    {
+      clearInterval( timer1 );
+      log( 'd' );
+    }, 2000 );
+    log( 'b' );
+
+    function log( msg )
+    {
+      console.log( `${msg || ''} count : ${_.Procedure.InstancesArray.length}` );
+      for( let i = 0 ; i < _.Procedure.InstancesArray.length ; i++ )
+      {
+        let procedure = _.Procedure.InstancesArray[ i ];
+        console.log( `  ${msg}${i} : ${procedure._longName}` );
+      }
+    }
+  }
+
+}
+
+nativeWatchingSetInterval.description =
+`
+- setInterval makes a procedure
+- timeout of setInterval does not removes the made procedure
+- clearInterval the made procedure
+`
+
+//
+
+/* xxx qqq : implement for browser */
+function nativeWatchingRequestAnimationFrame( test )
+{
+  let context = this;
+  let visited = [];
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  test.is( true );
+
+  if( !_global_.requestAnimationFrame )
+  return;
+
+  /* */
+
+  a.jsNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'error' ), 0 );
+    test.identical( _.strCount( op.output, 'Error' ), 0 );
+
+    test.identical( _.strCount( op.output, 'a count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /a0 : procedure::entry#1/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, '0c count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /0c0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, '1c count : 3' ), 1 );
+    test.identical( _.strCount( op.output, /1c0 : procedure::entry#1/ ), 1 );
+    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program\.js:9/ ), 1 );
+    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program\.js:14/ ), 1 );
+
+    test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
+    test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
+
+    return null;
+
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    let counter = 0;
+    _.include( 'wProcedure' );
+    _.Procedure.NativeWatchingEnable();
+
+    log( 'a' );
+    let timer1 = requestAnimationFrame( () =>
+    {
+      log( `${counter}c` );
+      counter += 1;
+    }, 800 );
+    let timer2 = setTimeout( () =>
+    {
+      cancelAnimationFrame( timer1 );
+      log( 'd' );
+    }, 2000 );
+    log( 'b' );
+
+    function log( msg )
+    {
+      console.log( `${msg || ''} count : ${_.Procedure.InstancesArray.length}` );
+      for( let i = 0 ; i < _.Procedure.InstancesArray.length ; i++ )
+      {
+        let procedure = _.Procedure.InstancesArray[ i ];
+        console.log( `  ${msg}${i} : ${procedure._longName}` );
+      }
+    }
+  }
+
+}
+
+nativeWatchingRequestAnimationFrame.description =
+`
+- requestAnimationFrame makes a procedure
+- timeout of requestAnimationFrame does not removes the made procedure
+- cancelAnimationFrame the made procedure
+`
+
 // --
 // declare
 // --
@@ -513,7 +835,7 @@ var Self =
 
   name : 'Tools.base.Procedure',
   silencing : 1,
-  routineTimeOut : 30000,
+  routineTimeOut : 60000,
 
   onSuiteBegin,
   onSuiteEnd,
@@ -528,7 +850,8 @@ var Self =
 
   tests :
   {
-    procedureIs, // Dmytro : the second part of routine in module wTools
+
+    procedureIs,
 
     trivial,
     activeProcedureSourcePath,
@@ -538,6 +861,11 @@ var Self =
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
     terminationEventsTerminationWithConsequence,
+
+    nativeWatchingSetTimeout,
+    nativeWatchingСlearTimeout,
+    nativeWatchingSetInterval,
+    nativeWatchingRequestAnimationFrame,
 
   },
 

@@ -30,10 +30,6 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 
-// if( _realGlobal_ !== _global_ )
-// if( _realGlobal_.wTools && _realGlobal_.wTools.procedure )
-// return ExportTo( _global_, _realGlobal_ );
-
 _.assert( !!_global_.wTools, 'Does not have wTools' );
 _.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
 _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
@@ -61,18 +57,9 @@ let Self = function wProcedure( o )
   }
 
   o = Self.OptionsFrom( ... arguments );
-
-  _.assert( o._stack === undefined || _.numberIs( o._stack ) || _.strIs( o._stack ) );
-
-  if( !o._stack )
-  debugger;
-  // if( o._stack )
-  // debugger;
   o._stack = _.procedure.stack( o._stack, 1 );
-  // o._stack = o._stack || _.procedure.stack( 1 );
 
   let args = [ o ];
-
   if( !( this instanceof Self ) )
   return new( _.constructorJoin( Self, args ) );
   return Self.prototype.init.apply( this, args );
@@ -99,6 +86,8 @@ function init( o )
 
   procedure._longNameMake();
 
+  _.arrayAppendOnceStrictly( procedure.InstancesArray, procedure );
+
   _.assert( _.strIs( procedure._sourcePath ) );
   _.assert( arguments.length === 1 );
   _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
@@ -112,13 +101,12 @@ function finit()
 {
   let procedure = this;
 
-  // if( procedure.id === 30 )
-  // debugger;
-
   _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
 
   delete _.Procedure.NamesMap[ procedure._longName ];
+
+  _.arrayRemoveOnceStrictly( procedure.InstancesArray, procedure );
 
   return _.Copyable.prototype.finit.call( procedure );
 }
@@ -146,9 +134,6 @@ function begin()
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( procedure._waitTimer === null )
-  // if( procedure._object === 'entry' )
-  // procedure._waitTimer = false;
-  // else
   procedure._waitTimer = _.time._begin( Infinity );
 
   if( !procedure._longName )
@@ -571,9 +556,6 @@ function Filter( filter )
 
     _.assert( _.arrayIs( procedures ) );
     result = _.filter( procedures, filter );
-    // result = _.mapVals( result );
-    // if( result.length > 1 )
-    // return result;
     if( !result.length )
     return result;
   }
@@ -581,9 +563,6 @@ function Filter( filter )
   if( _.numberIs( filter ) )
   {
     result = _.filter( procedures, { id : filter } );
-    // result = _.mapVals( result );
-    // if( result.length > 1 )
-    // return result;
     if( !result.length )
     return result;
   }
@@ -591,9 +570,6 @@ function Filter( filter )
   if( _.strIs( filter ) )
   {
     result = _.filter( procedures, { _name : filter } );
-    // result = _.mapVals( result );
-    // if( result.length > 1 )
-    // return result;
     if( !result.length )
     return result;
   }
@@ -601,9 +577,6 @@ function Filter( filter )
   if( _.routineIs( filter ) )
   {
     result = _.filter( procedures, { _routine : filter } );
-    // result = _.mapVals( result );
-    // if( result.length > 1 )
-    // return result;
     if( !result.length )
     return result;
   }
@@ -614,6 +587,124 @@ function Filter( filter )
   _.assert( result instanceof Self, `${_.strType( result )} is not a filter` );
 
   return result;
+}
+
+//
+
+function NativeWatchingEnable( o )
+{
+  o = _.routineOptions( NativeWatchingEnable, o );
+  _.assert( !!o.enable );
+
+  let original = Object.create( null );
+  original.setTimeout = _global_.setTimeout;
+  original.clearTimeout = _global_.clearTimeout;
+  original.setInterval = _global_.setInterval;
+  original.clearInterval = _global_.clearInterval;
+  original.requestAnimationFrame = _global_.requestAnimationFrame;
+  original.cancelAnimationFrame = _global_.cancelAnimationFrame;
+
+  _global_.setTimeout = setTimeout;
+  _global_.clearTimeout = clearTimeout;
+  _global_.setInterval = setInterval;
+  _global_.clearInterval = clearInterval;
+  if( _global_.requestAnimationFrame )
+  _global_.requestAnimationFrame = requestAnimationFrame;
+  if( _global_.cancelAnimationFrame )
+  _global_.cancelAnimationFrame = cancelAnimationFrame;
+
+  /* */
+
+  function setTimeout( onTime, ... args )
+  {
+    let object = original.setTimeout( onTime2, ... args );
+    let procedure = procedureMake({ _object : object });
+    return object;
+    function onTime2()
+    {
+      procedureRemove( procedure );
+      return onTime( ... arguments );
+    }
+  }
+
+  /* */
+
+  function clearTimeout( timer )
+  {
+    let result = original.clearTimeout( ... arguments );
+    let procedures = _.Procedure.Filter({ _object : timer })
+    if( procedures.length )
+    procedureRemove( procedures[ 0 ] );
+    return result;
+  }
+
+  /* */
+
+  function setInterval( onTime, ... args )
+  {
+    let object = original.setInterval( onTime, ... args );
+    let procedure = procedureMake({ _object : object });
+    return object;
+  }
+
+  /* */
+
+  function clearInterval( timer )
+  {
+    let result = original.clearInterval( ... arguments );
+    let procedures = _.Procedure.Filter({ _object : timer })
+    if( procedures.length )
+    procedureRemove( procedures[ 0 ] );
+    return result;
+  }
+
+  /* */
+
+  function requestAnimationFrame( onTime, ... args )
+  {
+    let object = original.requestAnimationFrame( onTime, ... args );
+    let procedure = procedureMake({ _object : object });
+    return object;
+  }
+
+  /* */
+
+  function cancelAnimationFrame( timer )
+  {
+    let result = original.cancelAnimationFrame( ... arguments );
+    let procedures = _.Procedure.Filter({ _object : timer })
+    if( procedures.length )
+    procedureRemove( procedures[ 0 ] );
+    return result;
+  }
+
+  /* */
+
+  function procedureMake( o )
+  {
+    let procedure = new _.Procedure
+    ({
+      _waitTimer : false,
+      _stack : 2,
+      ... o,
+    });
+    return procedure;
+  }
+
+  /* */
+
+  function procedureRemove( procedure )
+  {
+    procedure.finit();
+  }
+
+  /* */
+
+}
+
+NativeWatchingEnable.defaults =
+{
+  enable : 1,
 }
 
 //
@@ -637,7 +728,6 @@ function Filter( filter )
 function GetSingleMaybe( filter )
 {
   _.assert( arguments.length === 1 );
-  // let result = _.procedure.get( filter );
   let result = this.Filter( filter );
   if( _.arrayIs( result ) && result.length !== 1 )
   return null;
@@ -663,16 +753,6 @@ function ExportInfo( o )
     result += procedure._longName + '\n';
   }
 
-  // for( let p in _.Procedure.NamesMap )
-  // {
-  //   let procedure = _.Procedure.NamesMap[ p ];
-  //   if( !o.withQuasi && procedure._quasi )
-  //   continue;
-  //   if( !o.withNotQuasi && procedure._quasi )
-  //   continue;
-  //   result += procedure._longName + '\n';
-  // }
-
   return result;
 }
 
@@ -680,8 +760,6 @@ ExportInfo.defaults =
 {
   procedures : null,
   _quasi : null,
-  // withQuasi : 1,
-  // withNotQuasi : 1,
 }
 
 //
@@ -865,7 +943,6 @@ function _TerminationRestart()
   _.Procedure._TerminationTimer = null;
 
   let procedures = this.Filter({ _quasi : 0 });
-  // if( Object.keys( _.Procedure.NamesMap ).length-1 > 0 && !_.Procedure._Exiting )
   if( procedures.length && !_.Procedure._Exiting )
   {
     _.Procedure._TerminationTimer = _.time._begin( _.Procedure.TerminationPeriod, _.Procedure._TerminationIteration );
@@ -984,11 +1061,13 @@ function _Setup1()
 {
   _.assert( _.strIs( _.setup._entryProcedureStack ) );
 
+  _.assert( _.Procedure.InstancesArray.length === 0 );
+
   if( !_.Procedure.EntryProcedure )
   _.Procedure.EntryProcedure = _.procedure.begin
   ({
     _stack : _.setup._entryProcedureStack,
-    _object : 'entry',
+    _object : null,
     _name : 'entry',
     _quasi : true,
     _waitTimer : false,
@@ -1070,7 +1149,6 @@ function On( o )
 {
 
   o = _.event.on.pre( _.event.on, arguments );
-  // o.ehandler = _.Procedure.Ehandler;
   _.event.on( _.Procedure.Ehandler, o );
 
 }
@@ -1086,7 +1164,6 @@ function Off( o )
 {
 
   o = _.event.off.pre( _.event.off, arguments );
-  // o.ehandler = _.Procedure.Ehandler;
   _.event.off( _.Procedure.Ehandler, o );
 
 }
@@ -1099,18 +1176,6 @@ Off.defaults =
 // --
 // meta
 // --
-
-// function ExportTo( dstGlobal, srcGlobal )
-// {
-//   _.assert( _.mapIs( srcGlobal.wTools.Procedure.ToolsExtension ) );
-//   _.mapExtend( dstGlobal.wTools, srcGlobal.wTools.Procedure.ToolsExtension );
-//   dstGlobal.wTools.procedure = srcGlobal.wTools.procedure;
-//   dstGlobal.wTools.Procedure = srcGlobal.wTools.Procedure;
-//   dstGlobal.wTools.time = _.mapExtend( dstGlobal.wTools.time || Object.create( null ), srcGlobal.wTools.Procedure.TimeExtension );
-//   if( typeof module !== 'undefined' && module !== null );
-//   module[ 'exports' ] = dstGlobal.wTools.procedure;
-//   debugger;
-// }
 
 // --
 // time
@@ -1131,9 +1196,6 @@ function _timeBegin( o )
   o.procedure = _.Procedure( o.procedure );
   o.procedure.nameElse( 'time.begin' );
   o.procedure.routineElse( o.onTime );
-
-  // if( o.procedure.id === 30 )
-  // debugger;
 
   let wasAlive = o.procedure.isAlive();
   if( !wasAlive )
@@ -1174,16 +1236,8 @@ function _timeBegin( o )
       o.procedure.unuse();
       if( o.procedure.isUsed() )
       return;
-      // if( o.procedure._routine )
-      // return;
-      // if( !o.procedure.isAlive() )
-      // {
-      //   _.assert( o.procedure.isFinited() );
-      //   return;
-      // }
       o.procedure.activate( false );
       _.assert( !o.procedure.isActivated() );
-      // if( !wasAlive )
       o.procedure.end();
     }
   }
@@ -1218,12 +1272,6 @@ function _timeBegin( o )
     if( !o.procedure.use() )
     o.procedure.activate( true );
 
-    // let isActivated = o.procedure.isActivated();
-    // if( !isActivated )
-    // o.procedure.activate( true );
-    //
-    // o.procedure.use();
-
     try
     {
       return _cancel( this, arguments );
@@ -1233,18 +1281,9 @@ function _timeBegin( o )
       o.procedure.unuse();
       if( o.procedure.isUsed() )
       return;
-      // if( !o.procedure.isAlive() )
-      // {
-      //   _.assert( o.procedure.isFinited() );
-      //   return;
-      // }
-      // if( !isActivated )
-      {
-        o.procedure.activate( false );
-        _.assert( !o.procedure.isActivated() );
-        // if( !wasAlive )
-        o.procedure.end();
-      }
+      o.procedure.activate( false );
+      _.assert( !o.procedure.isActivated() );
+      o.procedure.end();
     }
 
   }
@@ -1390,6 +1429,7 @@ let Statics =
   // fields
 
   NamesMap : Object.create( null ),
+  InstancesArray : [],
   _Terminating : 0,
   _Exiting : 0,
   _TerminationTimer : null,
@@ -1406,6 +1446,8 @@ let Statics =
   TimeExtension,
 
   // routines
+
+  NativeWatchingEnable,
 
   Filter, /* qqq : cover please. one test routine per type of input data */
   GetSingleMaybe, /* xxx : rename to Get or Single? */
@@ -1527,6 +1569,8 @@ let NamespaceBlueprint =
   // fields
 
   namesMap : alias( 'NamesMap' ),
+  instancesArray : alias( 'InstancesArray' ),
+
   terminationPeriod : alias( 'TerminationPeriod' ),
   usingSourcePath : alias( 'UsingStack' ),
   counter : alias( 'Counter' ),
@@ -1566,9 +1610,6 @@ _.assert( _.routineIs( Self.Filter ) );
 // --
 // export
 // --
-
-// if( _realGlobal_ !== _global_ )
-// return ExportTo( _realGlobal_, _global_ );
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = _.procedure;
