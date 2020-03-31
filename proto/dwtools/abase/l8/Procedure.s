@@ -617,12 +617,14 @@ function NativeWatchingEnable( o )
 
   function setTimeout( onTime, ... args )
   {
-    let object = original.setTimeout( onTime2, ... args );
+    debugger;
+    let object = original.setTimeout.call( _global_, onTime2, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
     function onTime2()
     {
       procedureRemove( procedure );
+      debugger;
       return onTime( ... arguments );
     }
   }
@@ -631,7 +633,7 @@ function NativeWatchingEnable( o )
 
   function clearTimeout( timer )
   {
-    let result = original.clearTimeout( ... arguments );
+    let result = original.clearTimeout.call(  _global_, ... arguments );
     let procedures = _.Procedure.Filter({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
@@ -642,7 +644,7 @@ function NativeWatchingEnable( o )
 
   function setInterval( onTime, ... args )
   {
-    let object = original.setInterval( onTime, ... args );
+    let object = original.setInterval.call(  _global_, onTime, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
   }
@@ -651,7 +653,7 @@ function NativeWatchingEnable( o )
 
   function clearInterval( timer )
   {
-    let result = original.clearInterval( ... arguments );
+    let result = original.clearInterval.call( _global_, ... arguments );
     let procedures = _.Procedure.Filter({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
@@ -662,7 +664,7 @@ function NativeWatchingEnable( o )
 
   function requestAnimationFrame( onTime, ... args )
   {
-    let object = original.requestAnimationFrame( onTime, ... args );
+    let object = original.requestAnimationFrame.call( _global_, onTime, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
   }
@@ -671,7 +673,7 @@ function NativeWatchingEnable( o )
 
   function cancelAnimationFrame( timer )
   {
-    let result = original.cancelAnimationFrame( ... arguments );
+    let result = original.cancelAnimationFrame.call( _global_, ... arguments );
     let procedures = _.Procedure.Filter({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
@@ -1450,7 +1452,7 @@ let Statics =
   NativeWatchingEnable,
 
   Filter, /* qqq : cover please. one test routine per type of input data */
-  GetSingleMaybe, /* xxx : rename to Get or Single? */
+  GetSingleMaybe,
   ExportInfo,
   OptionsFrom,
   From,
