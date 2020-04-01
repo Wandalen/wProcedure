@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
 
-  require( '../l8/Procedure.s' );
+  require( '../l8_procedure/Include.s' );
 
 }
 
@@ -337,17 +337,17 @@ function terminationEventsExplicitTermination( test )
 
     console.log( 'v1' );
 
-    _.Procedure.On( 'terminationBegin', () =>
+    _.procedure.on( 'terminationBegin', () =>
     {
       console.log( 'terminationBegin1' );
     });
 
-    _.Procedure.On( 'terminationEnd', () =>
+    _.procedure.on( 'terminationEnd', () =>
     {
       console.log( 'terminationEnd1' );
     });
 
-    _.Procedure.TerminationPeriod = 1000;
+    _.procedure.terminationPeriod = 1000;
     _.procedure.terminationBegin();
 
   }
@@ -406,12 +406,12 @@ function terminationEventsImplicitTermination( test )
 
     console.log( 'v1' );
 
-    _.Procedure.On( 'terminationBegin', () =>
+    _.procedure.on( 'terminationBegin', () =>
     {
       console.log( 'terminationBegin1' );
     });
 
-    _.Procedure.On( 'terminationEnd', () =>
+    _.procedure.on( 'terminationEnd', () =>
     {
       console.log( 'terminationEnd1' );
     });
@@ -474,13 +474,13 @@ function terminationEventsTerminationWithConsequence( test )
 
     console.log( 'v1' );
 
-    _.Procedure.On( 'terminationBegin', () =>
+    _.procedure.on( 'terminationBegin', () =>
     {
       console.log( 'terminationBegin1' );
       con.take( 'terminationBegin1' )
     });
 
-    _.Procedure.On( 'terminationEnd', () =>
+    _.procedure.on( 'terminationEnd', () =>
     {
       console.log( 'terminationEnd1' );
     });
@@ -493,7 +493,7 @@ function terminationEventsTerminationWithConsequence( test )
       return null;
     })
 
-    _.Procedure.TerminationBegin();
+    _.procedure.terminationBegin();
   }
 
 }

@@ -54,7 +54,7 @@ path :
       content : prime
 
   entry.proto.no.tests :
-    path : proto/dwtools/abase/l8/Procedure.s
+    path : proto/dwtools/abase/l8_procedure/Procedure.s
     criterion :
       tests : 'no.tests'
   entry.proto.only.tests :
@@ -66,7 +66,7 @@ path :
   # npm.files : proto
 
   entry.out.raw.debug :
-    path : '{path::out.*=1}/source/dwtools/abase/l8/Procedure.s'
+    path : '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
     criterion :
       debug : [ debug, release ]
       raw : raw
