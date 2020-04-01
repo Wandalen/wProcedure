@@ -14,6 +14,7 @@
 /**
  *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
   @namespace "wTools.procedure"
+  @extends Tools
   @memberof module:Tools/base/Procedure
 */
 
