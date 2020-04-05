@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wProcedure.out
 consistency:
-  wProcedure.out.will.yml: &ref_0
-    hash: 64b7cf0dbf9dc637269b870ee177de06
-    size: 38379
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: afbba6a3cd5dd6d83c782c85e4852cf7
     size: 1897
-  ../.im.will.yml: &ref_2
-    hash: 11a9159739ae6ef66de493148bada68d
-    size: 4939
+  ../.im.will.yml: &ref_1
+    hash: e23a18adc158a81da94d0df6528745c5
+    size: 4959
 module:
   wProcedure.out:
     about:
@@ -23,18 +20,18 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@willbe.so>
       npm.name: wprocedure
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -116,7 +113,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l8/Procedure.s
+        path: ../proto/dwtools/abase/l8_procedure/Procedure.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -126,13 +123,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -161,10 +158,12 @@ module:
           - ../proto/dwtools
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
-          - ../proto/dwtools/abase/l8
-          - ../proto/dwtools/abase/l8/Procedure.s
           - ../proto/dwtools/abase/l8.test
           - ../proto/dwtools/abase/l8.test/Procedure.test.s
+          - ../proto/dwtools/abase/l8_procedure
+          - ../proto/dwtools/abase/l8_procedure/Include.s
+          - ../proto/dwtools/abase/l8_procedure/Namespace.s
+          - ../proto/dwtools/abase/l8_procedure/Procedure.s
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
     submodule:
@@ -699,24 +698,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          reflector: 'reflector::exported.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          reflector: 'reflector::exported.files.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -805,9 +786,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wProcedure.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wProcedure
@@ -819,20 +799,13 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 8.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
+      contributors: *ref_4
       npm.name: wprocedure
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -912,7 +885,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l8/Procedure.s
+        path: proto/dwtools/abase/l8_procedure/Procedure.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -922,13 +895,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1502,6 +1475,5 @@ module:
         hash: afbba6a3cd5dd6d83c782c85e4852cf7
         size: 1897
       ../.im.will.yml:
-        hash: 11a9159739ae6ef66de493148bada68d
-        size: 4939
-      wProcedure.out.will.yml: *ref_0
+        hash: e23a18adc158a81da94d0df6528745c5
+        size: 4959
