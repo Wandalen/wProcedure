@@ -67,7 +67,7 @@ function trivial( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -110,7 +110,7 @@ function activeProcedureSourcePath( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -174,7 +174,7 @@ function quasiProcedure( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -218,7 +218,7 @@ function accounting( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -304,7 +304,7 @@ function terminationEventsExplicitTermination( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -372,7 +372,7 @@ function terminationEventsImplicitTermination( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -438,7 +438,7 @@ function terminationEventsTerminationWithConsequence( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -517,7 +517,7 @@ function nativeWatchingSetTimeout( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -584,7 +584,7 @@ function nativeWatchingСlearTimeout( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -658,7 +658,7 @@ function nativeWatchingSetInterval( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -750,7 +750,7 @@ function nativeWatchingRequestAnimationFrame( test )
 
   /* */
 
-  a.jsNonThrowing({ execPath : programPath })
+  a.appStartNonThrowing({ execPath : programPath })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -845,7 +845,7 @@ var Self =
     timeAccuracy : 1,
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
-    execJsPath : null,
+    appJsPath : null,
   },
 
   tests :

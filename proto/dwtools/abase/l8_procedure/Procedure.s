@@ -6,10 +6,7 @@ let _global = _global_;
 let _ = _global_.wTools;
 
 _.assert( !!_global_.wTools, 'Does not have wTools' );
-// _.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
 _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
-
-// _global_.wTools.procedure = _global_.wTools.procedure || Object.create( null );
 
 // --
 // inter
@@ -32,7 +29,7 @@ let Self = function wProcedure( o )
   }
 
   o = Self.OptionsFrom( ... arguments );
-  o._stack = _.procedure.stack( o._stack, 1 );
+  o._stack = _.Procedure.Stack( o._stack, 1 );
 
   let args = [ o ];
   if( !( this instanceof Self ) )
@@ -61,7 +58,7 @@ function init( o )
 
   procedure._longNameMake();
 
-  _.arrayAppendOnceStrictly( procedure.InstancesArray, procedure );
+  _.arrayAppendOnceStrictly( _.Procedure.InstancesArray, procedure );
 
   _.assert( _.strIs( procedure._sourcePath ) );
   _.assert( arguments.length === 1 );
@@ -81,7 +78,7 @@ function finit()
 
   delete _.Procedure.NamesMap[ procedure._longName ];
 
-  _.arrayRemoveOnceStrictly( procedure.InstancesArray, procedure );
+  _.arrayRemoveOnceStrictly( _.Procedure.InstancesArray, procedure );
 
   return _.Copyable.prototype.finit.call( procedure );
 }
@@ -174,9 +171,6 @@ function activate( val )
   if( val === undefined )
   val = true;
   val = !!val;
-
-  // if( procedure.id === 30 )
-  // debugger;
 
   // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
 
@@ -568,38 +562,57 @@ function Filter( filter )
 
 function NativeWatchingEnable( o )
 {
+
   o = _.routineOptions( NativeWatchingEnable, o );
-  _.assert( !!o.enable );
+  _.assert( !!o.enable, 'not tested' );
 
-  let original = Object.create( null );
-  original.setTimeout = _global_.setTimeout;
-  original.clearTimeout = _global_.clearTimeout;
-  original.setInterval = _global_.setInterval;
-  original.clearInterval = _global_.clearInterval;
-  original.requestAnimationFrame = _global_.requestAnimationFrame;
-  original.cancelAnimationFrame = _global_.cancelAnimationFrame;
+  let original = _.Procedure._OriginalTimeRoutines = _.Procedure._OriginalTimeRoutines || Object.create( null );
 
-  _global_.setTimeout = setTimeout;
-  _global_.clearTimeout = clearTimeout;
-  _global_.setInterval = setInterval;
-  _global_.clearInterval = clearInterval;
-  if( _global_.requestAnimationFrame )
-  _global_.requestAnimationFrame = requestAnimationFrame;
-  if( _global_.cancelAnimationFrame )
-  _global_.cancelAnimationFrame = cancelAnimationFrame;
+  if( o.enable )
+  {
+    _.assert( _.lengthOf( original ) === 0 );
+
+    original.setTimeout = _global_.setTimeout;
+    original.clearTimeout = _global_.clearTimeout;
+    original.setInterval = _global_.setInterval;
+    original.clearInterval = _global_.clearInterval;
+    if( _global_.requestAnimationFrame )
+    original.requestAnimationFrame = _global_.requestAnimationFrame;
+    if( _global_.cancelAnimationFrame )
+    original.cancelAnimationFrame = _global_.cancelAnimationFrame;
+
+    _global_.setTimeout = setTimeout;
+    _global_.clearTimeout = clearTimeout;
+    _global_.setInterval = setInterval;
+    _global_.clearInterval = clearInterval;
+    if( _global_.requestAnimationFrame )
+    _global_.requestAnimationFrame = requestAnimationFrame;
+    if( _global_.cancelAnimationFrame )
+    _global_.cancelAnimationFrame = cancelAnimationFrame;
+
+  }
+  else
+  {
+
+    for( let k in original )
+    {
+      _.assert( _.routineIs( original[ k ] ) );
+      _global_[ k ] = original[ k ];
+      delete original[ k ];
+    }
+
+  }
 
   /* */
 
   function setTimeout( onTime, ... args )
   {
-    debugger;
     let object = original.setTimeout.call( _global_, onTime2, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
     function onTime2()
     {
       procedureRemove( procedure );
-      debugger;
       return onTime( ... arguments );
     }
   }
@@ -762,7 +775,7 @@ function OptionsFrom( o )
 function From( o )
 {
   o = Self.OptionsFrom( ... arguments );
-  o._stack = _.procedure.stack( o._stack, 1 );
+  o._stack = _.Procedure.Stack( o._stack, 1 );
   let result = Self( o );
   return result;
 }
@@ -891,227 +904,9 @@ function Stack( stack, delta )
   return stack;
 }
 
-// // --
-// // time
-// // --
-//
-// function _timeBegin( o )
-// {
-//
-//   _.assertRoutineOptions( _timeBegin, arguments );
-//
-//   if( o.procedure === undefined || o.procedure === null )
-//   o.procedure = 0;
-//   if( _.numberIs( o.procedure ) )
-//   {
-//     _.assert( _.intIs( o.procedure ) );
-//     o.procedure += 1;
-//   }
-//   o.procedure = _.Procedure( o.procedure );
-//   o.procedure.nameElse( 'time.begin' );
-//   o.procedure.routineElse( o.onTime );
-//
-//   let wasAlive = o.procedure.isAlive();
-//   if( !wasAlive )
-//   {
-//     _.assert( o.procedure._waitTimer === null );
-//     o.procedure._waitTimer = false;
-//     o.procedure.begin();
-//   }
-//   let timer;
-//
-//   if( o.method.name === 'periodic' )
-//   debugger;
-//   timer = o.method.call( _.time, o.delay, o.onTime, o.onCancel );
-//   timer.procedure = o.procedure;
-//   o.procedure.object( timer );
-//
-//   let _time = timer._time;
-//   let _cancel = timer._cancel;
-//   timer._time = o.method.name === 'periodic' ? timePeriodic : time;
-//   timer._cancel = cancel;
-//
-//   return timer;
-//
-//   /* */
-//
-//   function time()
-//   {
-//
-//     if( !o.procedure.use() )
-//     o.procedure.activate( true );
-//
-//     try
-//     {
-//       return _time.apply( this, arguments );
-//     }
-//     finally
-//     {
-//       o.procedure.unuse();
-//       if( o.procedure.isUsed() )
-//       return;
-//       o.procedure.activate( false );
-//       _.assert( !o.procedure.isActivated() );
-//       o.procedure.end();
-//     }
-//   }
-//
-//   /* */
-//
-//   function timePeriodic()
-//   {
-//     o.procedure.activate( true );
-//     try
-//     {
-//       return _time.apply( this, arguments );
-//     }
-//     finally
-//     {
-//       _.assert( !o.procedure.isFinited() );
-//       o.procedure.activate( false );
-//       _.assert( !o.procedure.isActivated() );
-//     }
-//   }
-//
-//   /* */
-//
-//   function cancel()
-//   {
-//
-//     if( timer.state !== 0 )
-//     {
-//       return;
-//     }
-//
-//     if( !o.procedure.use() )
-//     o.procedure.activate( true );
-//
-//     try
-//     {
-//       return _cancel( this, arguments );
-//     }
-//     finally
-//     {
-//       o.procedure.unuse();
-//       if( o.procedure.isUsed() )
-//       return;
-//       o.procedure.activate( false );
-//       _.assert( !o.procedure.isActivated() );
-//       o.procedure.end();
-//     }
-//
-//   }
-//
-//   /* */
-//
-// }
-//
-// _timeBegin.defaults =
-// {
-//   delay : null,
-//   procedure : null,
-//   onTime : null,
-//   onCancel : null,
-//   method : _.time._begin,
-// }
-//
-// //
-//
-// function timeBegin( delay, procedure, onTime, onCancel )
-// {
-//   _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
-//
-//   if( !_.procedureIs( procedure ) )
-//   {
-//     onTime = arguments[ 1 ];
-//     onCancel = arguments[ 2 ];
-//     procedure = 1;
-//   }
-//
-//   let o2 = Object.create( null );
-//   o2.delay = delay;
-//   o2.procedure = procedure;
-//   o2.onTime = onTime;
-//   o2.onCancel = onCancel || null;
-//   o2.method = _.time._begin;
-//
-//   return _timeBegin.call( this, o2 );
-// }
-//
-// //
-//
-// function timeFinally( delay, procedure, onTime )
-// {
-//   _.assert( arguments.length === 2 || arguments.length === 3 );
-//
-//   if( !_.procedureIs( procedure ) )
-//   {
-//     onTime = arguments[ 1 ];
-//     procedure = 1;
-//   }
-//
-//   let o2 = Object.create( null );
-//   o2.delay = delay;
-//   o2.procedure = procedure;
-//   o2.onTime = onTime;
-//   o2.onCancel = onTime;
-//   o2.method = _.time._begin;
-//
-//   let timer = _timeBegin.call( this, o2 );
-//   return timer;
-// }
-//
-// //
-//
-// function timePeriodic( delay, procedure, onTime, onCancel )
-// {
-//   _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
-//
-//   if( !_.procedureIs( procedure ) )
-//   {
-//     onTime = arguments[ 1 ];
-//     onCancel = arguments[ 2 ];
-//     procedure = 1;
-//   }
-//
-//   let o2 = Object.create( null );
-//   o2.delay = delay;
-//   o2.procedure = procedure;
-//   o2.onTime = onTime;
-//   o2.onCancel = onCancel || null;
-//   o2.method = _.time._periodic;
-//
-//   return _timeBegin.call( this, o2 );
-// }
-
 // --
 // relations
 // --
-
-// let Events =
-// {
-//   terminationBegin : [],
-//   terminationEnd : [],
-// }
-//
-// Object.freeze( Events );
-//
-// let Ehandler =
-// {
-//   events : Events,
-// }
-//
-// let ToolsExtension =
-// {
-//   [ Self.shortName ] : Self,
-// }
-//
-// let TimeExtension =
-// {
-//   begin : timeBegin,
-//   finally : timeFinally,
-//   periodic : timePeriodic,
-// }
 
 let Composes =
 {
@@ -1154,10 +949,7 @@ let Statics =
   ActiveProcedure : null,
   ActiveProcedures : [],
   EntryProcedure : null,
-
-  // Ehandler,
-  // ToolsExtension,
-  // TimeExtension,
+  _OriginalTimeRoutines : null,
 
   // routines
 
@@ -1172,23 +964,9 @@ let Statics =
   End,
   Activate,
 
-  // terminationReport,
-  // terminationBegin,
-  // _terminationIteration,
-  // _terminationRestart,
-  // _terminationEnd,
-  // _timersEnd,
-
-  // _EventTerminationBeginHandle,
-  // _eventTerminationEndHandle,
-  // _EventProcessExitHandle,
-  // _Setup1,
-
   _IdAlloc,
   WithObject,
   Stack,
-  // On,
-  // Off,
 
 }
 
@@ -1302,28 +1080,19 @@ let NamespaceBlueprint =
   end : join( 'End' ),
   activate : join( 'Activate' ),
   stack : join( 'Stack' ),
-  // on : join( 'On' ),
-  // off : join( 'Off' ),
-  // terminationReport : join( 'terminationReport' ),
-  // terminationBegin : join( 'terminationBegin' ),
   exportInfo : join( 'ExportInfo' ),
 
 }
 
 _.construction.extend( _.procedure, NamespaceBlueprint );
 
-// Object.assign( _, ToolsExtension );
-// Object.assign( _.time, TimeExtension );
-
 _[ Self.shortName ] = Self;
 _.procedure[ Self.shortName ] = Self;
 
-// _.Procedure._Setup1();
+_.procedure._Setup1();
 
 _.assert( _.routineIs( _.procedure.find ) );
 _.assert( _.routineIs( Self.Filter ) );
-
-_.procedure._Setup1();
 
 // --
 // export
