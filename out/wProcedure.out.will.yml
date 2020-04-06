@@ -6,8 +6,8 @@ consistency:
     hash: afbba6a3cd5dd6d83c782c85e4852cf7
     size: 1897
   ../.im.will.yml: &ref_1
-    hash: e23a18adc158a81da94d0df6528745c5
-    size: 4959
+    hash: b55037ae4013e86196fc4bcd1415895b
+    size: 4955
 module:
   wProcedure.out:
     about:
@@ -113,7 +113,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l8_procedure/Procedure.s
+        path: ../proto/dwtools/abase/l8_procedure/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -123,13 +123,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Include.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Include.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -885,7 +885,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l8_procedure/Procedure.s
+        path: proto/dwtools/abase/l8_procedure/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -895,13 +895,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Include.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Procedure.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l8_procedure/Include.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1475,5 +1475,5 @@ module:
         hash: afbba6a3cd5dd6d83c782c85e4852cf7
         size: 1897
       ../.im.will.yml:
-        hash: e23a18adc158a81da94d0df6528745c5
-        size: 4959
+        hash: b55037ae4013e86196fc4bcd1415895b
+        size: 4955
