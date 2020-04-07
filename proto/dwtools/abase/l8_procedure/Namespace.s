@@ -523,50 +523,8 @@ let ProcedureExtension =
 _.assert( _.routineIs( _.accessor.define.getter.alias ) );
 _.assert( _.routineIs( _.accessor.define.suite.alias ) );
 
-// let alias = ( originalName ) => _.accessor.define.suite.alias({ originalName, container : Self });
-// let join = ( originalName ) => _.routineJoin( Self, Self[ originalName ] );
-// let NamespaceBlueprint =
-// {
-//
-//   // fields
-//
-//   namesMap : alias( 'NamesMap' ),
-//   instancesArray : alias( 'InstancesArray' ),
-//
-//   terminationPeriod : alias( 'TerminationPeriod' ),
-//   usingSourcePath : alias( 'UsingStack' ),
-//   counter : alias( 'Counter' ),
-//   activeProcedure : alias( 'ActiveProcedure' ),
-//   activeProcedures : alias( 'ActiveProcedures' ),
-//   entryProcedure : alias( 'EntryProcedure' ),
-//
-//   // routines
-//
-//   find : join( 'Filter' ),
-//   getSingleMaybe : join( 'GetSingleMaybe' ),
-//   from : join( 'From' ),
-//   begin : join( 'Begin' ),
-//   end : join( 'End' ),
-//   activate : join( 'Activate' ),
-//   stack : join( 'Stack' ),
-//   on : join( 'On' ),
-//   off : join( 'Off' ),
-//   terminationReport : join( 'TerminationReport' ),
-//   terminationBegin : join( 'TerminationBegin' ),
-//   exportInfo : join( 'ExportInfo' ),
-//
-// }
-//
-// _.construction.extend( _.procedure, NamespaceBlueprint );
-
-// Object.assign( _, ToolsExtension );
 Object.assign( _.time, TimeExtension );
 Object.assign( _.procedure, ProcedureExtension );
-
-// _.procedure._Setup1();
-
-// _.assert( _.routineIs( _.procedure.find ) );
-// _.assert( _.routineIs( Self.Filter ) );
 
 // --
 // export

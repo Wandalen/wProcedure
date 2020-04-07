@@ -1,11 +1,11 @@
 {
   "name" : "wprocedure", 
-  "version" : "0.3.97", 
+  "version" : "0.3.99", 
   "description" : "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures", 
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
   "license" : "MIT", 
-  "main" : "proto/dwtools/abase/l8/Procedure.s", 
-  "files" : [ "proto/dwtools/abase/l8", "proto/dwtools/Tools.s", "out" ], 
+  "main" : "proto/dwtools/abase/l8_procedure/Include.s", 
+  "files" : [ "proto/dwtools/abase/l8_procedure", "proto/dwtools/Tools.s", "out" ], 
   "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" }, 
   "repository" : 
   {
