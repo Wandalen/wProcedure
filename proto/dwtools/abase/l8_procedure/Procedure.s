@@ -16,7 +16,7 @@ _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already 
  *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
   @namespace "wTools.procedure"
   @extends Tools
-  @memberof module:Tools/base/Procedure
+  @module Tools/base/Procedure
 */
 
 let Parent = null;
@@ -97,7 +97,9 @@ function isAlive()
 /**
  * @summary Launches the procedure.
  * @method begin
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function begin()
@@ -122,7 +124,9 @@ function begin()
 /**
  * @summary Stops the procedure.
  * @method end
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function end()
@@ -257,7 +261,9 @@ function isUsed()
 /**
  * @summary Returns true if procedure is running.
  * @method isBegun
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function isBegun()
@@ -333,7 +339,9 @@ function stackElse( stack )
  * Returns name of the procedure if no args provided. Sets name of procedure if provided single argument `name`.
  * @param {String} [name] Name of the procedure.
  * @method name
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function name( name )
@@ -379,7 +387,9 @@ function nameElse( name )
  * Returns routine of the procedure if no args provided. Sets routine of procedure if provided single argument `routine`.
  * @param {String} [routine] Name of the procedure.
  * @method routine
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function routine( routine )
@@ -425,7 +435,9 @@ function routineElse( routine )
  * Returns `longName` of the procedure if no args provided. Sets name of procedure if provided single argument `name`.
  * @param {String} [longName] Full name of the procedure.
  * @method longName
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 function longName( longName )
@@ -486,7 +498,9 @@ function _longNameMake()
  * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine Filter
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
  /**
@@ -494,7 +508,8 @@ function _longNameMake()
  * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine Filter
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function Filter( filter )
@@ -705,7 +720,9 @@ NativeWatchingEnable.defaults =
  * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine GetSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 /**
@@ -713,7 +730,8 @@ NativeWatchingEnable.defaults =
  * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine getSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function GetSingleMaybe( filter )
@@ -791,7 +809,9 @@ function From( o )
  * @param {Function} o._routine Routine to lauch.
  * @routine Begin
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 /**
@@ -802,7 +822,8 @@ function From( o )
  * @param {Function} o._routine Routine to lauch.
  * @routine begin
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function Begin( o )
@@ -826,7 +847,9 @@ Begin.defaults =
  * @param {Number|String|Routine} procedure Procedure selector.
  * @routine End
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 /**
@@ -834,7 +857,8 @@ Begin.defaults =
  * @param {Number|String|Routine} procedure Procedure selector.
  * @routine end
  * @returns {Object} Returns instance of {@link module:Tools/base/Procedure.wProcedure}
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function End( procedure )
@@ -849,13 +873,16 @@ function End( procedure )
 /**
  * @summary Increases counter of procedures and returns it value.
  * @routine _IdAlloc
- * @memberof module:Tools/base/Procedure.wProcedure
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
  */
 
 /**
  * @summary Increases counter of procedures and returns it value.
  * @routine _IdAlloc
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function _IdAlloc()

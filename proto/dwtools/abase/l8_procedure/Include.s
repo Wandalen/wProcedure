@@ -10,7 +10,7 @@
 /**
  *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
   @namespace "wTools.procedure"
-  @memberof module:Tools/base/Procedure
+  @module Tools/base/Procedure
 */
 
 if( typeof module !== 'undefined' )
