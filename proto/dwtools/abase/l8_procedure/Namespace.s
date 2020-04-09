@@ -97,7 +97,8 @@ function _eventProcessExitHandle()
 /**
  * @summary Prints report with number of procedures that are still working.
  * @routine terminationReport
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function terminationReport()
@@ -116,7 +117,8 @@ function terminationReport()
 /**
  * @summary Starts procedure of termination.
  * @routine terminationBegin
- * @memberof module:Tools/base/Procedure.wTools.procedure
+ * @module Tools/base/Procedure
+ * @namespace Tools.procedure
  */
 
 function terminationBegin()
