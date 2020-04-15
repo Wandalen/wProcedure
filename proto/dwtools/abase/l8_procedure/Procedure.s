@@ -14,7 +14,7 @@ _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already 
 
 /**
  *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
-  @namespace "wTools.procedure"
+  @namespace wTools.procedure
   @extends Tools
   @module Tools/base/Procedure
 */
