@@ -1126,7 +1126,7 @@ _.assert( _.routineIs( Self.Filter ) );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = _.procedure;
 
 })();
