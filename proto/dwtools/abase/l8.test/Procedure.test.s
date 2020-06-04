@@ -27,7 +27,7 @@ function onSuiteBegin()
   let self = this;
 
   self.suiteTempPath = path.pathDirTempOpen( path.join( __dirname, '../..'  ), 'procedure' );
-  self.assetsOriginalSuitePath = path.join( __dirname, '_asset' );
+  self.assetsOriginalPath = path.join( __dirname, '_asset' );
 
 }
 
@@ -844,7 +844,7 @@ var Self =
   {
     timeAccuracy : 1,
     suiteTempPath : null,
-    assetsOriginalSuitePath : null,
+    assetsOriginalPath : null,
     appJsPath : null,
   },
 
