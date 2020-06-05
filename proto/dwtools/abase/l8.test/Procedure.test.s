@@ -195,7 +195,7 @@ function quasiProcedure( test )
     let _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.procedure.begin({ _name : 'quasi', _quasi : true, _waitTimer : false });
-    logger.log( _.procedure.exportInfo() );
+    logger.log( _.procedure.exportString() );
     console.log( 'program.end' );
   }
 
@@ -264,7 +264,7 @@ function accounting( test )
     });
 
     _.procedure.begin({ _name : 'quasi', _quasi : true, _waitTimer : false });
-    logger.log( _.procedure.exportInfo() );
+    logger.log( _.procedure.exportString() );
 
     console.log( 'program.end' );
 

@@ -1108,7 +1108,7 @@ let NamespaceBlueprint =
   end : join( 'End' ),
   activate : join( 'Activate' ),
   stack : join( 'Stack' ),
-  exportInfo : join( 'ExportInfo' ),
+  exportString : join( 'ExportInfo' ),
 
 }
 
