@@ -395,7 +395,7 @@ function terminationEventsImplicitTermination( test )
     let _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
-    _.include( 'wAppBasic' );
+    _.include( 'wProcess' );
 
     let t = 100;
 

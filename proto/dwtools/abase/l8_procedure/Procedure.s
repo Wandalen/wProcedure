@@ -20,7 +20,8 @@ _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already 
 */
 
 let Parent = null;
-let Self = function wProcedure( o )
+let Self = wProcedure;
+function wProcedure( o )
 {
 
   if( !( this instanceof Self ) )
