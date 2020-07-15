@@ -6,5 +6,5 @@ Minimal programming interface to launch, stop and track collection of asynchrono
 ## Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```
