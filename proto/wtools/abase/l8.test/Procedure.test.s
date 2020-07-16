@@ -5,7 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  var _ = require( '../../../wtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   _.include( 'wTesting' );
 
@@ -13,8 +13,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 let fileProvider = _testerGlobal_.wTools.fileProvider;
 let path = fileProvider.path;
 
@@ -830,7 +830,7 @@ nativeWatchingRequestAnimationFrame.description =
 // declare
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.base.Procedure',
