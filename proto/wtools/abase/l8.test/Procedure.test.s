@@ -833,7 +833,7 @@ nativeWatchingRequestAnimationFrame.description =
 let Self =
 {
 
-  name : 'Tools.base.Procedure',
+  name : 'Tools.Procedure',
   silencing : 1,
   routineTimeOut : 60000,
 
