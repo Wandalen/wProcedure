@@ -1,4 +1,5 @@
-( function _Procedure_test_s_( ) {
+( function _Procedure_test_s_()
+{
 
 'use strict';
 
@@ -330,7 +331,7 @@ function terminationEventsExplicitTermination( test )
 
     let t = 1500;
 
-    let timer = _.time.begin( t*1, () =>
+    let timer = _.time.begin( t, () =>
     {
       console.log( 'timer' );
     });
@@ -399,7 +400,7 @@ function terminationEventsImplicitTermination( test )
 
     let t = 100;
 
-    let timer = _.time.begin( t*1, () =>
+    let timer = _.time.begin( t, () =>
     {
       console.log( 'timer' );
     });
