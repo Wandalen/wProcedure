@@ -866,6 +866,9 @@ function End( procedure )
 {
   _.assert( arguments.length === 1 );
   procedure = _.procedure.find( procedure );
+  /* Dmytro : routine find() ( linked to routine Filter ) returns only arrays. I think that routine Filter should be unchanged */
+  _.assert( procedure.length === 1 );
+  procedure = procedure[ 0 ];
   return procedure.end();
 }
 
