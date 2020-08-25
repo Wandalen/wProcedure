@@ -1,4 +1,5 @@
-( function _Procedure_s_() {
+( function _Procedure_s_()
+{
 
 'use strict';
 
@@ -185,11 +186,7 @@ function activate( val )
   if( val )
   {
 
-    _.assert
-    (
-        procedure !== _.Procedure.ActiveProcedure
-      , () => `${procedure._longName} is already active`
-    );
+    _.assert( procedure !== _.Procedure.ActiveProcedure, () => `${procedure._longName} is already active` );
 
     _.Procedure.ActiveProcedures.push( procedure );
     _.Procedure.ActiveProcedure = procedure;
@@ -198,9 +195,9 @@ function activate( val )
   {
     _.assert
     (
-        procedure === _.Procedure.ActiveProcedure
-      , () => `Attempt to deactivate ${procedure._longName}`
-            + `\nBut active procedure is ${_.Procedure.ActiveProcedure ? _.Procedure.ActiveProcedure._longName : _.Procedure.ActiveProcedure}`
+      procedure === _.Procedure.ActiveProcedure,
+      () => `Attempt to deactivate ${procedure._longName}\nBut active procedure is `
+      + `${_.Procedure.ActiveProcedure ? _.Procedure.ActiveProcedure._longName : _.Procedure.ActiveProcedure}`
     );
 
     _.Procedure.ActiveProcedures.pop();
@@ -504,7 +501,7 @@ function _longNameMake()
  * @module Tools/base/Procedure
  */
 
- /**
+/**
  * @summary Find procedure using id/name/routine as key.
  * @param {Number|String|Routine} filter Filter to filter procedures.
  * @routine Filter
