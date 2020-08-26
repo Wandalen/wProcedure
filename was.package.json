@@ -6,7 +6,7 @@
   "license" : "MIT",
   "main" : "proto/wtools/abase/l8_procedure/Include.s",
   "files" : [ "proto/wtools/abase/l8_procedure", "proto/wtools/Tools.s", "out" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
   "repository" :
   {
     "type" : "git",
