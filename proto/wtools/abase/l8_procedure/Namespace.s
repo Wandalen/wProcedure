@@ -322,9 +322,12 @@ function _timeBegin( o )
     }
     finally
     {
-      _.assert( !o.procedure.isFinited() );
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
+      // _.assert( !o.procedure.isFinited() ); /* Dmytro : periodic timer finishes procedure if callback returns undefined */
+      if( !o.procedure.isFinited() )
+      {
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+      }
     }
   }
 
@@ -338,7 +341,7 @@ function _timeBegin( o )
       return;
     }
 
-    if( !o.procedure.use() )
+    if( !o.procedure.use() && !o.procedure.isTopMost() )
     o.procedure.activate( true );
 
     try
