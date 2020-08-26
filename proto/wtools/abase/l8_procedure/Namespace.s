@@ -332,12 +332,8 @@ function _timeBegin( o )
 
   function cancel()
   {
-    if( o.method.name === '_periodic' )
-    {
-      return _cancel( this, arguments );
-    }
 
-    if( timer.state !== 0 )
+    if( timer.state !== 0 && o.method.name !== '_periodic' )
     {
       return;
     }
