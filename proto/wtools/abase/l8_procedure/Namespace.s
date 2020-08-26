@@ -244,6 +244,11 @@ function _timersEnd()
 function _timeBegin( o )
 {
 
+  if( o.onTime === undefined )
+  o.onTime = null;
+  if( o.onCancel === undefined )
+  o.onCancel = o.onTime;
+
   _.assertRoutineOptions( _timeBegin, arguments );
 
   if( o.procedure === undefined || o.procedure === null )
@@ -255,6 +260,7 @@ function _timeBegin( o )
   }
   o.procedure = _.Procedure( o.procedure );
   o.procedure.nameElse( 'time.begin' );
+  if( o.onTime !== null )
   o.procedure.routineElse( o.onTime );
 
   let wasAlive = o.procedure.isAlive();
@@ -266,7 +272,7 @@ function _timeBegin( o )
   }
   let timer;
 
-  if( o.method.name === 'periodic' )
+  if( o.method.name === '_periodic' )
   debugger;
   timer = o.method.call( _.time, o.delay, o.onTime, o.onCancel );
   timer.procedure = o.procedure;
@@ -274,7 +280,7 @@ function _timeBegin( o )
 
   let _time = timer._time;
   let _cancel = timer._cancel;
-  timer._time = o.method.name === 'periodic' ? timePeriodic : time;
+  timer._time = o.method.name === '_periodic' ? timePeriodic : time;
   timer._cancel = cancel;
 
   return timer;
@@ -294,11 +300,14 @@ function _timeBegin( o )
     finally
     {
       o.procedure.unuse();
-      if( o.procedure.isUsed() )
-      return;
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
-      o.procedure.end();
+      // if( o.procedure.isUsed() )
+      // return;
+      if( !o.procedure.isUsed() )
+      {
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+        o.procedure.end();
+      }
     }
   }
 
@@ -323,6 +332,10 @@ function _timeBegin( o )
 
   function cancel()
   {
+    if( o.method.name === '_periodic' )
+    {
+      return _cancel( this, arguments );
+    }
 
     if( timer.state !== 0 )
     {
@@ -339,16 +352,18 @@ function _timeBegin( o )
     finally
     {
       o.procedure.unuse();
-      if( o.procedure.isUsed() )
-      return;
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
-      o.procedure.end();
+      // if( o.procedure.isUsed() )
+      // return;
+
+      if( !o.procedure.isUsed() )
+      {
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+        o.procedure.end();
+      }
     }
 
   }
-
-  /* */
 
 }
 
