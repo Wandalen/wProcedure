@@ -17,7 +17,7 @@ about :
   - 'Kostiantyn Wandalen <wanalen@01.school>'
   npm.name : 'wprocedure'
   npm.scripts :
-    test : 'wtest .run proto/**'
+    test : wtest .run proto/** rapidity:-1
     docgen : 'wdocgen .build proto'
 
 path :

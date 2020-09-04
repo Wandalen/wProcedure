@@ -1,4 +1,5 @@
-( function _Namespace_s_() {
+( function _Namespace_s_()
+{
 
 'use strict';
 
@@ -294,11 +295,14 @@ function _timeBegin( o )
     finally
     {
       o.procedure.unuse();
-      if( o.procedure.isUsed() )
-      return;
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
-      o.procedure.end();
+      // if( o.procedure.isUsed() )
+      // return;
+      if( !o.procedure.isUsed() )
+      {
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+        o.procedure.end();
+      }
     }
   }
 
@@ -339,11 +343,15 @@ function _timeBegin( o )
     finally
     {
       o.procedure.unuse();
-      if( o.procedure.isUsed() )
-      return;
-      o.procedure.activate( false );
-      _.assert( !o.procedure.isActivated() );
-      o.procedure.end();
+      // if( o.procedure.isUsed() )
+      // return;
+
+      if( !o.procedure.isUsed() )
+      {
+        o.procedure.activate( false );
+        _.assert( !o.procedure.isActivated() );
+        o.procedure.end();
+      }
     }
 
   }
