@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wProcedure.out
 consistency:
-  wProcedure.out.will.yml: &ref_0
-    hash: bf7bdab5b0ae29013dd95e17f33fda9c
-    size: 38387
-  ../.ex.will.yml: &ref_1
-    hash: b0cd4296bdcd0fb44ff293dfd24ae507
-    size: 1898
-  ../.im.will.yml: &ref_2
-    hash: a03bafcd558818191aa57f83c92aebc3
-    size: 4952
+  ../.ex.will.yml: &ref_0
+    hash: 40a6442cd68ae2720f38be1f808e564c
+    size: 1908
+  ../.im.will.yml: &ref_1
+    hash: 3c0cd5a56475b3bf116f68ea0ae34a77
+    size: 5054
 module:
   wProcedure.out:
     about:
@@ -23,19 +20,19 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wprocedure
-      npm.scripts:
-        test: wtest .run proto/**
+      npm.scripts: &ref_5
+        test: 'wtest .run proto/** rapidity:-1'
         docgen: wdocgen .build proto
     path:
       module.willfiles:
@@ -181,6 +178,12 @@ module:
         enabled: 0
         criterion:
           development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          debug: 1
       wTesting:
         path: 'npm:///wTesting'
         autoExporting: 0
@@ -694,24 +697,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -800,9 +785,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wProcedure.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wProcedure
@@ -814,20 +798,13 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
+      contributors: *ref_4
       npm.name: wprocedure
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -947,6 +924,12 @@ module:
         enabled: 0
         criterion:
           development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          debug: 1
       wTesting:
         path: 'npm:///wTesting'
         autoExporting: 0
@@ -1485,9 +1468,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: b0cd4296bdcd0fb44ff293dfd24ae507
-        size: 1898
+        hash: 40a6442cd68ae2720f38be1f808e564c
+        size: 1908
       ../.im.will.yml:
-        hash: a03bafcd558818191aa57f83c92aebc3
-        size: 4952
-      wProcedure.out.will.yml: *ref_0
+        hash: 3c0cd5a56475b3bf116f68ea0ae34a77
+        size: 5054
