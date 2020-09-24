@@ -445,13 +445,6 @@ function timePeriodic( delay, procedure, onTime, onCancel )
   return _timeBegin.call( this, o2 );
 }
 
-//
-
-function timeSleep( delay, procedure )
-{
-  _.time._sleep.apply( this, arguments );
-}
-
 // --
 // meta
 // --
@@ -508,7 +501,6 @@ let TimeExtension =
   begin : timeBegin,
   finally : timeFinally,
   periodic : timePeriodic,
-  sleep : timeSleep,
 }
 
 let ProcedureExtension =
