@@ -105,7 +105,7 @@ function _eventProcessExitHandle()
 function terminationReport()
 {
 
-  let procedures = _.Procedure.Filter({ _quasi : 0 });
+  let procedures = _.Procedure.Find({ _quasi : 0 });
   if( _.procedure._terminationListInvalidated )
   logger.log( _.Procedure.ExportInfo( procedures ) );
 
@@ -172,7 +172,7 @@ function _terminationRestart()
   _.time._cancel( _.procedure._terminationTimer );
   _.procedure._terminationTimer = null;
 
-  let procedures = _.Procedure.Filter({ _quasi : 0 });
+  let procedures = _.Procedure.Find({ _quasi : 0 });
   if( procedures.length && !_.Procedure._Exiting )
   {
     _.procedure._terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.procedure._terminationIteration );
@@ -273,8 +273,8 @@ function _timeBegin( o )
   }
   let timer;
 
-  if( o.method.name === '_periodic' )
-  debugger;
+  // if( o.method.name === '_periodic' )
+  // debugger;
   timer = o.method.call( _.time, o.delay, o.onTime, o.onCancel );
   timer.procedure = o.procedure;
   o.procedure.object( timer );
@@ -490,11 +490,6 @@ let _ehandler =
 {
   events : Events,
 }
-
-// let ToolsExtension =
-// {
-//   [ Self.shortName ] : Self,
-// }
 
 let TimeExtension =
 {

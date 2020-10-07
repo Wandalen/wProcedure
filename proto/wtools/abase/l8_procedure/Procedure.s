@@ -88,6 +88,30 @@ function finit()
 
 //
 
+/**
+ * @summary Returns true if procedure is quasi. Quasi procedure procedure is not waited.
+ * @method isQuasi
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
+ */
+
+function isQuasi()
+{
+  let procedure = this;
+  return procedure._quasi;
+}
+
+//
+
+/**
+ * @summary Returns true if procedure is running.
+ * @method isAlive
+ * @class wProcedure
+ * @namespace Tools
+ * @module Tools/base/Procedure
+ */
+
 function isAlive()
 {
   let procedure = this;
@@ -179,15 +203,11 @@ function activate( val )
   val = true;
   val = !!val;
 
-  // console.log( `${ val ? 'activate' : 'deactivate'} ${procedure._longName} ${val ? _.Procedure.ActiveProcedures.length : _.Procedure.ActiveProcedures.length-1}` );
-
   _.assert( !procedure.isFinited(), () => `${procedure._longName} is finited!` );
 
   if( val )
   {
-
     _.assert( procedure !== _.Procedure.ActiveProcedure, () => `${procedure._longName} is already active` );
-
     _.Procedure.ActiveProcedures.push( procedure );
     _.Procedure.ActiveProcedure = procedure;
   }
@@ -199,7 +219,6 @@ function activate( val )
       () => `Attempt to deactivate ${procedure._longName}\nBut active procedure is `
       + `${_.Procedure.ActiveProcedure ? _.Procedure.ActiveProcedure._longName : _.Procedure.ActiveProcedure}`
     );
-
     _.Procedure.ActiveProcedures.pop();
     _.Procedure.ActiveProcedure = _.Procedure.ActiveProcedures[ _.Procedure.ActiveProcedures.length-1 ] || null;
   }
@@ -252,23 +271,6 @@ function isUsed()
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( procedure._counter >= 0 );
   return procedure._counter > 0;
-}
-
-//
-
-/**
- * @summary Returns true if procedure is running.
- * @method isBegun
- * @class wProcedure
- * @namespace Tools
- * @module Tools/base/Procedure
- */
-
-function isBegun()
-{
-  let procedure = this;
-  _.assert( arguments.length === 0, 'Expects no arguments' );
-  return !!procedure._waitTimer;
 }
 
 //
@@ -478,6 +480,9 @@ function _longNameMake()
   if( procedure.id === 0 )
   procedure.id = procedure._IdAlloc();
 
+  // if( procedure.id === 2 )
+  // debugger;
+
   let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? ( sourcePath + '' ) : '' );
 
   procedure.longName( result );
@@ -493,8 +498,8 @@ function _longNameMake()
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} filter Filter to filter procedures.
- * @routine Filter
+ * @param {Number|String|Routine} filter Find to filter procedures.
+ * @routine Find
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
  * @class wProcedure
  * @namespace Tools
@@ -503,14 +508,14 @@ function _longNameMake()
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} filter Filter to filter procedures.
- * @routine Filter
+ * @param {Number|String|Routine} filter Find to filter procedures.
+ * @routine Find
  * @returns {Object|Array} Returns one or several instances of {@link module:Tools/base/Procedure.wProcedure}.
  * @module Tools/base/Procedure
  * @namespace Tools.procedure
  */
 
-function Filter( filter )
+function Find( filter )
 {
   let Cls = this;
 
@@ -518,7 +523,7 @@ function Filter( filter )
 
   if( _.arrayIs( filter ) )
   {
-    let result = filter.map( ( p ) => Cls.Filter( p ) );
+    let result = filter.map( ( p ) => Cls.Find( p ) );
     result = _.arrayFlatten( result );
     return result;
   }
@@ -569,6 +574,15 @@ function Filter( filter )
   else
   _.assert( result instanceof Self, `${_.strType( result )} is not a filter` );
 
+  return result;
+}
+
+//
+
+function FindAlive()
+{
+  let cls = this;
+  let result = cls.InstancesArray.filter( ( procedure ) => procedure.isAlive() && !procedure.isQuasi() );
   return result;
 }
 
@@ -636,7 +650,7 @@ function NativeWatchingEnable( o )
   function clearTimeout( timer )
   {
     let result = original.clearTimeout.call(  _global_, ... arguments );
-    let procedures = _.Procedure.Filter({ _object : timer })
+    let procedures = _.Procedure.Find({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
     return result;
@@ -656,7 +670,7 @@ function NativeWatchingEnable( o )
   function clearInterval( timer )
   {
     let result = original.clearInterval.call( _global_, ... arguments );
-    let procedures = _.Procedure.Filter({ _object : timer })
+    let procedures = _.Procedure.Find({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
     return result;
@@ -676,7 +690,7 @@ function NativeWatchingEnable( o )
   function cancelAnimationFrame( timer )
   {
     let result = original.cancelAnimationFrame.call( _global_, ... arguments );
-    let procedures = _.Procedure.Filter({ _object : timer })
+    let procedures = _.Procedure.Find({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
     return result;
@@ -715,7 +729,7 @@ NativeWatchingEnable.defaults =
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} filter Filter to filter procedures.
+ * @param {Number|String|Routine} filter Find to filter procedures.
  * @routine GetSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
  * @class wProcedure
@@ -725,7 +739,7 @@ NativeWatchingEnable.defaults =
 
 /**
  * @summary Find procedure using id/name/routine as key.
- * @param {Number|String|Routine} filter Filter to filter procedures.
+ * @param {Number|String|Routine} filter Find to filter procedures.
  * @routine getSingleMaybe
  * @returns {Object} Returns single instance of {@link module:Tools/base/Procedure.wProcedure} or null.
  * @module Tools/base/Procedure
@@ -735,7 +749,7 @@ NativeWatchingEnable.defaults =
 function GetSingleMaybe( filter )
 {
   _.assert( arguments.length === 1 );
-  let result = this.Filter( filter );
+  let result = this.Find( filter );
   if( _.arrayIs( result ) && result.length !== 1 )
   return null;
   return result;
@@ -752,7 +766,7 @@ function ExportInfo( o )
   o = _.routineOptions( ExportInfo, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
-  let procedures = this.Filter( o );
+  let procedures = this.Find( o );
 
   for( let p = 0 ; p < procedures.length ; p++ )
   {
@@ -863,7 +877,7 @@ function End( procedure )
 {
   _.assert( arguments.length === 1 );
   procedure = _.procedure.find( procedure );
-  /* Dmytro : routine find() ( linked to routine Filter ) returns only arrays. I think that routine Filter should be unchanged */
+  /* Dmytro : routine find() ( linked to routine Find ) returns only arrays. I think that routine Find should be unchanged */
   _.assert( procedure.length === 1 );
   procedure = procedure[ 0 ];
   return procedure.end();
@@ -984,7 +998,9 @@ let Statics =
 
   NativeWatchingEnable,
 
-  Filter, /* qqq : cover please. one test routine per type of input data */
+  Find, /* qqq : cover please. one test routine per type of input data */
+  FindAlive,
+
   GetSingleMaybe,
   ExportInfo,
   OptionsFrom,
@@ -1030,6 +1046,7 @@ let ExtendClass =
   init,
   finit,
 
+  isQuasi,
   isAlive,
   begin,
   end,
@@ -1043,8 +1060,6 @@ let ExtendClass =
   unuse,
   isUsed,
 
-  isBegun,
-
   object,
   stack,
   stackElse,
@@ -1054,6 +1069,25 @@ let ExtendClass =
   routineElse,
   longName,
   _longNameMake,
+
+  //
+
+  NativeWatchingEnable,
+
+  Find, /* qqq : cover please. one test routine per type of input data */
+  FindAlive,
+
+  GetSingleMaybe,
+  ExportInfo,
+  OptionsFrom,
+  From,
+  Begin,
+  End,
+  Activate,
+
+  _IdAlloc,
+  WithObject,
+  Stack,
 
   // relations
 
@@ -1102,7 +1136,8 @@ let NamespaceBlueprint =
 
   // routines
 
-  find : join( 'Filter' ),
+  find : join( 'Find' ),
+  findAlive : join( 'FindAlive' ),
   getSingleMaybe : join( 'GetSingleMaybe' ),
   from : join( 'From' ),
   begin : join( 'Begin' ),
@@ -1121,7 +1156,7 @@ _.procedure[ Self.shortName ] = Self;
 _.procedure._Setup1();
 
 _.assert( _.routineIs( _.procedure.find ) );
-_.assert( _.routineIs( Self.Filter ) );
+_.assert( _.routineIs( Self.Find ) );
 
 // --
 // export
