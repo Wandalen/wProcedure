@@ -929,33 +929,13 @@ function Stack( stack, delta )
   if( !Config.debug || !_.Procedure.UsingStack )
   return '';
 
-  _.assert( delta === undefined || _.numberIs( delta ) );
-  _.assert( stack === undefined || stack === null || _.boolIs( stack ) || _.numberIs( stack ) || _.strIs( stack ) );
-  _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 );
+  if( _.numberIs( delta ) )
+  delta += 1;
+  else if( delta === undefined )
+  delta = 1;
 
-  if( _.strIs( stack ) )
-  return stack;
-  if( stack === false )
-  return '';
+  return _.introspector.stackRelative.call( this, stack, delta );
 
-  if( stack === undefined || stack === null || stack === true )
-  {
-    stack = 1;
-  }
-  else if( _.numberIs( stack ) )
-  {
-    stack += 1;
-    // delta = 0;
-  }
-
-  if( delta )
-  stack += delta;
-  if( _.numberIs( stack ) )
-  stack = _.introspector.stack([ stack, Infinity ]);
-
-  _.assert( _.strIs( stack ) );
-
-  return stack;
 }
 
 // --
