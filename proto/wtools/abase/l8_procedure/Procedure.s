@@ -927,13 +927,16 @@ function Stack( stack, delta )
   return '';
 
   _.assert( delta === undefined || _.numberIs( delta ) );
-  _.assert( stack === undefined || stack === null || _.numberIs( stack ) || _.strIs( stack ) );
+  _.assert( stack === undefined || stack === null || _.boolIs( stack ) || _.numberIs( stack ) || _.strIs( stack ) );
   _.assert( arguments.length === 0 || arguments.length === 1 || arguments.length === 2 );
 
   if( _.strIs( stack ) )
   return stack;
 
-  if( stack === undefined || stack === null )
+  if( stack === false )
+  return '';
+
+  if( stack === undefined || stack === null || stack === true )
   stack = 1;
   if( _.numberIs( stack ) )
   stack += 1;
