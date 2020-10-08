@@ -932,14 +932,14 @@ function Stack( stack, delta )
 
   if( _.strIs( stack ) )
   return stack;
-
   if( stack === false )
   return '';
 
   if( stack === undefined || stack === null || stack === true )
   stack = 1;
-  if( _.numberIs( stack ) )
+  else if( _.numberIs( stack ) )
   stack += 1;
+
   if( delta )
   stack += delta;
   if( _.numberIs( stack ) )
