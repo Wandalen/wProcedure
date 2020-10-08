@@ -936,9 +936,14 @@ function Stack( stack, delta )
   return '';
 
   if( stack === undefined || stack === null || stack === true )
-  stack = 1;
+  {
+    stack = 1;
+  }
   else if( _.numberIs( stack ) )
-  stack += 1;
+  {
+    stack += 1;
+    delta = 0;
+  }
 
   if( delta )
   stack += delta;
