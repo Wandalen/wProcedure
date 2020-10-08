@@ -840,7 +840,10 @@ function From( o )
 
 function Begin( o )
 {
-  let result = Self.From( ... arguments );
+  o = Self.OptionsFrom( ... arguments );
+  o._stack = _.Procedure.Stack( o._stack, 1 );
+  let result = Self.From( o );
+  // let result = Self.From( ... arguments );
   result.begin();
   return result;
 }
@@ -1148,7 +1151,7 @@ let NamespaceBlueprint =
   findAlive : join( 'FindAlive' ),
   getSingleMaybe : join( 'GetSingleMaybe' ),
   from : join( 'From' ),
-  begin : join( 'Begin' ),
+  // begin : join( 'Begin' ),
   end : join( 'End' ),
   activate : join( 'Activate' ),
   stack : join( 'Stack' ),

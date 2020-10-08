@@ -446,6 +446,19 @@ function timePeriodic( delay, procedure, onTime, onCancel )
 }
 
 // --
+// etc
+// --
+
+function begin( o )
+{
+  o = _.Procedure.OptionsFrom( ... arguments );
+  o._stack = _.Procedure.Stack( o._stack, 1 );
+  let result = _.Procedure.From( o );
+  result.begin();
+  return result;
+}
+
+// --
 // meta
 // --
 
@@ -517,6 +530,10 @@ let ProcedureExtension =
   _terminationRestart,
   _terminationEnd,
   _timersEnd,
+
+  // etc
+
+  begin,
 
   // meta
 
