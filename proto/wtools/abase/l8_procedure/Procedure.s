@@ -942,7 +942,7 @@ function Stack( stack, delta )
   else if( _.numberIs( stack ) )
   {
     stack += 1;
-    delta = 0;
+    // delta = 0;
   }
 
   if( delta )
