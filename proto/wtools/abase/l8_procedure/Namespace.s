@@ -378,8 +378,13 @@ _timeBegin.defaults =
 
 //
 
-function timeBegin( delay, procedure, onTime, onCancel )
+function timeBegin( /* delay, procedure, onTime, onCancel */ )
 {
+  let delay = arguments[ 0 ];
+  let procedure = arguments[ 1 ];
+  let onTime = arguments[ 2 ];
+  let onCancel = arguments[ 3 ];
+
   _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
 
   if( !_.procedureIs( procedure ) )
@@ -424,8 +429,13 @@ function timeFinally( delay, procedure, onTime )
 
 //
 
-function timePeriodic( delay, procedure, onTime, onCancel )
+function timePeriodic( /* delay, procedure, onTime, onCancel */ )
 {
+  let delay = arguments[ 0 ];
+  let procedure = arguments[ 1 ];
+  let onTime = arguments[ 2 ];
+  let onCancel = arguments[ 3 ];
+
   _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
 
   if( !_.procedureIs( procedure ) )

@@ -833,43 +833,50 @@ function Stack( test )
 {
 
   test.case = 'without arguments';
-  var got = _.Procedure.Stack();
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet();
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
+
   /* */
 
   test.open( 'stack - null' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( null );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( null );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - undefined';
-  var got = _.Procedure.Stack( null, undefined );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( null, undefined );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( null, 0 );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( null, 0 );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( null, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( null, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( null, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( null, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - null' );
 
@@ -878,34 +885,39 @@ function Stack( test )
   test.open( 'stack - undefined' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( undefined );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( undefined );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - undefined';
-  var got = _.Procedure.Stack( undefined, undefined );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( undefined, undefined );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( undefined, 0 );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( undefined, 0 );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( undefined, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( undefined, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( undefined, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( undefined, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - undefined' );
 
@@ -914,34 +926,39 @@ function Stack( test )
   test.open( 'stack - true' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( true );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( true );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
-  test.case = 'delta - true';
-  var got = _.Procedure.Stack( true, undefined );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  test.case = 'delta - undefined';
+  var got = stackGet( true, undefined );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( true, 0 );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( true, 0 );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( true, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( true, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( true, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( true, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - true' );
 
@@ -950,23 +967,23 @@ function Stack( test )
   test.open( 'stack - false' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( false );
+  var got = stackGet( false );
   test.identical( got, '' );
 
   test.case = 'delta - false';
-  var got = _.Procedure.Stack( false, undefined );
+  var got = stackGet( false, undefined );
   test.identical( got, '' );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( false, 0 );
+  var got = stackGet( false, 0 );
   test.identical( got, '' );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( false, 1 );
+  var got = stackGet( false, 1 );
   test.identical( got, '' );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( false, 2 );
+  var got = stackGet( false, 2 );
   test.identical( got, '' );
 
   test.close( 'stack - false' );
@@ -976,34 +993,39 @@ function Stack( test )
   test.open( 'stack - 0' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( 0 );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 0 );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( 0, undefined );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 0, undefined );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( 0, 0 );
-  test.is( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 0, 0 );
+  test.is( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( 0, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 0, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 0, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 0, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 0' );
 
@@ -1012,34 +1034,39 @@ function Stack( test )
   test.open( 'stack - 1' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( 1, undefined );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 1, undefined );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( 1, 0 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.is( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 1, 0 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.is( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( 1, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 1, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 1, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.isNot( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 1, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 1' );
 
@@ -1048,34 +1075,39 @@ function Stack( test )
   test.open( 'stack - 2' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 2, undefined );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 2, undefined );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 2, 0 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.is( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 2, 0 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.is( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 2, 1 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.isNot( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 2, 1 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
+  test.is( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 2, 2 );
-  test.isNot( _.strHas( got, 'at Object.Stack '  ) );
-  test.isNot( _.strHas( got, 'at Proxy._run'  ) );
-  test.isNot( _.strHas( got, 'at wConsequence.<anonymous> '  ) );
+  var got = stackGet( 2, 2 );
+  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
+  test.isNot( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 2' );
 
@@ -1084,41 +1116,64 @@ function Stack( test )
   test.open( 'stack - string' );
 
   test.case = 'without delta';
-  var got = _.Procedure.Stack( 'some\nat@\nb\nc\nd' );
+  var got = stackGet( 'some\nat@\nb\nc\nd' );
   test.identical( got, 'some\nat@\nb\nc\nd' );
 
   test.case = 'delta - undefined';
-  var got = _.Procedure.Stack( 'some\nat@\nb\nc\nd', undefined );
+  var got = stackGet( 'some\nat@\nb\nc\nd', undefined );
   test.identical( got, 'some\nat@\nb\nc\nd' );
 
   test.case = 'delta - 0';
-  var got = _.Procedure.Stack( 'some\nat@\nb\nc\nd', 0 );
+  var got = stackGet( 'some\nat@\nb\nc\nd', 0 );
   test.identical( got, 'some\nat@\nb\nc\nd' );
 
   test.case = 'delta - 1';
-  var got = _.Procedure.Stack( 'some\nat@\nb\nc\nd', 1 );
+  var got = stackGet( 'some\nat@\nb\nc\nd', 1 );
   test.identical( got, 'some\nat@\nb\nc\nd' );
 
   test.case = 'delta - 2';
-  var got = _.Procedure.Stack( 'some\nat@\nb\nc\nd', 2 );
+  var got = stackGet( 'some\nat@\nb\nc\nd', 2 );
   test.identical( got, 'some\nat@\nb\nc\nd' );
 
   test.close( 'stack - string' );
 
   /* - */
 
-  if( !Config.debug )
-  return;
+  if( Config.debug )
+  {
+    test.case = 'extra arguments';
+    test.shouldThrowErrorSync( () => _.Procedure.Stack( null, [ 1, 2 ], 'extra' ) );
 
-  test.case = 'extra arguments';
-  test.shouldThrowErrorSync( () => _.Procedure.stack( null, [ 1, 2 ], 'extra' ) );
+    test.case = 'wrong type of stack';
+    test.shouldThrowErrorSync( () => _.Procedure.Stack( [ 'at @' ] ) );
 
-  test.case = 'wrong type of stack';
-  test.shouldThrowErrorSync( () => _.Procedure.stack( [ 'at @' ] ) );
+    test.case = 'wrong type of delta';
+    test.shouldThrowErrorSync( () => _.Procedure.Stack( null, [] ) );
+  }
 
-  test.case = 'wrong type of delta';
-  test.shouldThrowErrorSync( () => _.Procedure.stack( null, [] ) );
+  /* */
+
+  function stackGet()
+  {
+    return stackGet2.apply( this, arguments );
+  }
+
+  function stackGet2()
+  {
+    return stackGet3.apply( this, arguments );
+  }
+
+  function stackGet3()
+  {
+    return stackGet4.apply( this, arguments );
+  }
+
+  function stackGet4()
+  {
+    return _.Procedure.Stack( ... arguments );
+  }
 }
+
 
 // --
 // declare

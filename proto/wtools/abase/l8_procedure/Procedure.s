@@ -1074,7 +1074,7 @@ let ExtendClass =
   From,
   Begin,
   End,
-  Activate,
+  // Activate, /* Dmytro : duplicate */
 
   _IdAlloc,
   WithObject,
