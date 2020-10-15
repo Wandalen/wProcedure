@@ -385,14 +385,17 @@ function timeBegin( /* delay, procedure, onTime, onCancel */ )
   let onTime = arguments[ 2 ];
   let onCancel = arguments[ 3 ];
 
-  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
-
   if( !_.procedureIs( procedure ) )
   {
     onTime = arguments[ 1 ];
     onCancel = arguments[ 2 ];
     procedure = 1;
   }
+
+  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
+  _.assert( _.numberIs( delay ) );
+  _.assert( _.routineIs( onTime ) || onTime === undefined || onTime === null );
+  _.assert( _.routineIs( onCancel ) || onCancel === undefined || onCancel === null );
 
   let o2 = Object.create( null );
   o2.delay = delay;
@@ -416,6 +419,10 @@ function timeFinally( delay, procedure, onTime )
     procedure = 1;
   }
 
+  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
+  _.assert( _.numberIs( delay ) );
+  _.assert( _.routineIs( onTime ) || onTime === undefined || onTime === null );
+
   let o2 = Object.create( null );
   o2.delay = delay;
   o2.procedure = procedure;
@@ -436,14 +443,17 @@ function timePeriodic( /* delay, procedure, onTime, onCancel */ )
   let onTime = arguments[ 2 ];
   let onCancel = arguments[ 3 ];
 
-  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
-
   if( !_.procedureIs( procedure ) )
   {
     onTime = arguments[ 1 ];
     onCancel = arguments[ 2 ];
     procedure = 1;
   }
+
+  _.assert( arguments.length === 2 || arguments.length === 3 || arguments.length === 4 );
+  _.assert( _.numberIs( delay ) );
+  _.assert( _.routineIs( onTime ) );
+  _.assert( _.routineIs( onCancel ) || onCancel === undefined || onCancel === null );
 
   let o2 = Object.create( null );
   o2.delay = delay;
