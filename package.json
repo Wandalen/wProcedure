@@ -1,22 +1,35 @@
 {
-  "name" : "wprocedure",
-  "version" : "0.3.153",
-  "description" : "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "license" : "MIT",
-  "main" : "proto/wtools/abase/l8_procedure/Include.s",
-  "files" : [ "proto/wtools/abase/l8_procedure", "proto/wtools/Tools.s", "out" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/wProcedure.git"
+  "name": "wprocedure",
+  "version": "0.3.153",
+  "description": "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "license": "MIT",
+  "main": "proto/wtools/abase/l8_procedure/Include.s",
+  "files": [
+    "proto/wtools/abase/l8_procedure",
+    "proto/wtools/Tools.s",
+    "out"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-1",
+    "docgen": "wdocgen proto"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wProcedure/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wProcedure.git"
   },
-  "dependencies" : { "wTools" : "alpha" },
-  "devDependencies" : { "eslint" : "7.1.0", "wprocedure" : "file:.", "wTesting" : "alpha" },
-  "keywords" : [ "wTools" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wProcedure/issues"
+  },
+  "dependencies": {
+    "wTools": "alpha"
+  },
+  "devDependencies": {
+    "eslint": "7.1.0",
+    "wprocedure": "file:.",
+    "wTesting": "alpha"
+  },
+  "keywords": [
+    "wTools"
+  ]
 }
