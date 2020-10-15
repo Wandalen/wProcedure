@@ -480,14 +480,17 @@ function _longNameMake()
   if( procedure.id === 0 )
   procedure.id = procedure._IdAlloc();
 
-  // if( procedure.id === 2 )
+  // if( procedure.id === 8 || procedure.id === 9 )
+  // debugger;
+  // if( procedure.id >= 11 )
   // debugger;
 
-  let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? ( sourcePath + '' ) : '' );
+  let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? sourcePath : '' );
 
   procedure.longName( result );
 
   _.assert( procedure.id > 0 );
+
 
   return result;
 }
