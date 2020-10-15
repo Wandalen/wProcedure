@@ -9,7 +9,7 @@
 */
 
 /**
- *@summary Collection of routines to launch, stop and track collection of asynchronous procedures.
+ *@summary Collection of cross-platform routines to launch, stop and track collection of asynchronous procedures.
   @namespace wTools.procedure
   @module Tools/base/Procedure
 */

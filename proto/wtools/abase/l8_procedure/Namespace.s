@@ -19,7 +19,7 @@ _global_.wTools.procedure = _global_.wTools.procedure || Object.create( null );
 function on( o )
 {
 
-  o = _.event.on.pre( _.event.on, arguments );
+  o = _.event.on.head( _.event.on, arguments );
   _.event.on( _.procedure._ehandler, o );
 
 }
@@ -34,7 +34,7 @@ on.defaults =
 function off( o )
 {
 
-  o = _.event.off.pre( _.event.off, arguments );
+  o = _.event.off.head( _.event.off, arguments );
   _.event.off( _.procedure._ehandler, o );
 
 }
