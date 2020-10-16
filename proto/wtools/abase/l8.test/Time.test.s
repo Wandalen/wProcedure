@@ -4668,61 +4668,6 @@ function cancel( test )
 
 //
 
-function sleep( test )
-{
-
-  test.case = 'delay - 0';
-  var start = _.time.now();
-  _.time.sleep( 0 );
-  var got = _.time.now() - start;
-  test.is( 0 <= got );
-
-  test.case = 'delay - 2';
-  var start = _.time.now();
-  _.time.sleep( 2 );
-  var got = _.time.now() - start;
-  test.is( 1 <= got );
-
-  test.case = 'delay - 100';
-  var start = _.time.now();
-  _.time.sleep( 100 );
-  var got = _.time.now() - start;
-  test.is( 99 <= got );
-
-  test.case = 'delay - 2000';
-  var start = _.time.now();
-  _.time.sleep( 2000 );
-  var got = _.time.now() - start;
-  test.is( 1999 <= got );
-
-  /* - */
-
-  if( !Config.debug )
-  return;
-
-  test.case = 'without arguments';
-  test.shouldThrowErrorSync( () => _.time.sleep() );
-
-  test.case = 'extra arguments';
-  test.shouldThrowErrorSync( () => _.time.sleep( 10, new _.Procedure(), 10 ) );
-
-  test.case = 'wrong type of delay';
-  test.shouldThrowErrorSync( () => _.time.sleep( '10' ) );
-
-  test.case = 'negative value of delay';
-  test.shouldThrowErrorSync( () => _.time.sleep( -1 ) );
-
-  test.case = 'Infinity value of delay';
-  test.shouldThrowErrorSync( () => _.time.sleep( Infinity ) );
-
-  test.case = 'delay has NaN value';
-  test.shouldThrowErrorSync( () => _.time.sleep( NaN ) );
-}
-
-sleep.timeOut = 30000;
-
-//
-
 function timeOutCancelInsideOfCallback( test )
 {
   let context = this;
@@ -4731,7 +4676,6 @@ function timeOutCancelInsideOfCallback( test )
   var timer = _.time.begin( 1, () =>
   {
     visited.push( 'v1' );
-    debugger;
     _.time.cancel( timer );
     visited.push( 'v2' );
   });
@@ -4850,7 +4794,6 @@ let Self =
     periodic,
     periodicWithProcedure,
     cancel,
-    sleep,
     timeOutCancelInsideOfCallback,
     timeOutCancelOutsideOfCallback,
     timeOutCancelZeroDelayInsideOfCallback,
