@@ -4666,97 +4666,6 @@ function cancel( test )
   test.close( 'timer - _periodic' );
 }
 
-//
-
-function timeOutCancelInsideOfCallback( test )
-{
-  let context = this;
-  let visited = [];
-
-  var timer = _.time.begin( 1, () =>
-  {
-    visited.push( 'v1' );
-    _.time.cancel( timer );
-    visited.push( 'v2' );
-  });
-
-  visited.push( 'v0' );
-
-  return _.time.out( context.dt1*15 ).then( () =>
-  {
-    test.identical( visited, [ 'v0', 'v1', 'v2' ] );
-    return null;
-  });
-}
-
-//
-
-function timeOutCancelOutsideOfCallback( test )
-{
-  let context = this;
-  let visited = [];
-
-  var timer = _.time.begin( context.dt1*3, () =>
-  {
-    visited.push( 'v1' );
-  });
-
-  _.time.cancel( timer );
-  visited.push( 'v0' );
-
-  return _.time.out( context.dt1*15 ).then( () =>
-  {
-    test.identical( visited, [ 'v0' ] );
-    return null;
-  });
-}
-
-//
-
-function timeOutCancelZeroDelayInsideOfCallback( test )
-{
-  let context = this;
-  let visited = [];
-
-  var timer = _.time.begin( 0, () =>
-  {
-    visited.push( 'v1' );
-    _.time.cancel( timer );
-    visited.push( 'v2' );
-  });
-
-  visited.push( 'v0' );
-
-  return _.time.out( context.dt1*15 ).then( () =>
-  {
-    test.identical( visited, [ 'v0', 'v1', 'v2' ] );
-    return null;
-  });
-}
-
-//
-
-function timeOutCancelZeroDelayOutsideOfCallback( test )
-{
-  let context = this;
-  let visited = [];
-
-  var timer = _.time.begin( 0, () =>
-  {
-    visited.push( 'v1' );
-  });
-
-  _.time.cancel( timer );
-  visited.push( 'v0' );
-
-  return _.time.out( context.dt1*15 ).then( () =>
-  {
-    test.identical( visited, [ 'v0' ] );
-    return null;
-  });
-}
-
-
 // --
 // declare
 // --
@@ -4794,10 +4703,6 @@ let Self =
     periodic,
     periodicWithProcedure,
     cancel,
-    timeOutCancelInsideOfCallback,
-    timeOutCancelOutsideOfCallback,
-    timeOutCancelZeroDelayInsideOfCallback,
-    timeOutCancelZeroDelayOutsideOfCallback,
 
   },
 
