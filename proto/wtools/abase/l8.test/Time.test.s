@@ -1419,6 +1419,9 @@ function _periodicWithProcedure( test )
   var timer = _.time._periodic( 10, () => 1, () => -1 );
   var nProceduresAfter = _.Procedure.Counter;
   test.identical( nProceduresBegin, nProceduresAfter );
+  _.time.cancel( timer );
+  var nProceduresAfter = _.Procedure.Counter;
+  test.identical( nProceduresBegin, nProceduresAfter );
 }
 
 //
