@@ -4,13 +4,17 @@
 'use strict';
 
 let _global = _global_;
-let _ = _global_.wTools;
+let _ = _global.wTools;
 
-_.assert( !!_global_.wTools, 'Does not have wTools' );
-_.assert( _global_.wTools.procedure === undefined, 'wTools.procedure is already defined' );
-_.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
+_.assert( !!_global.wTools, 'Does not have wTools' );
+_.assert( _global.wTools.procedure === undefined, 'wTools.procedure is already defined' );
+_.assert( _global.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
 
-_global_.wTools.procedure = _global_.wTools.procedure || Object.create( null );
+_global.wTools.procedure = _global.wTools.procedure || Object.create( null );
+
+_realGlobal_._ProcedureGlobals_ = _realGlobal_._ProcedureGlobals_ || [];
+_.arrayAppendOnce( _realGlobal_._ProcedureGlobals_, _global );
+
 
 // --
 // event
@@ -136,6 +140,9 @@ function terminationBegin()
 
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
+
+  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
+
 }
 
 terminationBegin.defaults =

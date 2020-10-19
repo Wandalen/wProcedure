@@ -969,6 +969,11 @@ let Restricts =
   _waitTime : Infinity,
 }
 
+// let Medials =
+// {
+//   stackDelta : null,
+// }
+
 let Statics =
 {
 
@@ -1088,6 +1093,7 @@ let ExtendClass =
   Composes,
   Associates,
   Restricts,
+  // Medials,
   Statics,
   Forbids,
 
