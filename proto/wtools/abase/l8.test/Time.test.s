@@ -591,8 +591,6 @@ function _beginWithProcedure( test )
   test.identical( nProceduresBegin, nProceduresAfter );
 }
 
-_beginWithProcedure.experimental = 1;
-
 //
 
 function _beginTimerInsideOfCallback( test )
@@ -1122,6 +1120,16 @@ function _finally( test )
 
   return ready;
 }
+//
+
+function _finallyWithProcedure( test )
+{
+  test.case = 'Procedure as callback, should throw error';
+  var nProceduresBegin = _.Procedure.Counter;
+  var timer = _.time._finally( 10, () => 1 );
+  var nProceduresAfter = _.Procedure.Counter;
+  test.identical( nProceduresBegin, nProceduresAfter );
+}
 
 //
 
@@ -1402,6 +1410,16 @@ function _periodic( test )
 
   return ready;
 }
+//
+
+function _periodicWithProcedure( test )
+{
+  test.case = 'Procedure as callback, should throw error';
+  var nProceduresBegin = _.Procedure.Counter;
+  var timer = _.time._periodic( 10, () => 1, () => -1 );
+  var nProceduresAfter = _.Procedure.Counter;
+  test.identical( nProceduresBegin, nProceduresAfter );
+}
 
 //
 
@@ -1496,6 +1514,18 @@ function _cancel( test )
   test.identical( got.result, -1 );
 
   test.close( 'timer - _periodic' );
+}
+
+//
+
+function _cancelWithProcedure( test )
+{
+  test.case = 'Procedure as callback, should throw error';
+  var timer = _.time._begin( 10, () => 1, () => -1 );
+  var nProceduresBegin = _.Procedure.Counter;
+  var got = _.time._cancel( timer );
+  var nProceduresAfter = _.Procedure.Counter;
+  test.identical( nProceduresBegin, nProceduresAfter );
 }
 
 //
@@ -4707,8 +4737,11 @@ let Self =
     _beginWithProcedure,
     _beginTimerInsideOfCallback,
     _finally,
+    _finallyWithProcedure,
     _periodic,
+    _periodicWithProcedure,
     _cancel,
+    _cancelWithProcedure,
     begin,
     beginWithProcedure,
     beginTimerInsideOfCallback,
