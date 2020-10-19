@@ -164,6 +164,7 @@ module:
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l8.test
           - ../proto/wtools/abase/l8.test/Procedure.test.s
+          - ../proto/wtools/abase/l8.test/Time.test.s
           - ../proto/wtools/abase/l8_procedure
           - ../proto/wtools/abase/l8_procedure/Include.s
           - ../proto/wtools/abase/l8_procedure/Namespace.s
