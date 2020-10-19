@@ -582,6 +582,19 @@ function _begin( test )
 
 //
 
+function _beginWithProcedure( test )
+{
+  test.case = 'Procedure as callback, should throw error';
+  var nProceduresBegin = _.Procedure.Counter;
+  var timer = _.time._begin( 10, () => 1, () => -1 );
+  var nProceduresAfter = _.Procedure.Counter;
+  test.identical( nProceduresBegin, nProceduresAfter );
+}
+
+_beginWithProcedure.experimental = 1;
+
+//
+
 function _beginTimerInsideOfCallback( test )
 {
   let context = this;
@@ -4691,6 +4704,7 @@ let Self =
     // basic
 
     _begin,
+    _beginWithProcedure,
     _beginTimerInsideOfCallback,
     _finally,
     _periodic,
