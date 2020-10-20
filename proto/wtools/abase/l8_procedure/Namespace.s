@@ -141,7 +141,7 @@ function terminationBegin()
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
 
-  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
+  _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : covered, test routine terminationBeginWithTwoNamespaces */
 
 }
 
