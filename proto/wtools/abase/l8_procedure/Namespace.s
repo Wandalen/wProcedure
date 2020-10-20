@@ -141,7 +141,7 @@ function terminationBegin()
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
 
-  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
+  _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
 
 }
 
@@ -170,6 +170,8 @@ function _terminationRestart()
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.Procedure._Terminating >= 1 );
 
+  // console.log( '_terminationRestart' ); debugger;
+
   if( _.Procedure._Terminating === 2 )
   {
     return;
@@ -180,6 +182,7 @@ function _terminationRestart()
   _.procedure._terminationTimer = null;
 
   let procedures = _.Procedure.Find({ _quasi : 0 });
+  // if( 1 ) /* yyy */
   if( procedures.length && !_.Procedure._Exiting )
   {
     _.procedure._terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.procedure._terminationIteration );
@@ -198,6 +201,8 @@ function _terminationEnd()
 
   try
   {
+
+    // console.log( '_terminationEnd' ); debugger;
 
     _.assert( arguments.length === 0, 'Expects no arguments' );
     _.assert( _.Procedure._Terminating === 1 );
@@ -510,7 +515,8 @@ function _Setup1()
   _.Procedure.EntryProcedure.activate( true );
 
   _.assert( !!_.process && !!_.process.on );
-  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle );
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle ); /* xxx : add explenation */
+  /* xxx : add handler of beforeExit */
 
 }
 
