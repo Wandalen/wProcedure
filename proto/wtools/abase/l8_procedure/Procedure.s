@@ -76,6 +76,10 @@ function finit()
 {
   let procedure = this;
 
+  // if( procedure.id === 4 )
+  // debugger;
+
+  _.assert( !procedure.isFinited(), () => `${procedure._longName} not found is alread finited` );
   _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
 
@@ -486,7 +490,7 @@ function _longNameMake()
   if( procedure.id === 0 )
   procedure.id = procedure._IdAlloc();
 
-  // if( procedure.id === 6 )
+  // if( procedure.id === 4 )
   // debugger;
 
   let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? sourcePath : '' );
