@@ -509,6 +509,174 @@ terminationEventsTerminationWithConsequence.description =
 
 //
 
+function terminationBeginWithTwoNamespaces( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let programPath1 = a.program( program1 );
+  let programPath2 = a.program( program2 );
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : programPath1 })
+  .then( ( op ) =>
+  {
+    test.case = 'termination of procedures from first global namespace';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 1 );
+    test.identical( _.strCount( op.output, 'Global procedures : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'timer1' ), 1 );
+    test.identical( _.strCount( op.output, 'timer2' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 1 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+    return null;
+  });
+
+  a.appStartNonThrowing({ execPath : programPath2 })
+  .then( ( op ) =>
+  {
+    test.case = 'termination of procedures from second global namespace';
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Global procedures : undefined' ), 1 );
+    test.identical( _.strCount( op.output, 'Global procedures : 1' ), 1 );
+    test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
+    test.identical( _.strCount( op.output, 'timer1' ), 1 );
+    test.identical( _.strCount( op.output, 'timer2' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationBegin1' ), 1 );
+    test.identical( _.strCount( op.output, /v1(.|\n|\r)*terminationBegin1(.|\n|\r)*timer(.|\n|\r)*terminationEnd1(.|\n|\r)*/mg ), 1 );
+    test.identical( _.strCount( op.output, 'Waiting for' ), 1 );
+    test.identical( _.strCount( op.output, 'procedure::' ), 1 );
+    test.identical( _.strCount( op.output, 'v1' ), 1 );
+    test.identical( _.strCount( op.output, 'terminationEnd1' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  /* */
+
+  function program1()
+  {
+    let _ = require( toolsPath );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_ }` );
+
+    _.include( 'wConsequence' );
+    _.include( 'wProcedure' );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+
+    _.include( 'wTesting' );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+
+    let t = _testerGlobal_.wTools;
+
+    /* */
+
+    let timeOut = 1500;
+
+    let timer = _.time.begin( timeOut, () =>
+    {
+      console.log( 'timer1' );
+    });
+
+    let timerT = t.time.begin( timeOut, () =>
+    {
+      console.log( 'timer2' );
+    });
+
+    console.log( 'v1' );
+
+    /* */
+
+    _.procedure.on( 'terminationBegin', () =>
+    {
+      console.log( 'terminationBegin1' );
+    });
+
+    _.procedure.on( 'terminationEnd', () =>
+    {
+      console.log( 'terminationEnd1' );
+    });
+
+    /* */
+
+    _.procedure.terminationPeriod = 1000;
+    _.procedure.terminationBegin();
+  }
+
+  /* */
+
+  function program2()
+  {
+    let _ = require( toolsPath );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_ }` );
+
+    _.include( 'wConsequence' );
+    _.include( 'wProcedure' );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+
+    _.include( 'wTesting' );
+
+    console.log( `Global procedures : ${ _realGlobal_._ProcedureGlobals_.length }` );
+
+    let t = _testerGlobal_.wTools;
+
+    /* */
+
+    let timeOut = 1500;
+
+    let timer = _.time.begin( timeOut, () =>
+    {
+      console.log( 'timer1' );
+    });
+
+    let timerT = t.time.begin( timeOut, () =>
+    {
+      console.log( 'timer2' );
+    });
+
+    /* */
+
+    console.log( 'v1' );
+
+    t.procedure.on( 'terminationBegin', () =>
+    {
+      console.log( 'terminationBegin1' );
+    });
+
+    t.procedure.on( 'terminationEnd', () =>
+    {
+      console.log( 'terminationEnd1' );
+    });
+
+    /* */
+
+    t.procedure.terminationPeriod = 1000;
+    t.procedure.terminationBegin();
+  }
+
+}
+
+terminationBeginWithTwoNamespaces.timeOut = 60000;
+terminationBeginWithTwoNamespaces.description =
+`
+- terminationBegin terminate global namespaces in _ProcedureGlobals_
+- each global namespace terminate own procedures
+`
+
+//
+
 function nativeWatchingSetTimeout( test )
 {
   let context = this;
@@ -1210,6 +1378,7 @@ let Self =
     terminationEventsExplicitTermination,
     terminationEventsImplicitTermination,
     terminationEventsTerminationWithConsequence,
+    terminationBeginWithTwoNamespaces,
 
     nativeWatchingSetTimeout,
     nativeWatchingСlearTimeout,
