@@ -228,7 +228,7 @@ function _terminationEnd()
   }
   catch( err )
   {
-    _.setup._errUncaughtHandler2( err, 'uncaught error in procedures termination routine' )
+    _.error._handleUncaught2({ err, origination : 'uncaught error in procedures termination routine' })
   }
 
 }
