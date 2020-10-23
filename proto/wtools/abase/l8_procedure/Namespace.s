@@ -515,8 +515,14 @@ function _Setup1()
   _.Procedure.EntryProcedure.activate( true );
 
   _.assert( !!_.process && !!_.process.on );
-  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle ); /* xxx : add explenation */
-  /* xxx : add handler of beforeExit */
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle );
+  /* xxx : add explenation */
+  /* xxx qqq for Dmytro : introduce mini-class _.event.Chain()
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle )
+  ->
+  _.process.on( _.event.Chain( 'available', 'exit', 'exit' ), _.procedure._eventProcessExitHandle )
+  qqq for Dmytro : restrict routines _.*.on() to accept 2 arguments
+  */
 
 }
 
