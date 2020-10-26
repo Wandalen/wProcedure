@@ -335,7 +335,8 @@ function _timeBegin( o )
     }
     finally
     {
-      // _.assert( !o.procedure.isFinited() ); /* Dmytro : periodic timer finishes procedure if callback returns undefined */
+      // _.assert( !o.procedure.isFinited() );
+      /* Dmytro : periodic timer finishes procedure if callback returns undefined */
       if( !o.procedure.isFinited() )
       {
         o.procedure.activate( false );
@@ -349,6 +350,7 @@ function _timeBegin( o )
   function cancel()
   {
 
+    /* xxx qqq for Dmytro : look suspicious! */
     if( timer.state !== 0 && o.method.name !== '_periodic' )
     {
       return;
