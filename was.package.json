@@ -1,6 +1,6 @@
 {
   "name" : "wprocedure",
-  "version" : "0.3.160",
+  "version" : "0.3.161",
   "description" : "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
