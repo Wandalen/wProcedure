@@ -228,7 +228,7 @@ function _terminationEnd()
   }
   catch( err )
   {
-    _.setup._errUncaughtHandler2( err, 'uncaught error in procedures termination routine' )
+    _.error._handleUncaught2({ err, origination : 'uncaught error in procedures termination routine' })
   }
 
 }
@@ -335,7 +335,8 @@ function _timeBegin( o )
     }
     finally
     {
-      // _.assert( !o.procedure.isFinited() ); /* Dmytro : periodic timer finishes procedure if callback returns undefined */
+      // _.assert( !o.procedure.isFinited() );
+      /* Dmytro : periodic timer finishes procedure if callback returns undefined */
       if( !o.procedure.isFinited() )
       {
         o.procedure.activate( false );
@@ -349,6 +350,7 @@ function _timeBegin( o )
   function cancel()
   {
 
+    /* xxx qqq for Dmytro : look suspicious! */
     if( timer.state !== 0 && o.method.name !== '_periodic' )
     {
       return;
@@ -515,8 +517,14 @@ function _Setup1()
   _.Procedure.EntryProcedure.activate( true );
 
   _.assert( !!_.process && !!_.process.on );
-  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle ); /* xxx : add explenation */
-  /* xxx : add handler of beforeExit */
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle );
+  /* xxx : add explenation */
+  /* xxx qqq for Dmytro : introduce mini-class _.event.Chain()
+  _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle )
+  ->
+  _.process.on( _.event.Chain( 'available', 'exit', 'exit' ), _.procedure._eventProcessExitHandle )
+  qqq for Dmytro : restrict routines _.*.on() to accept 2 arguments
+  */
 
 }
 
