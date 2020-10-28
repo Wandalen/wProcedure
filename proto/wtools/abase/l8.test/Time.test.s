@@ -1965,6 +1965,59 @@ function begin( test )
     });
   });
 
+  // ready.then( () =>
+  // {
+  //   test.case = 'executes method cancel twice, should throw error';
+  //   var timer = _.time.begin( Infinity, onTime, onCancel );
+  //   timer.cancel();
+  //   debugger;
+  //   /* xxx qqq for Dmytro : bad test. ask */
+  //   return _.time.out( context.t1, () =>
+  //   {
+  //     debugger;
+  //     return timer.cancel()
+  //   })
+  //   .finally( ( err, arg ) =>
+  //   {
+  //     debugger;
+  //     if( arg )
+  //     {
+  //       test.is( false );
+  //     }
+  //     else
+  //     {
+  //       _.errAttend( err );
+  //       test.is( true );
+  //     }
+  //     return null;
+  //   });
+  // });
+  //
+  // ready.then( () =>
+  // {
+  //   test.case = 'executes method time and then method cancel, should throw error';
+  //   var timer = _.time.begin( Infinity, onTime, onCancel );
+  //   timer.time();
+  //
+  //   return _.time.out( context.t1, () =>
+  //   {
+  //     timer.cancel()
+  //   })
+  //   .finally( ( err, arg ) =>
+  //   {
+  //     if( arg )
+  //     {
+  //       test.is( false );
+  //     }
+  //     else
+  //     {
+  //       _.errAttend( err );
+  //       test.is( true );
+  //     }
+  //     return null;
+  //   });
+  // });
+
   ready.then( () =>
   {
     test.case = 'executes method time and then method cancel, should throw error';
