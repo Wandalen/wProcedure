@@ -3149,6 +3149,28 @@ function finally_( test )
     });
   });
 
+  ready.then( () =>
+  {
+    test.case = 'executes method time twice, should throw error';
+    var timer = _.time.finally( Infinity, onTime );
+    timer.time();
+
+    return _.time.out( context.t1, () => timer.time() )
+    .finally( ( err, arg ) =>
+    {
+      if( arg )
+      {
+        test.is( false );
+      }
+      else
+      {
+        _.errAttend( err );
+        test.is( true );
+      }
+      return null;
+    });
+  });
+
   // qqq for Dmytro
   // ready.then( () =>
   // {

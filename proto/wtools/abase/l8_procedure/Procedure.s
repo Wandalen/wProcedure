@@ -76,12 +76,22 @@ function finit()
 {
   let procedure = this;
 
+  // if( procedure.id === 4 )
+  // debugger;
+
+  _.assert( !procedure.isFinited(), () => `${procedure._longName} not found is alread finited` );
   _.assert( _.Procedure.NamesMap[ procedure._longName ] === procedure, () => `${procedure._longName} not found` );
   _.assert( !procedure.isActivated(), `Cant finit ${procedure._longName}, it is activated` );
 
   delete _.Procedure.NamesMap[ procedure._longName ];
 
   _.arrayRemoveOnceStrictly( _.Procedure.InstancesArray, procedure );
+
+  if( _.Procedure._Terminating )
+  {
+    _.procedure._terminationListInvalidated = 1;
+    _.procedure._terminationRestart();
+  }
 
   return _.Copyable.prototype.finit.call( procedure );
 }
@@ -133,6 +143,7 @@ function begin()
   let procedure = this;
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
+  _.assert( !procedure.isFinited() );
 
   if( procedure._waitTimer === null )
   procedure._waitTimer = _.time._begin( Infinity );
@@ -162,17 +173,16 @@ function end()
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( procedure._waitTimer !== null, `${procedure._longName} is not alive` );
 
+  // if( _.Procedure._Terminating )
+  // {
+  //   _.procedure._terminationListInvalidated = 1;
+  //   _.procedure._terminationRestart();
+  // }
+
   if( procedure._waitTimer )
   _.time._cancel( procedure._waitTimer );
   procedure._waitTimer = null;
-
   procedure.finit();
-
-  if( _.Procedure._Terminating )
-  {
-    _.procedure._terminationListInvalidated = 1;
-    _.procedure._terminationRestart();
-  }
 
   return procedure;
 }
@@ -480,9 +490,7 @@ function _longNameMake()
   if( procedure.id === 0 )
   procedure.id = procedure._IdAlloc();
 
-  // if( procedure.id === 8 || procedure.id === 9 )
-  // debugger;
-  // if( procedure.id >= 11 )
+  // if( procedure.id === 4 )
   // debugger;
 
   let result = 'procedure::' + name + '#' + procedure.id + ' @ ' + ( sourcePath ? sourcePath : '' );

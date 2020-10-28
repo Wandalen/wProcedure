@@ -238,8 +238,8 @@ function accounting( test )
 
     test.identical( _.strCount( op.output, 'entry r:null o:Null wt:false' ), 1 );
     test.identical( _.strCount( op.output, 'time.begin r:timeOut1 o:Timer wt:false' ), 1 );
-    test.identical( _.strCount( op.output, 'time.out r:timeGot o:Competitor wt:Timer' ), 1 );
-    test.identical( _.strCount( op.output, 'time.out r:timeEnd o:Timer wt:false' ), 1 );
+    test.identical( _.strCount( op.output, 'time.out r:timeEnd2 o:Competitor wt:Timer' ), 1 );
+    test.identical( _.strCount( op.output, 'time.out r:timeEnd1 o:Timer wt:false' ), 1 );
     test.identical( _.strCount( op.output, 'quasi r:null o:Null wt:false' ), 1 );
 
     return null;
