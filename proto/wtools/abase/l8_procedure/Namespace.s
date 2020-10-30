@@ -12,9 +12,8 @@ _.assert( _global.wTools.Procedure === undefined, 'wTools.Procedure is already d
 
 _global.wTools.procedure = _global.wTools.procedure || Object.create( null );
 
-_realGlobal_._ProcedureGlobals_ = _realGlobal_._ProcedureGlobals_ || [];
-_.arrayAppendOnce( _realGlobal_._ProcedureGlobals_, _global );
-
+// _realGlobal_._ProcedureGlobals_ = _realGlobal_._ProcedureGlobals_ || [];
+// _.arrayAppendOnce( _realGlobal_._ProcedureGlobals_, _global );
 
 // --
 // event
@@ -141,7 +140,13 @@ function terminationBegin()
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
 
-  _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : covered, test routine terminationBeginWithTwoNamespaces */
+  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
+
+  _.each( _realGlobal_._globals_, ( global ) =>
+  {
+    if( global.wTools && global.wTools.procedure && global.wTools.procedure.terminationBegin )
+    global.wTools.procedure.terminationBegin();
+  }); /* yyy qqq : cover in wTesting and wProcedure */
 
 }
 

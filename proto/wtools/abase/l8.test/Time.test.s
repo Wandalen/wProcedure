@@ -2736,7 +2736,6 @@ function beginTimerInsideOfCallback( test )
       test.identical( timer.state, 2 );
       test.identical( timer.result, -1 );
       test.identical( result, [ 1, 1, 1, -1 ] );
-
       return null;
     });
   });
