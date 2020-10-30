@@ -946,7 +946,6 @@ function Stack( stack, delta )
   delta = 1;
 
   return _.introspector.stackRelative.call( this, stack, delta );
-
 }
 
 // --
@@ -1090,7 +1089,6 @@ let ExtendClass =
   From,
   Begin,
   End,
-  // Activate, /* Dmytro : duplicate */
 
   _IdAlloc,
   WithObject,
