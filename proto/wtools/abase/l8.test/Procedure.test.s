@@ -146,6 +146,7 @@ function activeProcedureSourcePath( test )
       return 'callback2';
     })
 
+    console.log( 'stack::program ' + _.Procedure.ActiveProcedure._stack );
     console.log( 'sourcePath::program ' + _.Procedure.ActiveProcedure._sourcePath );
     _.time.out( 100, function timeOut1()
     {
