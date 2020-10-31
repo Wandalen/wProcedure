@@ -945,6 +945,7 @@ function Stack( stack, delta )
   else if( delta === undefined )
   delta = 1;
 
+  // debugger; xxx
   return _.introspector.stackRelative.call( this, stack, delta );
 }
 

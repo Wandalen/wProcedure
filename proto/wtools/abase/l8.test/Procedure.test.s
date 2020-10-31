@@ -115,8 +115,8 @@ function activeProcedureSourcePath( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:31/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:21/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:32/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:22/ ), 1 );
     test.identical( _.strCount( op.output, /sourcePath::callback1.*program.js:8/ ), 1 );
     test.identical( _.strCount( op.output, /sourcePath::callback2.*program.js:13/ ), 1 );
     test.identical( _.strCount( op.output, 'sourcePath::' ), 4 );
