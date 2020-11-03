@@ -140,13 +140,13 @@ function terminationBegin()
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
 
-  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy qqq : cover in wTesting and wProcedure */
+  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : it's deprecated, covered as _realGlobal_._globals_ */
 
   _.each( _realGlobal_._globals_, ( global ) =>
   {
     if( global.wTools && global.wTools.procedure && global.wTools.procedure.terminationBegin )
     global.wTools.procedure.terminationBegin();
-  }); /* yyy qqq : cover in wTesting and wProcedure */
+  }); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : covered */
 
 }
 
