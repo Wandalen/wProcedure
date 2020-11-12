@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
-let fileProvider = _testerGlobal_.wTools.fileProvider;
+let fileProvider = _globals_.testing.wTools.fileProvider;
 let path = fileProvider.path;
 
 // --
@@ -525,9 +525,9 @@ function terminationBeginWithTwoNamespaces( test )
     test.case = 'termination of procedures from first global namespace';
     test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : wTesting' ), 1 );
     test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
@@ -547,9 +547,9 @@ function terminationBeginWithTwoNamespaces( test )
     test.case = 'termination of procedures from second global namespace';
     test.identical( op.exitCode, 0 );
     test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : real' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-    test.identical( _.strCount( op.output, 'GLOBAL WHICH : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : wTesting' ), 1 );
     test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
@@ -581,13 +581,13 @@ function terminationBeginWithTwoNamespaces( test )
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_NAME__ }` );
 
     _.include( 'wTesting' );
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_NAME__ }` );
 
     console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
@@ -644,13 +644,13 @@ function terminationBeginWithTwoNamespaces( test )
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_NAME__ }` );
 
     _.include( 'wTesting' );
 
     keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
-    console.log( `GLOBAL WHICH : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_WHICH__ }` );
+    console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_NAME__ }` );
 
     console.log( `Instances are identical : ${ keys[ 0 ] === _realGlobal_._globals_[ keys[ 1 ] ] }` );
 
