@@ -230,7 +230,7 @@ function accounting( test )
     test.identical( _.strCount( op.output, 'procedure::time.out' ), 2 );
     test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
 
-    test.identical( _.strCount( op.output, 'program.js:39' ), 1 );
+    test.identical( _.strCount( op.output, 'program.js:38' ), 1 );
     test.identical( _.strCount( op.output, 'program.js:6' ), 1 );
     test.identical( _.strCount( op.output, 'program.js:11' ), 2 );
     test.identical( _.strCount( op.output, 'program.js:16' ), 1 );

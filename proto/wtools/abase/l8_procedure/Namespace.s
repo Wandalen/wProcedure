@@ -531,7 +531,7 @@ function _Setup1()
   _.process.on( 'available', _.event.Name( 'exit' ), _.event.Name( 'exit' ), _.procedure._eventProcessExitHandle )
   ->
   _.process.on( _.event.Chain( 'available', 'exit', 'exit' ), _.procedure._eventProcessExitHandle )
-  aaa for Dmytro : restrict routines _.*.on() to accept 2 arguments /* Dmytro : done */
+  aaa for Dmytro : restrict routines _.*.on() to accept 2 arguments // Dmytro : done
   */
 
 }
