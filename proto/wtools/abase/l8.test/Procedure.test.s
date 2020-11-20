@@ -939,7 +939,7 @@ function nativeWatchingRequestAnimationFrame( test )
   let a = test.assetFor( false );
   let programPath = a.program( program );
 
-  test.is( true );
+  test.true( true );
 
   if( !_global_.requestAnimationFrame )
   return;
@@ -1029,10 +1029,10 @@ function Stack( test )
 
   test.case = 'without arguments';
   var got = stackGet();
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   /* */
 
@@ -1040,38 +1040,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( null );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - undefined';
   var got = stackGet( null, undefined );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
   var got = stackGet( null, 0 );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( null, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( null, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - null' );
 
@@ -1081,38 +1081,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( undefined );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - undefined';
   var got = stackGet( undefined, undefined );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
   var got = stackGet( undefined, 0 );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( undefined, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( undefined, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - undefined' );
 
@@ -1122,38 +1122,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( true );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - undefined';
   var got = stackGet( true, undefined );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
   var got = stackGet( true, 0 );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( true, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( true, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - true' );
 
@@ -1189,38 +1189,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( 0 );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
   var got = stackGet( 0, undefined );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 0';
   var got = stackGet( 0, 0 );
-  test.is( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.true( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( 0, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 0, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 0' );
 
@@ -1230,38 +1230,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( 1, undefined );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( 1, 0 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.is( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.true( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 1';
   var got = stackGet( 1, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 1, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.false( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 1' );
 
@@ -1271,38 +1271,38 @@ function Stack( test )
 
   test.case = 'without delta';
   var got = stackGet( 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 2, undefined );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 2, 0 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.is( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.true( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 2, 1 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
-  test.is( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.false( _.strHas( got, 'at stackGet2 '  ) );
+  test.true( _.strHas( got, 'at stackGet '  ) );
 
   test.case = 'delta - 2';
   var got = stackGet( 2, 2 );
-  test.isNot( _.strHas( got, 'at stackGet4 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet3 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet2 '  ) );
-  test.isNot( _.strHas( got, 'at stackGet '  ) );
+  test.false( _.strHas( got, 'at stackGet4 '  ) );
+  test.false( _.strHas( got, 'at stackGet3 '  ) );
+  test.false( _.strHas( got, 'at stackGet2 '  ) );
+  test.false( _.strHas( got, 'at stackGet '  ) );
 
   test.close( 'stack - 2' );
 
