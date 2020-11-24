@@ -472,12 +472,12 @@ function _begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -498,12 +498,12 @@ function _begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -520,12 +520,12 @@ function _begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -542,12 +542,12 @@ function _begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -997,12 +997,12 @@ function _finally( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1019,12 +1019,12 @@ function _finally( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1041,12 +1041,12 @@ function _finally( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1063,12 +1063,12 @@ function _finally( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1230,7 +1230,7 @@ function _periodic( test )
     {
       test.identical( timer.onTime, onTime );
       test.identical( timer.onCancel, undefined );
-      test.is( timer.state === -2 );
+      test.true( timer.state === -2 );
       test.identical( timer.result, undefined );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -1289,7 +1289,7 @@ function _periodic( test )
     {
       test.identical( timer.onTime, onTime );
       test.identical( timer.onCancel, onCancel );
-      test.is( timer.state === -2 );
+      test.true( timer.state === -2 );
       test.identical( timer.result, -1 );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -1322,12 +1322,12 @@ function _periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1348,12 +1348,12 @@ function _periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1874,12 +1874,12 @@ function begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1893,12 +1893,12 @@ function begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1912,12 +1912,12 @@ function begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1932,12 +1932,12 @@ function begin( test )
       debugger;
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -1954,69 +1954,16 @@ function begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
   });
-
-  // ready.then( () =>
-  // {
-  //   test.case = 'executes method cancel twice, should throw error';
-  //   var timer = _.time.begin( Infinity, onTime, onCancel );
-  //   timer.cancel();
-  //   debugger;
-  //   /* xxx qqq for Dmytro : bad test. ask */
-  //   return _.time.out( context.t1, () =>
-  //   {
-  //     debugger;
-  //     return timer.cancel()
-  //   })
-  //   .finally( ( err, arg ) =>
-  //   {
-  //     debugger;
-  //     if( arg )
-  //     {
-  //       test.is( false );
-  //     }
-  //     else
-  //     {
-  //       _.errAttend( err );
-  //       test.is( true );
-  //     }
-  //     return null;
-  //   });
-  // });
-  //
-  // ready.then( () =>
-  // {
-  //   test.case = 'executes method time and then method cancel, should throw error';
-  //   var timer = _.time.begin( Infinity, onTime, onCancel );
-  //   timer.time();
-  //
-  //   return _.time.out( context.t1, () =>
-  //   {
-  //     timer.cancel()
-  //   })
-  //   .finally( ( err, arg ) =>
-  //   {
-  //     if( arg )
-  //     {
-  //       test.is( false );
-  //     }
-  //     else
-  //     {
-  //       _.errAttend( err );
-  //       test.is( true );
-  //     }
-  //     return null;
-  //   });
-  // });
 
   ready.then( () =>
   {
@@ -2029,12 +1976,12 @@ function begin( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2072,13 +2019,13 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -2094,7 +2041,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2113,13 +2060,13 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -2135,7 +2082,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, -2 );
@@ -2154,13 +2101,13 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -2189,7 +2136,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2209,7 +2156,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2228,7 +2175,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 2 );
@@ -2248,7 +2195,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, -2 );
@@ -2267,7 +2214,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 2 );
@@ -2297,7 +2244,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2332,7 +2279,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2351,13 +2298,13 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -2373,7 +2320,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2392,7 +2339,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 2 );
@@ -2412,7 +2359,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, -2 );
@@ -2431,7 +2378,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 2 );
@@ -2450,13 +2397,13 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -2482,7 +2429,7 @@ function beginWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -2513,12 +2460,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2532,12 +2479,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2551,12 +2498,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2570,12 +2517,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2592,12 +2539,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -2615,12 +2562,12 @@ function beginWithProcedure( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -2637,12 +2584,12 @@ function beginWithProcedure( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -2659,12 +2606,12 @@ function beginWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3099,12 +3046,12 @@ function finally_( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3118,12 +3065,12 @@ function finally_( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3137,12 +3084,12 @@ function finally_( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3159,12 +3106,12 @@ function finally_( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3182,12 +3129,12 @@ function finally_( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -3204,12 +3151,12 @@ function finally_( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -3226,12 +3173,12 @@ function finally_( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -3248,12 +3195,12 @@ function finally_( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3291,13 +3238,13 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, null );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -3312,13 +3259,13 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -3334,7 +3281,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3354,7 +3301,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, -2 );
@@ -3387,7 +3334,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -3406,7 +3353,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3426,7 +3373,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3446,7 +3393,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, -2 );
@@ -3476,7 +3423,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3511,7 +3458,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, null );
       test.identical( got.state, 2 );
@@ -3530,13 +3477,13 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, null );
       test.identical( got.onCancel, null );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -3551,7 +3498,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3570,13 +3517,13 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -3592,7 +3539,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, -2 );
@@ -3611,13 +3558,13 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( !procedure.isFinited() );
+      test.true( !procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 0 );
       test.identical( got.result, undefined );
       _.time.cancel( timer );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
 
       return null;
     });
@@ -3633,7 +3580,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3663,7 +3610,7 @@ function finallyWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onTime );
       test.identical( got.state, 2 );
@@ -3694,12 +3641,12 @@ function finallyWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3713,12 +3660,12 @@ function finallyWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3732,12 +3679,12 @@ function finallyWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3754,12 +3701,12 @@ function finallyWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3777,12 +3724,12 @@ function finallyWithProcedure( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -3799,12 +3746,12 @@ function finallyWithProcedure( test )
   //   {
   //     if( arg )
   //     {
-  //       test.is( false );
+  //       test.true( false );
   //     }
   //     else
   //     {
   //       _.errAttend( err );
-  //       test.is( true );
+  //       test.true( true );
   //     }
   //     return null;
   //   });
@@ -3821,12 +3768,12 @@ function finallyWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -3977,7 +3924,7 @@ function periodic( test )
     {
       test.identical( timer.onTime, onTime );
       test.identical( timer.onCancel, null );
-      test.is( timer.state === -2 );
+      test.true( timer.state === -2 );
       test.identical( timer.result, undefined );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -4036,7 +3983,7 @@ function periodic( test )
     {
       test.identical( timer.onTime, onTime );
       test.identical( timer.onCancel, onCancel );
-      test.is( timer.state === -2 );
+      test.true( timer.state === -2 );
       test.identical( timer.result, -1 );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -4066,12 +4013,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4085,12 +4032,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4104,12 +4051,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4123,12 +4070,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4145,12 +4092,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4171,12 +4118,12 @@ function periodic( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4226,7 +4173,7 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, -2 );
@@ -4260,7 +4207,7 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, -2 );
@@ -4294,7 +4241,7 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
       test.identical( got.state, -2 );
@@ -4341,10 +4288,10 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
-      test.is( got.state === -2 );
+      test.true( got.state === -2 );
       test.identical( got.result, undefined );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -4375,7 +4322,7 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, null );
       test.identical( got.state, -2 );
@@ -4408,10 +4355,10 @@ function periodicWithProcedure( test )
     .then( ( got ) =>
     {
       test.identical( got.procedure, procedure );
-      test.is( procedure.isFinited() );
+      test.true( procedure.isFinited() );
       test.identical( got.onTime, onTime );
       test.identical( got.onCancel, onCancel );
-      test.is( got.state === -2 );
+      test.true( got.state === -2 );
       test.identical( got.result, -1 );
       test.identical( times, 0 );
       test.identical( result, [ 1, 1, 1, 1, 1 ] );
@@ -4441,12 +4388,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4460,12 +4407,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4479,12 +4426,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4498,12 +4445,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4520,12 +4467,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
@@ -4546,12 +4493,12 @@ function periodicWithProcedure( test )
     {
       if( arg )
       {
-        test.is( false );
+        test.true( false );
       }
       else
       {
         _.errAttend( err );
-        test.is( true );
+        test.true( true );
       }
       return null;
     });
