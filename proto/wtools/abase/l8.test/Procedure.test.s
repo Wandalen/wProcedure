@@ -62,9 +62,7 @@ function trivial( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  debugger;
   let programPath = a.program( program );
-  debugger;
 
   /* */
 
@@ -232,7 +230,7 @@ function accounting( test )
     test.identical( _.strCount( op.output, 'procedure::time.out' ), 2 );
     test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
 
-    test.identical( _.strCount( op.output, 'program.js:39' ), 1 );
+    test.identical( _.strCount( op.output, 'program.js:38' ), 1 );
     test.identical( _.strCount( op.output, 'program.js:6' ), 1 );
     test.identical( _.strCount( op.output, 'program.js:11' ), 2 );
     test.identical( _.strCount( op.output, 'program.js:16' ), 1 );
@@ -280,7 +278,6 @@ function accounting( test )
       if( _.competitorIs( procedure._object ) )
       obj = 'Competitor';
       let wt = _.timerIs( procedure._waitTimer ) ? 'Timer' : procedure._waitTimer;
-      debugger;
       logger.log( `${procedure.name()} r:${rou} o:${obj} wt:${wt}` );
     }
 
@@ -527,7 +524,7 @@ function terminationBeginWithTwoNamespaces( test )
     test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
     test.identical( _.strCount( op.output, 'Global name : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-    test.identical( _.strCount( op.output, 'Global name : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : testing' ), 1 );
     test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
@@ -549,7 +546,7 @@ function terminationBeginWithTwoNamespaces( test )
     test.identical( _.strCount( op.output, 'Global procedures : 1' ), 2 );
     test.identical( _.strCount( op.output, 'Global name : real' ), 1 );
     test.identical( _.strCount( op.output, 'Global procedures : 2' ), 1 );
-    test.identical( _.strCount( op.output, 'Global name : wTesting' ), 1 );
+    test.identical( _.strCount( op.output, 'Global name : testing' ), 1 );
     test.identical( _.strCount( op.output, 'Instances are identical : false' ), 1 );
     test.identical( _.strCount( op.output, 'Wrong namespace for _.' ), 0 );
     test.identical( _.strCount( op.output, 'timer1' ), 1 );
