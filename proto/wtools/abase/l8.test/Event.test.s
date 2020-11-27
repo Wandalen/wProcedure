@@ -257,6 +257,41 @@ function onWithChain( test )
   _.event.off( _.procedure._ehandler, { callbackMap : { terminationEnd : null } } );
 }
 
+//
+
+function onCheckDescriptor( test )
+{
+  var self = this;
+
+  /* */
+
+  test.case = 'call with arguments';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var got = _.procedure.on( 'terminationBegin', onEvent );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.identical( got.enabled, true );
+  test.identical( got.first, 0 );
+  test.true( _.routineIs( got.off ) );
+  test.true( _.mapIs( got.callbackMap ) );
+  test.identical( _.mapKeys( got.callbackMap ).length, 1 );
+  got.off();
+
+  /* */
+
+  test.case = 'call with arguments';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var got = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.identical( got.enabled, true );
+  test.identical( got.first, 0 );
+  test.true( _.routineIs( got.off ) );
+  test.true( _.mapIs( got.callbackMap ) );
+  test.identical( _.mapKeys( got.callbackMap ).length, 1 );
+  got.off();
+}
+
 // --
 // declare
 // --
@@ -274,6 +309,7 @@ let Self =
     onWithArguments,
     onWithOptionsMap,
     onWithChain,
+    onCheckDescriptor,
 
   },
 
