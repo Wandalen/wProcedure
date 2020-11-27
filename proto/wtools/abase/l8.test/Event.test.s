@@ -218,6 +218,45 @@ function onWithOptionsMap( test )
   test.shouldThrowErrorSync( () => _.procedure.on({ callbackMap : { unknown : () => 'unknown' } }) );
 }
 
+//
+
+function onWithChain( test )
+{
+  var self = this;
+
+  /* */
+
+  test.case = 'call with arguments';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var got = _.procedure.on( _.event.Chain( 'terminationBegin', 'terminationEnd' ), onEvent );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [ 0 ] );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.off( _.procedure._ehandler, { callbackMap : { terminationEnd : null } } );
+
+  /* */
+
+  test.case = 'call with options map';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var got = _.procedure.on({ callbackMap : { terminationBegin : [ _.event.Name( 'terminationEnd' ), onEvent ] } });
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [ 0 ] );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.off( _.procedure._ehandler, { callbackMap : { terminationEnd : null } } );
+}
+
 // --
 // declare
 // --
@@ -234,6 +273,7 @@ let Self =
 
     onWithArguments,
     onWithOptionsMap,
+    onWithChain,
 
   },
 
