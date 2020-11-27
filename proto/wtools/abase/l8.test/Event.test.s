@@ -50,7 +50,7 @@ function onWithArguments( test )
   test.identical( result, [ 0 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
+  got.terminationBegin.off();
 
   /* */
 
@@ -67,7 +67,7 @@ function onWithArguments( test )
   test.identical( result, [ 0, 1 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
+  got.terminationBegin.off();
 
   /* */
 
@@ -86,8 +86,8 @@ function onWithArguments( test )
   test.identical( result, [ 0, 1, -2, -3 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
-  got2.off();
+  got.terminationBegin.off();
+  got2.terminationEnd.off();
 }
 
 //
@@ -122,7 +122,7 @@ function onWithOptionsMap( test )
   test.identical( result, [ 0 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
+  got.terminationBegin.off();
 
   /* */
 
@@ -139,7 +139,7 @@ function onWithOptionsMap( test )
   test.identical( result, [ 0, 1 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
+  got.terminationBegin.off();
 
   /* */
 
@@ -157,7 +157,8 @@ function onWithOptionsMap( test )
   test.identical( result, [ 0, 1, -2, -3 ] );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.off();
+  got.terminationBegin.off();
+  got.terminationEnd.off();
 
   test.close( 'option first - 0' );
 
@@ -175,8 +176,8 @@ function onWithOptionsMap( test )
   test.identical( result, [ -0, 1 ] );
   _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
   test.identical( result, [ -0, 1, -2, 3 ] );
-  got.off();
-  got2.off();
+  got.terminationBegin.off();
+  got2.terminationBegin.off();
 
   /* */
 
@@ -268,28 +269,28 @@ function onCheckDescriptor( test )
   test.case = 'call with arguments';
   var result = [];
   var onEvent = () => result.push( result.length );
-  var got = _.procedure.on( 'terminationBegin', onEvent );
+  var descriptor = _.procedure.on( 'terminationBegin', onEvent );
+  test.identical( _.mapKeys( descriptor ), [ 'terminationBegin' ] );
+  test.identical( _.mapKeys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+  test.identical( descriptor.terminationBegin.enabled, true );
+  test.identical( descriptor.terminationBegin.first, 0 );
+  test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.identical( got.enabled, true );
-  test.identical( got.first, 0 );
-  test.true( _.routineIs( got.off ) );
-  test.true( _.mapIs( got.callbackMap ) );
-  test.identical( _.mapKeys( got.callbackMap ).length, 1 );
-  got.off();
+  descriptor.terminationBegin.off();
 
   /* */
 
   test.case = 'call with arguments';
   var result = [];
   var onEvent = () => result.push( result.length );
-  var got = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
+  var descriptor = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
+  test.identical( _.mapKeys( descriptor ), [ 'terminationBegin' ] );
+  test.identical( _.mapKeys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+  test.identical( descriptor.terminationBegin.enabled, true );
+  test.identical( descriptor.terminationBegin.first, 0 );
+  test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
   test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.identical( got.enabled, true );
-  test.identical( got.first, 0 );
-  test.true( _.routineIs( got.off ) );
-  test.true( _.mapIs( got.callbackMap ) );
-  test.identical( _.mapKeys( got.callbackMap ).length, 1 );
-  got.off();
+  descriptor.terminationBegin.off();
 }
 
 // --
