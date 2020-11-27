@@ -22,7 +22,77 @@ let _ = _global_.wTools;
 //
 // --
 
-function onWithMap( test )
+function onWithArguments( test )
+{
+  var self = this;
+
+  /* */
+
+  test.case = 'no callback for events';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var onEvent2 = () => result.push( -1 * result.length );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [] );
+
+  /* */
+
+  test.case = 'single callback for single event, single event is given';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var onEvent2 = () => result.push( -1 * result.length );
+  var got = _.procedure.on( 'terminationBegin', onEvent );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [ 0 ] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [ 0 ] );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  got.off();
+
+  /* */
+
+  test.case = 'single callback for single event, a few events are given';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var onEvent2 = () => result.push( -1 * result.length );
+  var got = _.procedure.on( 'terminationBegin', onEvent );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [ 0 ] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [ 0, 1 ] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [ 0, 1 ] );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  got.off();
+
+  /* */
+
+  test.case = 'single callback for each events in event handler, a few events are given';
+  var result = [];
+  var onEvent = () => result.push( result.length );
+  var onEvent2 = () => result.push( -1 * result.length );
+  var got = _.procedure.on( 'terminationBegin', onEvent );
+  var got2 = _.procedure.on( 'terminationEnd', onEvent2 );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [ 0 ] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.identical( result, [ 0, 1 ] );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  test.identical( result, [ 0, 1, -2, -3 ] );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  got.off();
+  got2.off();
+}
+
+//
+
+function onWithOptionsMap( test )
 {
   var self = this;
 
@@ -162,7 +232,8 @@ let Self =
   tests :
   {
 
-    onWithMap,
+    onWithArguments,
+    onWithOptionsMap,
 
   },
 
