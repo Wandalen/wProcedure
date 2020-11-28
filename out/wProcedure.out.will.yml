@@ -163,6 +163,7 @@ module:
           - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l8.test
+          - ../proto/wtools/abase/l8.test/Event.test.s
           - ../proto/wtools/abase/l8.test/Procedure.test.s
           - ../proto/wtools/abase/l8.test/Time.test.s
           - ../proto/wtools/abase/l8_procedure
