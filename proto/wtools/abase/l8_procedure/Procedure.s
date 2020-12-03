@@ -554,28 +554,28 @@ function Find( filter )
     delete filter.procedures;
 
     _.assert( _.arrayIs( procedures ) );
-    result = _.filter( procedures, filter );
+    result = _.filter_( null, procedures, filter );
     if( !result.length )
     return result;
   }
 
   if( _.numberIs( filter ) )
   {
-    result = _.filter( procedures, { id : filter } );
+    result = _.filter_( null, procedures, { id : filter } );
     if( !result.length )
     return result;
   }
 
   if( _.strIs( filter ) )
   {
-    result = _.filter( procedures, { _name : filter } );
+    result = _.filter_( null, procedures, { _name : filter } );
     if( !result.length )
     return result;
   }
 
   if( _.routineIs( filter ) )
   {
-    result = _.filter( procedures, { _routine : filter } );
+    result = _.filter_( null, procedures, { _routine : filter } );
     if( !result.length )
     return result;
   }
@@ -928,7 +928,7 @@ function _IdAlloc()
 
 function WithObject( timer )
 {
-  let result = _.filter( _.Procedure.NamesMap, { _object : timer } );
+  let result = _.filter_( null, _.Procedure.NamesMap, { _object : timer } );
   return _.mapVals( result )[ 0 ];
 }
 
