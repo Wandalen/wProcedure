@@ -1125,6 +1125,7 @@ _.assert( _.routineIs( _.accessor.define.getter.alias ) );
 _.assert( _.routineIs( _.accessor.define.suite.alias ) );
 
 let alias = ( originalName ) => _.accessor.define.suite.alias({ originalName, container : Self });
+// let alias = ( originalName ) => _.define.alias({ originalName, originalContainer : Self });
 let join = ( originalName ) => _.routineJoin( Self, Self[ originalName ] );
 let NamespaceBlueprint =
 {
