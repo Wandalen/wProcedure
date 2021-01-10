@@ -1159,6 +1159,9 @@ let NamespaceBlueprint =
 
 _.construction.extend( _.procedure, NamespaceBlueprint );
 
+_.assert( Self.TerminationPeriod > 0 );
+_.assert( _.procedure.terminationPeriod > 0 );
+
 _[ Self.shortName ] = Self;
 _.procedure[ Self.shortName ] = Self;
 

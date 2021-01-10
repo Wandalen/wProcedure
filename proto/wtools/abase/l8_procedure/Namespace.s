@@ -138,13 +138,11 @@ function terminationBegin()
   _.procedure._eventTerminationBeginHandle();
   _.procedure._terminationRestart();
 
-  // _realGlobal_._ProcedureGlobals_.forEach( ( global ) => global.wTools.procedure.terminationBegin() ); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : it's deprecated, covered as _realGlobal_._globals_ */
-
   _.each( _realGlobal_._globals_, ( global ) =>
   {
     if( global.wTools && global.wTools.procedure && global.wTools.procedure.terminationBegin )
     global.wTools.procedure.terminationBegin();
-  }); /* yyy aaa : cover in wTesting and wProcedure */ /* Dmytro : covered */
+  });
 
 }
 
@@ -173,8 +171,6 @@ function _terminationRestart()
   _.assert( arguments.length === 0, 'Expects no arguments' );
   _.assert( _.Procedure._Terminating >= 1 );
 
-  // console.log( '_terminationRestart' ); debugger;
-
   if( _.Procedure._Terminating === 2 )
   {
     return;
@@ -185,7 +181,7 @@ function _terminationRestart()
   _.procedure._terminationTimer = null;
 
   let procedures = _.Procedure.Find({ _quasi : 0 });
-  // if( 1 ) /* yyy */
+
   if( procedures.length && !_.Procedure._Exiting )
   {
     _.procedure._terminationTimer = _.time._begin( _.procedure.terminationPeriod, _.procedure._terminationIteration );
