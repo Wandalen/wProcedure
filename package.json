@@ -1,6 +1,6 @@
 {
   "name" : "wprocedure",
-  "version" : "0.3.184",
+  "version" : "0.3.185",
   "description" : "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
   "license" : "MIT",
@@ -16,7 +16,7 @@
   {
     "url" : "https://github.com/Wandalen/wProcedure/issues"
   },
-  "dependencies" : { "wTools" : "alpha", "wProto" : "alpha" },
+  "dependencies" : { "wTools" : "alpha", "wCopyable" : "alpha", "wProto" : "alpha" },
   "devDependencies" : { "eslint" : "7.1.0", "wprocedure" : "file:.", "wTesting" : "alpha" },
   "keywords" : [ "wTools" ]
 }
