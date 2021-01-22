@@ -16,7 +16,7 @@
   {
     "url" : "https://github.com/Wandalen/wProcedure/issues"
   },
-  "dependencies" : { "wTools" : "", "wProto" : "" },
+  "dependencies" : { "wTools" : "", "wCopyable": "", "wProto" : "" },
   "devDependencies" : { "wTesting" : "", "eslint" : "7.1.0", "wprocedure" : "file:." },
   "keywords" : [ "wTools" ]
 }

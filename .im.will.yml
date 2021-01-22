@@ -4,6 +4,12 @@ submodule :
   wTools :
     path : npm:///wTools
     enabled : 0 # submodule
+  wCopyable :
+    path : npm:///wCopyable
+    enabled : 0 # submodule
+  wProto :
+    path : npm:///wProto
+    enabled : 0 # submodule
   wprocedure :
     path : hd://.
     enabled : 0 # submodule
