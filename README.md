@@ -8,7 +8,7 @@ Minimal programming interface to launch, stop and track collection of asynchrono
 git clone https://github.com/Wandalen/wProcedure
 cd wProcedure
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project

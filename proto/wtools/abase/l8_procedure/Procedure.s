@@ -1157,7 +1157,9 @@ let NamespaceBlueprint =
 
 }
 
+// debugger; _global_.debugger = 1;
 _.construction.extend( _.procedure, NamespaceBlueprint );
+// debugger;
 
 _.assert( Self.TerminationPeriod > 0 );
 _.assert( _.procedure.terminationPeriod > 0 );
