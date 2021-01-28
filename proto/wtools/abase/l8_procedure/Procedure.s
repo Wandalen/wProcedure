@@ -1157,7 +1157,7 @@ let NamespaceBlueprint =
 
 }
 
-// debugger; _global_.debugger = 1;
+// debugger; // _global_.debugger = 1;
 _.construction.extend( _.procedure, NamespaceBlueprint );
 // debugger;
 
