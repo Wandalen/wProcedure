@@ -362,7 +362,7 @@ function name( name )
   return procedure._name;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.strIs( name ), () => 'Expects string, but got ' + _.strType( name ) );
+  _.assert( _.strIs( name ), () => 'Expects string, but got ' + _.entity.strType( name ) );
 
   procedure._name = name;
 
@@ -410,7 +410,7 @@ function routine( routine )
   return procedure._routine;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( routine ), () => 'Expects routine, but got ' + _.strType( routine ) );
+  _.assert( _.routineIs( routine ), () => 'Expects routine, but got ' + _.entity.strType( routine ) );
 
   procedure._routine = routine;
 
@@ -583,7 +583,7 @@ function Find( filter )
   if( _.arrayIs( result ) )
   _.assert( result.every( ( result ) => result instanceof Self, 'Not a filter' ) );
   else
-  _.assert( result instanceof Self, `${_.strType( result )} is not a filter` );
+  _.assert( result instanceof Self, `${_.entity.strType( result )} is not a filter` );
 
   return result;
 }

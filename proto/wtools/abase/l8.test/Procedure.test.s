@@ -272,7 +272,7 @@ function accounting( test )
     {
       let procedure = _.Procedure.NamesMap[ p ];
       let rou = ( procedure._routine ? procedure._routine.name : procedure._routine );
-      let obj = _.strType( procedure._object );
+      let obj = _.entity.strType( procedure._object );
       if( _.timerIs( procedure._object ) )
       obj = 'Timer';
       if( _.competitorIs( procedure._object ) )
