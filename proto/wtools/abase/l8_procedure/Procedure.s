@@ -32,8 +32,6 @@ function wProcedure( o )
   }
 
   o = Self.OptionsFrom( ... arguments );
-  if( _.number.is( o._stack ) )
-  debugger
   o._stack = _.Procedure.Stack( o._stack, 1 );
 
   let args = [ o ];
