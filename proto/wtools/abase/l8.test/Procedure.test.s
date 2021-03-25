@@ -100,6 +100,164 @@ trivial.description =
 
 //
 
+function procedureSourcePath( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /sourcePath::callback.*program.js:11/ ), 1 ); /* `then` is a regular routine ( alias for `thenKeep` ) */
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:19/ ), 1 ); /* `_.time.out` created with `_.routine.uniteCloning` */
+    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:29/ ), 1 ); /* `console.log` is a regular routine */
+    test.identical( _.strCount( op.output, 'sourcePath::' ), 3 );
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    var con = _.Consequence();
+
+    /*  */
+
+    con.then( function callback( arg )
+    {
+      console.log( 'sourcePath::callback ' + _.Procedure.ActiveProcedure._sourcePath );
+      return 'callback';
+    })
+
+    console.log( 'sourcePath::program ' + _.Procedure.ActiveProcedure._sourcePath );
+
+    _.time.out( 100, function timeOut1()
+    {
+      console.log( 'sourcePath::timeout ' + _.Procedure.ActiveProcedure._sourcePath );
+      con.take( 'timeout1' );
+    });
+
+  }
+
+}
+
+procedureSourcePath.timeOut = 30000;
+
+//
+
+function procedureStack( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let programPath = a.program( program );
+  let programPath2 = a.program( program2 );
+  let programPath3 = a.program( program3 );
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : programPath })
+  .then( ( op ) =>
+  {
+    test.case = 'stack from `then` ( regular routine )';
+
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strBegins( op.output, /stack::callback.*program.js:11/ ), true );
+    test.identical( _.strCount( op.output, 'stack::' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : programPath2 })
+  .then( ( op ) =>
+  {
+    test.case = 'stack from program itself';
+
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strBegins( op.output, /stack::program.*program2.js:13/ ), true );
+    test.identical( _.strCount( op.output, 'stack::' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  a.appStartNonThrowing({ execPath : programPath3 })
+  .then( ( op ) =>
+  {
+    test.case = 'stack from `time.out` routine ( created using `_.routine.uniteCloning` )';
+
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strBegins( op.output, /stack::timeout.*program3.js:19/ ), true );
+    test.identical( _.strCount( op.output, 'stack::' ), 1 );
+    return null;
+  });
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    var con = _.Consequence();
+
+    /*  */
+
+    con.then( function callback( arg )
+    {
+      console.log( 'stack::callback ' + _.Procedure.ActiveProcedure._stack );
+      return 'callback';
+    })
+
+    con.take( 'callback' );
+  }
+
+  //
+
+  function program2()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    console.log( 'stack::program ' + _.Procedure.ActiveProcedure._stack );
+
+  }
+
+  //
+
+  function program3()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wFiles' );
+    _.include( 'wConsequence' );
+
+    /*  */
+
+    _.time.out( 100, function timeOut1()
+    {
+      console.log( 'stack::timeout ' + _.Procedure.ActiveProcedure._stack );
+    });
+
+  }
+
+}
+
+procedureStack.timeOut = 30000;
+
+//
+
 function activeProcedureSourcePath( test )
 {
   let context = this;
@@ -1395,6 +1553,8 @@ let Self =
     procedureIs,
 
     trivial,
+    procedureSourcePath,
+    procedureStack,
     activeProcedureSourcePath,
     quasiProcedure,
     accounting,
