@@ -58,14 +58,14 @@ function init( o )
   _.assert( procedure._sourcePath === null );
 
   /* original */
-  // procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
+  procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
 
-  let stackSplitted = procedure._stack.split( '\n' );
+  // let stackSplitted = procedure._stack.split( '\n' );
 
-  if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
-  procedure._sourcePath = stackSplitted[ 1 ];
-  else
-  procedure._sourcePath = stackSplitted[ 0 ];
+  // if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
+  // procedure._sourcePath = stackSplitted[ 1 ];
+  // else
+  // procedure._sourcePath = stackSplitted[ 0 ];
 
   procedure._longNameMake();
 
@@ -668,7 +668,7 @@ function NativeWatchingEnable( o )
 
   function clearTimeout( timer )
   {
-    let result = original.clearTimeout.call(  _global_, ... arguments );
+    let result = original.clearTimeout.call( _global_, ... arguments );
     let procedures = _.Procedure.Find({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
@@ -679,7 +679,7 @@ function NativeWatchingEnable( o )
 
   function setInterval( onTime, ... args )
   {
-    let object = original.setInterval.call(  _global_, onTime, ... args );
+    let object = original.setInterval.call( _global_, onTime, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
   }

@@ -1929,7 +1929,6 @@ function begin( test )
     return _.time.out( 0, () => _.time.begin( 0, () => 1, [] ) )
     .finally( ( err, arg ) =>
     {
-      debugger;
       if( arg )
       {
         test.true( false );
@@ -3222,7 +3221,6 @@ function finallyWithProcedure( test )
 
   /* - */
 
-  debugger;
   ready.finally( () =>
   {
     test.open( 'delay - Infinity' );
@@ -3387,7 +3385,7 @@ function finallyWithProcedure( test )
   {
     test.case = 'onTime, execute method cancel';
     var procedure = _.Procedure( 5 );
-    var timer = _.time.finally( 0, procedure,  onTime );
+    var timer = _.time.finally( 0, procedure, onTime );
     timer.cancel();
     return _.time.out( context.t1, () => timer )
     .then( ( got ) =>
