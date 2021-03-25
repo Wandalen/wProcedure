@@ -197,7 +197,7 @@ function procedureStack( test )
     test.case = 'stack from `time.out` routine ( created using `_.routine.uniteCloning` )';
 
     test.identical( op.exitCode, 0 );
-    test.identical( _.strBegins( op.output, /stack::timeout.*program3.js:19/ ), true );
+    test.identical( _.strBegins( op.output, /stack::timeout.*program3.js:9/ ), true );
     test.identical( _.strCount( op.output, 'stack::' ), 1 );
     return null;
   });

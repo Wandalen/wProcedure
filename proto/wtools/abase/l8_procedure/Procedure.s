@@ -32,6 +32,8 @@ function wProcedure( o )
   }
 
   o = Self.OptionsFrom( ... arguments );
+  if( _.number.is( o._stack ) )
+  debugger
   o._stack = _.Procedure.Stack( o._stack, 1 );
 
   let args = [ o ];
@@ -57,15 +59,27 @@ function init( o )
   _.assert( _.strIs( procedure._stack ) );
   _.assert( procedure._sourcePath === null );
 
-  /* original */
-  procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
+  /* change stack, remove wrapper of `_.routine.unite*` */
+  let stackSplitted = procedure._stack.split( '\n' );
 
+  if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
+  {
+    stackSplitted.shift();
+    procedure._stack = stackSplitted.join( '\n' );
+  }
+
+  procedure._sourcePath = stackSplitted[ 0 ];
+
+  /* not change _stack, change only _sourcePath */
   // let stackSplitted = procedure._stack.split( '\n' );
 
   // if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
   // procedure._sourcePath = stackSplitted[ 1 ];
   // else
   // procedure._sourcePath = stackSplitted[ 0 ];
+
+  /* original */
+  // procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
 
   procedure._longNameMake();
 
