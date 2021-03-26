@@ -3,8 +3,8 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global.wTools;
+const _global = _global_;
+const _ = _global.wTools;
 
 _.assert( !!_global.wTools, 'Does not have wTools' );
 _.assert( _global.wTools.procedure === undefined, 'wTools.procedure is already defined' );

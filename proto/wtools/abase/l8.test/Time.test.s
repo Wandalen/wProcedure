@@ -15,8 +15,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // basic
@@ -4608,7 +4608,7 @@ function cancel( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.procedure.Time',
@@ -4649,7 +4649,7 @@ let Self =
 
 };
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
