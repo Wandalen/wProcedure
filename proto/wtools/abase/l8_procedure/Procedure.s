@@ -3,8 +3,8 @@
 
 'use strict';
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 _.assert( !!_global_.wTools, 'Does not have wTools' );
 _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
@@ -20,8 +20,8 @@ _.assert( _global_.wTools.Procedure === undefined, 'wTools.Procedure is already 
   @module Tools/base/Procedure
 */
 
-let Parent = null;
-let Self = wProcedure;
+const Parent = null;
+const Self = wProcedure;
 function wProcedure( o )
 {
 
