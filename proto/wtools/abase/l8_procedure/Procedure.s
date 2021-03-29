@@ -57,27 +57,7 @@ function init( o )
   _.assert( _.strIs( procedure._stack ) );
   _.assert( procedure._sourcePath === null );
 
-  /* change stack, remove wrapper of `_.routine.unite*` */
-  let stackSplitted = procedure._stack.split( '\n' );
-
-  if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
-  {
-    stackSplitted.shift();
-    procedure._stack = stackSplitted.join( '\n' );
-  }
-
-  procedure._sourcePath = stackSplitted[ 0 ];
-
-  /* not change _stack, change only _sourcePath */
-  // let stackSplitted = procedure._stack.split( '\n' );
-
-  // if( _.strHas( stackSplitted[ 0 ], 'Routine.s' ) )
-  // procedure._sourcePath = stackSplitted[ 1 ];
-  // else
-  // procedure._sourcePath = stackSplitted[ 0 ];
-
-  /* original */
-  // procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
+  procedure._sourcePath = procedure._stack.split( '\n' )[ 0 ];
 
   procedure._longNameMake();
 
