@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wProcedure.out
 consistency:
-  wProcedure.out.will.yml: &ref_0
-    hash: f8abba0e51beae67ce968e04b1a0c83d
-    size: 38897
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: 40a6442cd68ae2720f38be1f808e564c
     size: 1908
-  ../.im.will.yml: &ref_2
-    hash: 7950aa02a696318ab8663978bc4f980b
-    size: 5188
+  ../.im.will.yml: &ref_1
+    hash: b44c7bed1388b1c28c9706001eb1994c
+    size: 5147
 module:
   wProcedure.out:
     about:
@@ -23,18 +20,18 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wprocedure
-      npm.scripts:
+      npm.scripts: &ref_5
         test: 'wtest .run proto/** rapidity:-1'
         docgen: wdocgen .build proto
     path:
@@ -65,7 +62,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ../
+        path: ..
       repository:
         path: 'git+https:///github.com/Wandalen/wProcedure.git'
       origins:
@@ -146,6 +143,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - ../proto/wtools/abase/l8_procedure/Include.s
+          - ../proto/node_modules/wprocedure
       exported.dir.proto.export:
         criterion:
           generated: 1
@@ -713,24 +714,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -819,9 +802,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wProcedure.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wProcedure
@@ -833,20 +815,13 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
+      contributors: *ref_4
       npm.name: wprocedure
-      npm.scripts:
-        test: 'wtest .run proto/** rapidity:-1'
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -875,7 +850,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ./
+        path: .
       repository:
         path: 'git+https:///github.com/Wandalen/wProcedure.git'
       origins:
@@ -956,6 +931,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - proto/wtools/abase/l8_procedure/Include.s
+          - proto/node_modules/wprocedure
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -1522,6 +1501,5 @@ module:
         hash: 40a6442cd68ae2720f38be1f808e564c
         size: 1908
       ../.im.will.yml:
-        hash: 7950aa02a696318ab8663978bc4f980b
-        size: 5188
-      wProcedure.out.will.yml: *ref_0
+        hash: b44c7bed1388b1c28c9706001eb1994c
+        size: 5147
