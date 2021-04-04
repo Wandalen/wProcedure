@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wProcedure.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wProcedure.out.will.yml: &ref_0
+    hash: b6d263d635570abbaefca8904e42d192
+    size: 39523
+  ../.ex.will.yml: &ref_1
     hash: 40a6442cd68ae2720f38be1f808e564c
     size: 1908
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: b44c7bed1388b1c28c9706001eb1994c
     size: 5147
 module:
@@ -20,18 +23,18 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wprocedure
-      npm.scripts: &ref_5
+      npm.scripts:
         test: 'wtest .run proto/** rapidity:-1'
         docgen: wdocgen .build proto
     path:
@@ -714,6 +717,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -802,8 +823,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wProcedure.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wProcedure
@@ -815,13 +837,20 @@ module:
         many interdependent procedures.
       enabled: 1
       version: 0.4.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - wTools
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
       npm.name: wprocedure
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: 'wtest .run proto/** rapidity:-1'
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1503,3 +1532,6 @@ module:
       ../.im.will.yml:
         hash: b44c7bed1388b1c28c9706001eb1994c
         size: 5147
+      wProcedure.out.will.yml:
+        hash: b6d263d635570abbaefca8904e42d192
+        size: 39523
