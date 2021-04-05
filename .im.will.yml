@@ -83,8 +83,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wProcedure/proto/wtools/abase/l8_procedure/Include.s
-    - /pro/module/wProcedure/proto/node_modules/wprocedure
+    - proto/wtools/abase/l8_procedure/Include.s
+    - proto/node_modules/wprocedure
 reflector:
   reflect.proto:
     inherit: predefined.*
