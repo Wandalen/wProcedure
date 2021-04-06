@@ -3,14 +3,14 @@ root:
   - wProcedure.out
 consistency:
   wProcedure.out.will.yml: &ref_0
-    hash: f8abba0e51beae67ce968e04b1a0c83d
-    size: 38897
+    hash: eca99de698840bf108c0a68dc525accb
+    size: 39523
   ../.ex.will.yml: &ref_1
     hash: 40a6442cd68ae2720f38be1f808e564c
     size: 1908
   ../.im.will.yml: &ref_2
-    hash: 7950aa02a696318ab8663978bc4f980b
-    size: 5188
+    hash: dd39a19f86ff5568649ea650b015de3f
+    size: 5101
 module:
   wProcedure.out:
     about:
@@ -65,7 +65,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ../
+        path: ..
       repository:
         path: 'git+https:///github.com/Wandalen/wProcedure.git'
       origins:
@@ -146,6 +146,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - ../proto/wtools/abase/l8_procedure/Include.s
+          - ../proto/node_modules/wprocedure
       exported.dir.proto.export:
         criterion:
           generated: 1
@@ -160,8 +164,10 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.ss
+          - ../proto/node_modules
+          - ../proto/node_modules/Tools
+          - ../proto/node_modules/wprocedure
           - ../proto/wtools
-          - ../proto/wtools/Tools.s
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l8.test
           - ../proto/wtools/abase/l8.test/Event.test.s
@@ -873,7 +879,7 @@ module:
       download:
         criterion:
           predefined: 1
-        path: ./
+        path: .
       repository:
         path: 'git+https:///github.com/Wandalen/wProcedure.git'
       origins:
@@ -954,6 +960,10 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
+      npm.proto.entry:
+        path:
+          - proto/wtools/abase/l8_procedure/Include.s
+          - proto/node_modules/wprocedure
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -1520,6 +1530,8 @@ module:
         hash: 40a6442cd68ae2720f38be1f808e564c
         size: 1908
       ../.im.will.yml:
-        hash: 7950aa02a696318ab8663978bc4f980b
-        size: 5188
-      wProcedure.out.will.yml: *ref_0
+        hash: dd39a19f86ff5568649ea650b015de3f
+        size: 5101
+      wProcedure.out.will.yml:
+        hash: eca99de698840bf108c0a68dc525accb
+        size: 39523
