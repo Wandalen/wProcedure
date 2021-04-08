@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../node_modules/Tools' );
+  const _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wTesting' );
 
@@ -82,7 +82,7 @@ function trivial( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     let t = 250;
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
@@ -128,7 +128,7 @@ function activeProcedureSourcePath( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wFiles' );
     _.include( 'wConsequence' );
 
@@ -193,7 +193,7 @@ function quasiProcedure( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.procedure.begin({ _name : 'quasi', _quasi : true, _waitTimer : false });
     logger.log( _.procedure.exportString() );
@@ -251,7 +251,7 @@ function accounting( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wConsequence' );
 
     _.time.begin( 50, function timeOut1()
@@ -324,7 +324,7 @@ function terminationEventsExplicitTermination( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
@@ -392,7 +392,7 @@ function terminationEventsImplicitTermination( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
     _.include( 'wProcess' );
@@ -459,7 +459,7 @@ function terminationEventsTerminationWithConsequence( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
@@ -569,7 +569,7 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program1()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
     let keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
@@ -632,7 +632,7 @@ function terminationBeginWithTwoNamespaces( test )
 
   function program2()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
 
     let keys = _.mapKeys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
@@ -737,7 +737,7 @@ function nativeWatchingSetTimeout( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wProcedure' );
     _.Procedure.NativeWatchingEnable();
 
@@ -806,7 +806,7 @@ function nativeWatchingСlearTimeout( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wProcedure' );
     _.Procedure.NativeWatchingEnable();
 
@@ -889,7 +889,7 @@ function nativeWatchingSetInterval( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     let counter = 0;
     _.include( 'wProcedure' );
     _.Procedure.NativeWatchingEnable();
@@ -982,7 +982,7 @@ function nativeWatchingRequestAnimationFrame( test )
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     let counter = 0;
     _.include( 'wProcedure' );
     _.Procedure.NativeWatchingEnable();
