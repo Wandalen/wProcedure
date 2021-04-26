@@ -540,7 +540,7 @@ function Find( filter )
   }
 
   let result = filter;
-  let procedures = _.mapVals( _.Procedure.NamesMap );
+  let procedures = _.props.vals( _.Procedure.NamesMap );
 
   if( _.mapIs( filter ) )
   {
@@ -602,14 +602,14 @@ function FindAlive()
 function NativeWatchingEnable( o )
 {
 
-  o = _.routineOptions( NativeWatchingEnable, o );
+  o = _.routine.options_( NativeWatchingEnable, o );
   _.assert( !!o.enable, 'not tested' );
 
   let original = _.Procedure._OriginalTimeRoutines = _.Procedure._OriginalTimeRoutines || Object.create( null );
 
   if( o.enable )
   {
-    _.assert( _.lengthOf( original ) === 0 );
+    _.assert( _.entity.lengthOf( original ) === 0 );
 
     original.setTimeout = _global_.setTimeout;
     original.clearTimeout = _global_.clearTimeout;
@@ -774,7 +774,7 @@ function ExportInfo( o )
 
   if( _.longIs( arguments[ 0 ] ) )
   o = { procedures : o }
-  o = _.routineOptions( ExportInfo, o );
+  o = _.routine.options_( ExportInfo, o );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   let procedures = this.Find( o );
@@ -929,7 +929,7 @@ function _IdAlloc()
 function WithObject( timer )
 {
   let result = _.filter_( null, _.Procedure.NamesMap, { _object : timer } );
-  return _.mapVals( result )[ 0 ];
+  return _.props.vals( result )[ 0 ];
 }
 
 //
@@ -1000,7 +1000,7 @@ let Statics =
   EntryProcedure : null,
   _OriginalTimeRoutines : null,
 
-  // routines
+  // implementation
 
   NativeWatchingEnable,
 
@@ -1142,7 +1142,7 @@ let NamespaceBlueprint =
   activeProcedures : alias( 'ActiveProcedures' ),
   entryProcedure : alias( 'EntryProcedure' ),
 
-  // routines
+  // implementation
 
   find : join( 'Find' ),
   findAlive : join( 'FindAlive' ),

@@ -571,19 +571,19 @@ function terminationBeginWithTwoNamespaces( test )
   {
     const _ = require( toolsPath );
 
-    let keys = _.mapKeys( _realGlobal_._globals_ );
+    let keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_NAME__ }` );
 
     _.include( 'wTesting' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_NAME__ }` );
 
@@ -634,19 +634,19 @@ function terminationBeginWithTwoNamespaces( test )
   {
     const _ = require( toolsPath );
 
-    let keys = _.mapKeys( _realGlobal_._globals_ );
+    let keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
 
     _.include( 'wConsequence' );
     _.include( 'wProcedure' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 0 ] ].__GLOBAL_NAME__ }` );
 
     _.include( 'wTesting' );
 
-    keys = _.mapKeys( _realGlobal_._globals_ );
+    keys = _.props.keys( _realGlobal_._globals_ );
     console.log( `Global procedures : ${ keys.length }` );
     console.log( `Global name : ${ _realGlobal_._globals_[ keys[ 1 ] ].__GLOBAL_NAME__ }` );
 
