@@ -6,7 +6,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  let _ = require( '../../../node_modules/Tools' );
+  const _ = require( '../../../node_modules/Tools' );
 
   _.include( 'wTesting' );
   _.include( 'wConsequence' );
@@ -270,8 +270,8 @@ function onCheckDescriptor( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var descriptor = _.procedure.on( 'terminationBegin', onEvent );
-  test.identical( _.mapKeys( descriptor ), [ 'terminationBegin' ] );
-  test.identical( _.mapKeys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+  test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
+  test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
   test.identical( descriptor.terminationBegin.enabled, true );
   test.identical( descriptor.terminationBegin.first, 0 );
   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
@@ -284,8 +284,8 @@ function onCheckDescriptor( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var descriptor = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
-  test.identical( _.mapKeys( descriptor ), [ 'terminationBegin' ] );
-  test.identical( _.mapKeys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+  test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
+  test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
   test.identical( descriptor.terminationBegin.enabled, true );
   test.identical( descriptor.terminationBegin.first, 0 );
   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );

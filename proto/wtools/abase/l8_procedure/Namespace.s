@@ -131,7 +131,7 @@ function terminationBegin()
   if( _.Procedure._Terminating )
   return;
 
-  _.routineOptions( terminationBegin, arguments );
+  _.routine.options_( terminationBegin, arguments );
   _.Procedure._Terminating = 1;
   _.procedure._terminationListInvalidated = 1;
 
@@ -261,7 +261,7 @@ function _timeBegin( o )
   if( o.onCancel === undefined )
   o.onCancel = o.onTime;
 
-  _.assertRoutineOptions( _timeBegin, arguments );
+  _.routine.assertOptions( _timeBegin, arguments );
 
   if( o.procedure === undefined || o.procedure === null )
   o.procedure = 0;
