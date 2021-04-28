@@ -113,9 +113,9 @@ function procedureSourcePath( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /sourcePath::callback.*program.js:11/ ), 1 ); /* `then` is a regular routine ( alias for `thenKeep` ) */
-    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:19/ ), 1 ); /* `_.time.out` created with `_.routine.uniteCloning` */
-    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:29/ ), 1 ); /* `console.log` is a regular routine */
+    test.identical( _.strCount( op.output, /sourcePath::callback.*program:11/ ), 1 ); /* `then` is a regular routine ( alias for `thenKeep` ) */
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program:19/ ), 1 ); /* `_.time.out` created with `_.routine.uniteCloning` */
+    test.identical( _.strCount( op.output, /sourcePath::program.*program:/ ), 1 ); /* `console.log` is a regular routine */
     test.identical( _.strCount( op.output, 'sourcePath::' ), 3 );
     return null;
   });
@@ -172,7 +172,7 @@ function procedureStack( test )
     test.case = 'stack from `then` ( regular routine )';
 
     test.identical( op.exitCode, 0 );
-    test.identical( _.strBegins( op.output, /stack::callback.*program.js:11/ ), true );
+    test.identical( _.strBegins( op.output, /stack::callback.*program:11/ ), true );
     test.identical( _.strCount( op.output, 'stack::' ), 1 );
     return null;
   });
@@ -185,7 +185,7 @@ function procedureStack( test )
     test.case = 'stack from program itself';
 
     test.identical( op.exitCode, 0 );
-    test.identical( _.strBegins( op.output, /stack::program.*program2.js:13/ ), true );
+    test.identical( _.strBegins( op.output, /stack::program.*program2/ ), true );
     test.identical( _.strCount( op.output, 'stack::' ), 1 );
     return null;
   });
@@ -198,7 +198,7 @@ function procedureStack( test )
     test.case = 'stack from `time.out` routine ( created using `_.routine.uniteCloning` )';
 
     test.identical( op.exitCode, 0 );
-    test.identical( _.strBegins( op.output, /stack::timeout.*program3.js:9/ ), true );
+    test.identical( _.strBegins( op.output, /stack::timeout.*program3:9/ ), true );
     test.identical( _.strCount( op.output, 'stack::' ), 1 );
     return null;
   });
