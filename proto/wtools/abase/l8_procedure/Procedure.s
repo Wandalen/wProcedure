@@ -803,7 +803,7 @@ function OptionsFrom( o )
   else if( _.numberIs( o ) )
   o = { _stack : o }
 
-  _.assert( o === undefined || o === null || _.objectIs( o ) );
+  _.assert( o === undefined || o === null || _.object.isBasic( o ) );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   if( o === undefined || o === null )
