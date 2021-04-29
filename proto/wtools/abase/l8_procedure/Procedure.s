@@ -660,7 +660,7 @@ function NativeWatchingEnable( o )
 
   function clearTimeout( timer )
   {
-    let result = original.clearTimeout.call(  _global_, ... arguments );
+    let result = original.clearTimeout.call( _global_, ... arguments );
     let procedures = _.Procedure.Find({ _object : timer })
     if( procedures.length )
     procedureRemove( procedures[ 0 ] );
@@ -671,7 +671,7 @@ function NativeWatchingEnable( o )
 
   function setInterval( onTime, ... args )
   {
-    let object = original.setInterval.call(  _global_, onTime, ... args );
+    let object = original.setInterval.call( _global_, onTime, ... args );
     let procedure = procedureMake({ _object : object });
     return object;
   }
