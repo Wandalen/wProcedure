@@ -774,7 +774,7 @@ function ExportInfo( o )
 
   if( _.longIs( arguments[ 0 ] ) )
   o = { procedures : o }
-  o = _.routine.options_( ExportInfo, o );
+  o = _.routine.options_( ExportInfo, o || null );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   let procedures = this.Find( o );

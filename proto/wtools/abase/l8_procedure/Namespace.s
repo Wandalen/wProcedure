@@ -10,7 +10,7 @@ _.assert( !!_global.wTools, 'Does not have wTools' );
 _.assert( _global.wTools.procedure === undefined, 'wTools.procedure is already defined' );
 _.assert( _global.wTools.Procedure === undefined, 'wTools.Procedure is already defined' );
 
-_global.wTools.procedure = _global.wTools.procedure || Object.create( null );
+_.procedure = _.procedure || Object.create( null );
 
 // _realGlobal_._ProcedureGlobals_ = _realGlobal_._ProcedureGlobals_ || [];
 // _.arrayAppendOnce( _realGlobal_._ProcedureGlobals_, _global );

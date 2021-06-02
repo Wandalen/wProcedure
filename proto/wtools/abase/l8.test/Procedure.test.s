@@ -272,10 +272,10 @@ function activeProcedureSourcePath( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /sourcePath::program.*program.js:32/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::timeout.*program.js:22/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::callback1.*program.js:8/ ), 1 );
-    test.identical( _.strCount( op.output, /sourcePath::callback2.*program.js:13/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::program.*program:32/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::timeout.*program:22/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback1.*program:8/ ), 1 );
+    test.identical( _.strCount( op.output, /sourcePath::callback2.*program:13/ ), 1 );
     test.identical( _.strCount( op.output, 'sourcePath::' ), 4 );
     return null;
   });
@@ -340,8 +340,8 @@ function quasiProcedure( test )
     test.identical( _.strCount( op.output, 'procedure::entry' ), 1 );
     test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
     test.identical( _.strCount( op.output, 'procedure::' ), 2 );
-    test.identical( _.strCount( op.output, 'program.js:5' ), 1 );
-    test.identical( _.strCount( op.output, 'program.js:12' ), 1 );
+    test.identical( _.strCount( op.output, 'program:5' ), 1 );
+    test.identical( _.strCount( op.output, 'program:' ), 2 );
     return null;
   });
 
@@ -389,10 +389,10 @@ function accounting( test )
     test.identical( _.strCount( op.output, 'procedure::time.out' ), 2 );
     test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
 
-    test.identical( _.strCount( op.output, 'program.js:38' ), 1 );
-    test.identical( _.strCount( op.output, 'program.js:6' ), 1 );
-    test.identical( _.strCount( op.output, 'program.js:11' ), 2 );
-    test.identical( _.strCount( op.output, 'program.js:16' ), 1 );
+    test.identical( _.strCount( op.output, 'program:38' ), 1 );
+    test.identical( _.strCount( op.output, 'program:6' ), 1 );
+    test.identical( _.strCount( op.output, 'program:11' ), 2 );
+    test.identical( _.strCount( op.output, 'program:16' ), 1 );
 
     test.identical( _.strCount( op.output, 'entry r:null o:Null wt:false' ), 1 );
     test.identical( _.strCount( op.output, 'time.begin r:timeOut1 o:Timer wt:false' ), 1 );
