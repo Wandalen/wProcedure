@@ -602,7 +602,7 @@ function FindAlive()
 function NativeWatchingEnable( o )
 {
 
-  o = _.routine.options_( NativeWatchingEnable, o );
+  o = _.routine.options( NativeWatchingEnable, o || null );
   _.assert( !!o.enable, 'not tested' );
 
   let original = _.Procedure._OriginalTimeRoutines = _.Procedure._OriginalTimeRoutines || Object.create( null );
@@ -774,7 +774,7 @@ function ExportInfo( o )
 
   if( _.longIs( arguments[ 0 ] ) )
   o = { procedures : o }
-  o = _.routine.options_( ExportInfo, o || null );
+  o = _.routine.options( ExportInfo, o || null );
   _.assert( arguments.length === 0 || arguments.length === 1 );
 
   let procedures = this.Find( o );

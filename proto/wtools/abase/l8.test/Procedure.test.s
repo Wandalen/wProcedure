@@ -272,7 +272,7 @@ function activeProcedureSourcePath( test )
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /sourcePath::program.*program:32/ ), 1 );
+    test.identical( _.strCount( op.output, /program:/ ), 5 );
     test.identical( _.strCount( op.output, /sourcePath::timeout.*program:22/ ), 1 );
     test.identical( _.strCount( op.output, /sourcePath::callback1.*program:8/ ), 1 );
     test.identical( _.strCount( op.output, /sourcePath::callback2.*program:13/ ), 1 );
@@ -389,7 +389,7 @@ function accounting( test )
     test.identical( _.strCount( op.output, 'procedure::time.out' ), 2 );
     test.identical( _.strCount( op.output, 'procedure::quasi' ), 1 );
 
-    test.identical( _.strCount( op.output, 'program:38' ), 1 );
+    test.identical( _.strCount( op.output, 'program:' ), 5 );
     test.identical( _.strCount( op.output, 'program:6' ), 1 );
     test.identical( _.strCount( op.output, 'program:11' ), 2 );
     test.identical( _.strCount( op.output, 'program:16' ), 1 );
@@ -877,14 +877,14 @@ function nativeWatchingSetTimeout( test )
     test.identical( _.strCount( op.output, 'Error' ), 0 );
 
     test.identical( _.strCount( op.output, 'a count : 1' ), 1 );
-    test.identical( _.strCount( op.output, /a0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
+    test.identical( _.strCount( op.output, /a0 : procedure::entry#1.*program:/ ), 1 );
 
     test.identical( _.strCount( op.output, 'b count : 2' ), 1 );
-    test.identical( _.strCount( op.output, /b0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
-    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:8:5/ ), 1 );
+    test.identical( _.strCount( op.output, /b0 : procedure::entry#1.*program:/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program:8:5/ ), 1 );
 
     test.identical( _.strCount( op.output, 'c count : 1' ), 1 );
-    test.identical( _.strCount( op.output, /c0 : procedure::entry#1.*program\.js:27:1/ ), 1 );
+    test.identical( _.strCount( op.output, /c0 : procedure::entry#1.*program:/ ), 1 );
 
     return null;
   });
@@ -948,8 +948,8 @@ function nativeWatchingСlearTimeout( test )
 
     test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
     test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:8:18/ ), 1 );
-    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:12:18/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program:8:18/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program:12:18/ ), 1 );
 
     test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
     test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
@@ -1022,18 +1022,18 @@ function nativeWatchingSetInterval( test )
 
     test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
     test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, '0c count : 3' ), 1 );
     test.identical( _.strCount( op.output, /0c0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, '1c count : 3' ), 1 );
     test.identical( _.strCount( op.output, /1c0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
     test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
@@ -1114,18 +1114,18 @@ function nativeWatchingRequestAnimationFrame( test )
 
     test.identical( _.strCount( op.output, 'b count : 3' ), 1 );
     test.identical( _.strCount( op.output, /b0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /b1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /b2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, '0c count : 3' ), 1 );
     test.identical( _.strCount( op.output, /0c0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /0c1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /0c2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, '1c count : 3' ), 1 );
     test.identical( _.strCount( op.output, /1c0 : procedure::entry#1/ ), 1 );
-    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program\.js:9/ ), 1 );
-    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program\.js:14/ ), 1 );
+    test.identical( _.strCount( op.output, /1c1 : procedure::#2.*program:9/ ), 1 );
+    test.identical( _.strCount( op.output, /1c2 : procedure::#3.*program:14/ ), 1 );
 
     test.identical( _.strCount( op.output, 'd count : 1' ), 1 );
     test.identical( _.strCount( op.output, /d0 : procedure::entry#1/ ), 1 );
