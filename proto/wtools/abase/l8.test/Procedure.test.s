@@ -63,7 +63,7 @@ function trivial( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -105,7 +105,7 @@ function procedureSourcePath( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -160,9 +160,9 @@ function procedureStack( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let programPath = a.program( program );
-  let programPath2 = a.program( program2 );
-  let programPath3 = a.program( program3 );
+  let programPath = a.program( program ).programPath;
+  let programPath2 = a.program( program2 ).programPath;
+  let programPath3 = a.program( program3 ).programPath;
 
   /* */
 
@@ -264,7 +264,7 @@ function activeProcedureSourcePath( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -329,7 +329,7 @@ function quasiProcedure( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -373,7 +373,7 @@ function accounting( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -458,7 +458,7 @@ function terminationEventsExplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -526,7 +526,7 @@ function terminationEventsImplicitTermination( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -592,7 +592,7 @@ function terminationEventsTerminationWithConsequence( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -670,8 +670,8 @@ function terminationBeginWithTwoNamespaces( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let programPath1 = a.program( program1 );
-  let programPath2 = a.program( program2 );
+  let programPath1 = a.program( program1 ).programPath;
+  let programPath2 = a.program( program2 ).programPath;
 
   /* */
 
@@ -865,7 +865,7 @@ function nativeWatchingSetTimeout( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -932,7 +932,7 @@ function nativeWatchingСlearTimeout( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -1006,7 +1006,7 @@ function nativeWatchingSetInterval( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   /* */
 
@@ -1093,7 +1093,7 @@ function nativeWatchingRequestAnimationFrame( test )
   let context = this;
   let visited = [];
   let a = test.assetFor( false );
-  let programPath = a.program( program );
+  let programPath = a.program( program ).programPath;
 
   test.true( true );
 

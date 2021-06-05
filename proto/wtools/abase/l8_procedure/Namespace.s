@@ -21,8 +21,8 @@ _.procedure = _.procedure || Object.create( null );
 
 function on( o )
 {
-  o = _.event.on.head( _.event.on, arguments );
-  return _.event.on( _.procedure._ehandler, o );
+  o = _.event.onHead( _.event.on, arguments );
+  return _.event.on( _.procedure._edispatcher, o );
 }
 
 on.defaults =
@@ -35,8 +35,8 @@ on.defaults =
 function off( o )
 {
 
-  o = _.event.off.head( _.event.off, arguments );
-  _.event.off( _.procedure._ehandler, o );
+  o = _.event.offHead( _.event.off, arguments );
+  _.event.off( _.procedure._edispatcher, o );
 
 }
 
@@ -50,7 +50,7 @@ off.defaults =
 function _eventTerminationBeginHandle()
 {
 
-  _.procedure._ehandler.events.terminationBegin.forEach( ( callback ) =>
+  _.procedure._edispatcher.events.terminationBegin.forEach( ( callback ) =>
   {
     try
     {
@@ -69,7 +69,7 @@ function _eventTerminationBeginHandle()
 function _eventTerminationEndHandle()
 {
 
-  _.procedure._ehandler.events.terminationEnd.forEach( ( callback ) =>
+  _.procedure._edispatcher.events.terminationEnd.forEach( ( callback ) =>
   {
     try
     {
@@ -542,7 +542,7 @@ let Events =
 
 Object.freeze( Events );
 
-let _ehandler =
+let _edispatcher =
 {
   events : Events,
 }
@@ -584,7 +584,7 @@ let ProcedureExtension =
 
   // fields
 
-  _ehandler,
+  _edispatcher,
 
 }
 

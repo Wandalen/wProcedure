@@ -32,9 +32,9 @@ function onWithArguments( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [] );
 
   /* */
@@ -44,12 +44,12 @@ function onWithArguments( test )
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on( 'terminationBegin', onEvent );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
 
   /* */
@@ -59,14 +59,14 @@ function onWithArguments( test )
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on( 'terminationBegin', onEvent );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0, 1 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
 
   /* */
@@ -77,15 +77,15 @@ function onWithArguments( test )
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on( 'terminationBegin', onEvent );
   var got2 = _.procedure.on( 'terminationEnd', onEvent2 );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0, 1, -2, -3 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
   got2.terminationEnd.off();
 }
@@ -104,9 +104,9 @@ function onWithOptionsMap( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [] );
 
   /* */
@@ -116,12 +116,12 @@ function onWithOptionsMap( test )
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent } });
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
 
   /* */
@@ -131,14 +131,14 @@ function onWithOptionsMap( test )
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent }} );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0, 1 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
 
   /* */
@@ -148,15 +148,15 @@ function onWithOptionsMap( test )
   var onEvent = () => result.push( result.length );
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent, 'terminationEnd' : onEvent2 } });
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0, 1, -2, -3 ] );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
   got.terminationBegin.off();
   got.terminationEnd.off();
 
@@ -172,9 +172,9 @@ function onWithOptionsMap( test )
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent } });
   var got2 = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent2 }, 'first' : 1 });
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ -0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ -0, 1, -2, 3 ] );
   got.terminationBegin.off();
   got2.terminationBegin.off();
@@ -188,9 +188,9 @@ function onWithOptionsMap( test )
   var onEvent2 = () => result.push( -1 * result.length );
   var got = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent2 }, 'first' : 1 });
   var got2 = _.procedure.on({ 'callbackMap' : { 'terminationBegin' : onEvent } });
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ -0, 1 ] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [ -0, 1, -2, 3 ] );
 
   test.close( 'option first - 1' );
@@ -231,15 +231,15 @@ function onWithChain( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var got = _.procedure.on( _.event.Chain( 'terminationBegin', 'terminationEnd' ), onEvent );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0 ] );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.off( _.procedure._ehandler, { callbackMap : { terminationEnd : null } } );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
 
   /* */
 
@@ -247,15 +247,15 @@ function onWithChain( test )
   var result = [];
   var onEvent = () => result.push( result.length );
   var got = _.procedure.on({ callbackMap : { terminationBegin : [ _.event.Name( 'terminationEnd' ), onEvent ] } });
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.eventGive( _.procedure._ehandler, 'terminationBegin' );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
   test.identical( result, [] );
-  _.event.eventGive( _.procedure._ehandler, 'terminationEnd' );
+  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
   test.identical( result, [ 0 ] );
-  test.false( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.off( _.procedure._ehandler, { callbackMap : { terminationEnd : null } } );
+  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+  _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
 }
 
 //
@@ -275,7 +275,7 @@ function onCheckDescriptor( test )
   test.identical( descriptor.terminationBegin.enabled, true );
   test.identical( descriptor.terminationBegin.first, 0 );
   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   descriptor.terminationBegin.off();
 
   /* */
@@ -289,7 +289,7 @@ function onCheckDescriptor( test )
   test.identical( descriptor.terminationBegin.enabled, true );
   test.identical( descriptor.terminationBegin.first, 0 );
   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
-  test.true( _.event.eventHasHandler( _.procedure._ehandler, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
   descriptor.terminationBegin.off();
 }
 
