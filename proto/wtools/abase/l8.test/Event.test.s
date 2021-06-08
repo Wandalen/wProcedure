@@ -755,36 +755,119 @@ function onWithChain( test )
 
 function onCheckDescriptor( test )
 {
-  var self = this;
+  const self = this;
+  const a = test.assetFor( false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'from arguments';
+    return null;
+  });
+  var program = a.program( callbackInArgs );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ \'terminationBegin\' ]' ), 1 );
+    test.identical( _.strCount( op.output, '[ \'off\', \'enabled\', \'first\', \'callbackMap\' ]' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.enabled : true' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.first : false' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.callbackMap : terminationBegin' ), 1 );
+    return null;
+  });
 
   /* */
 
-  test.case = 'call with arguments';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var descriptor = _.procedure.on( 'terminationBegin', onEvent );
-  test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
-  test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
-  test.identical( descriptor.terminationBegin.enabled, true );
-  test.identical( descriptor.terminationBegin.first, 0 );
-  test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  descriptor.terminationBegin.off();
+  a.ready.then( () =>
+  {
+    test.case = 'from map';
+    return null;
+  });
+  var program = a.program( callbackInMap );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ \'terminationBegin\' ]' ), 1 );
+    test.identical( _.strCount( op.output, '[ \'off\', \'enabled\', \'first\', \'callbackMap\' ]' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.enabled : true' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.first : true' ), 1 );
+    test.identical( _.strCount( op.output, 'descriptor.callbackMap : terminationBegin' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
 
   /* */
 
-  test.case = 'call with arguments';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var descriptor = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
-  test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
-  test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
-  test.identical( descriptor.terminationBegin.enabled, true );
-  test.identical( descriptor.terminationBegin.first, 0 );
-  test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  descriptor.terminationBegin.off();
+  function callbackInArgs()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    const descriptor = _.procedure.on( 'terminationBegin', ( ... args ) => result.push( args ) );
+    console.log( _.props.keys( descriptor ) );
+    console.log( _.props.keys( descriptor.terminationBegin ) );
+    console.log( `descriptor.enabled : ${ descriptor.terminationBegin.enabled }` );
+    console.log( `descriptor.first : ${ descriptor.terminationBegin.first }` );
+    console.log( `descriptor.callbackMap : ${ _.props.keys( descriptor.terminationBegin.callbackMap ) }` );
+  }
+
+  /* */
+
+  function callbackInMap()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    const descriptor = _.procedure.on({ callbackMap : { 'terminationBegin' : ( ... args ) => result.push( args ) }, first : true });
+    console.log( _.props.keys( descriptor ) );
+    console.log( _.props.keys( descriptor.terminationBegin ) );
+    console.log( `descriptor.enabled : ${ descriptor.terminationBegin.enabled }` );
+    console.log( `descriptor.first : ${ descriptor.terminationBegin.first }` );
+    console.log( `descriptor.callbackMap : ${ _.props.keys( descriptor.terminationBegin.callbackMap ) }` );
+  }
 }
+
+// //
+//
+// function onCheckDescriptor( test )
+// {
+//   var self = this;
+//
+//   /* */
+//
+//   test.case = 'call with arguments';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var descriptor = _.procedure.on( 'terminationBegin', onEvent );
+//   test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
+//   test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+//   test.identical( descriptor.terminationBegin.enabled, true );
+//   test.identical( descriptor.terminationBegin.first, 0 );
+//   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   descriptor.terminationBegin.off();
+//
+//   /* */
+//
+//   test.case = 'call with arguments';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var descriptor = _.procedure.on({ callbackMap : { 'terminationBegin' : onEvent } });
+//   test.identical( _.props.keys( descriptor ), [ 'terminationBegin' ] );
+//   test.identical( _.props.keys( descriptor.terminationBegin ), [ 'off', 'enabled', 'first', 'callbackMap' ] );
+//   test.identical( descriptor.terminationBegin.enabled, true );
+//   test.identical( descriptor.terminationBegin.first, 0 );
+//   test.equivalent( descriptor.terminationBegin.callbackMap, { terminationBegin : onEvent } );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   descriptor.terminationBegin.off();
+// }
 
 // --
 // declare
