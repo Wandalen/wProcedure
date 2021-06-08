@@ -24,71 +24,197 @@ const _ = _global_.wTools;
 
 function onWithArguments( test )
 {
-  var self = this;
+  const self = this;
+  const a = test.assetFor( false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'no callbacks for events';
+    return null;
+  });
+  var program = a.program( withoutCallbacks );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[]' ), 1 );
+    return null;
+  });
 
   /* */
 
-  test.case = 'no callback for events';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var onEvent2 = () => result.push( -1 * result.length );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [] );
+  a.ready.then( () =>
+  {
+    test.case = 'single callback for single event, single event is given';
+    return null;
+  });
+  var program = a.program( callbackForAvailable );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ [] ]' ), 1 );
+    return null;
+  });
 
   /* */
 
-  test.case = 'single callback for single event, single event is given';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var onEvent2 = () => result.push( -1 * result.length );
-  var got = _.procedure.on( 'terminationBegin', onEvent );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [ 0 ] );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.terminationBegin.off();
+  a.ready.then( () =>
+  {
+    test.case = 'single callback for single event, a few events are given';
+    return null;
+  });
+  var program = a.program( callbackForAvailableDouble );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ [] ]' ), 1 );
+    return null;
+  });
 
   /* */
 
-  test.case = 'single callback for single event, a few events are given';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var onEvent2 = () => result.push( -1 * result.length );
-  var got = _.procedure.on( 'terminationBegin', onEvent );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [ 0, 1 ] );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.terminationBegin.off();
+  a.ready.then( () =>
+  {
+    test.case = 'single callback for single event, a few events are given';
+    return null;
+  });
+  var program = a.program( callbacksForEvents );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var exp = `[ [], 1 ]`;
+    test.identical( _.strCount( op.output, exp ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
 
   /* */
 
-  test.case = 'single callback for each events in event handler, a few events are given';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var onEvent2 = () => result.push( -1 * result.length );
-  var got = _.procedure.on( 'terminationBegin', onEvent );
-  var got2 = _.procedure.on( 'terminationEnd', onEvent2 );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [ 0 ] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [ 0, 1 ] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [ 0, 1, -2, -3 ] );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
-  got.terminationBegin.off();
-  got2.terminationEnd.off();
+  function withoutCallbacks()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure._eventTerminationBeginHandle();
+    _.procedure._eventTerminationEndHandle();
+    console.log( result );
+  }
+
+  /* */
+
+  function callbackForAvailable()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure.on( 'terminationBegin', ( ... args ) => result.push( args ) );
+    _.procedure.terminationBegin();
+    console.log( result );
+  }
+
+  /* */
+
+  function callbackForAvailableDouble()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure.on( 'terminationBegin', ( ... args ) => result.push( args ) );
+    _.procedure.terminationBegin();
+    console.log( result );
+  }
+
+  /* */
+
+  function callbacksForEvents()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure.on( 'terminationBegin', ( ... args ) => result.push( args ) );
+    _.procedure.on( 'terminationEnd', ( e ) => result.push( result.length ) );
+    _.procedure.terminationBegin();
+    _.procedure.terminationBegin();
+    console.log( result );
+  }
 }
+
+// function onWithArguments( test )
+// {
+//   var self = this;
+//
+//   /* */
+//
+//   test.case = 'no callback for events';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var onEvent2 = () => result.push( -1 * result.length );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [] );
+//
+//   /* */
+//
+//   test.case = 'single callback for single event, single event is given';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var onEvent2 = () => result.push( -1 * result.length );
+//   var got = _.procedure.on( 'terminationBegin', onEvent );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [ 0 ] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [ 0 ] );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+//   got.terminationBegin.off();
+//
+//   /* */
+//
+//   test.case = 'single callback for single event, a few events are given';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var onEvent2 = () => result.push( -1 * result.length );
+//   var got = _.procedure.on( 'terminationBegin', onEvent );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [ 0 ] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [ 0, 1 ] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [ 0, 1 ] );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+//   got.terminationBegin.off();
+//
+//   /* */
+//
+//   test.case = 'single callback for each events in event handler, a few events are given';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var onEvent2 = () => result.push( -1 * result.length );
+//   var got = _.procedure.on( 'terminationBegin', onEvent );
+//   var got2 = _.procedure.on( 'terminationEnd', onEvent2 );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [ 0 ] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [ 0, 1 ] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [ 0, 1, -2, -3 ] );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent2 } ) );
+//   got.terminationBegin.off();
+//   got2.terminationEnd.off();
+// }
 
 //
 
