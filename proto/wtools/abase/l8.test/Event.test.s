@@ -647,40 +647,109 @@ function onWithOptionsMap( test )
 
 function onWithChain( test )
 {
-  var self = this;
+  const self = this;
+  const a = test.assetFor( false );
+  a.fileProvider.dirMake( a.abs( '.' ) );
+
+  /* - */
+
+  a.ready.then( () =>
+  {
+    test.case = 'chain in args';
+    return null;
+  });
+  var program = a.program( chainInArgs );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ [] ]' ), 1 );
+    return null;
+  });
+
+  a.ready.then( () =>
+  {
+    test.case = 'chain in map';
+    return null;
+  });
+  var program = a.program( chainInMap );
+  program.start();
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '[ [] ]' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready
 
   /* */
 
-  test.case = 'call with arguments';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var got = _.procedure.on( _.event.Chain( 'terminationBegin', 'terminationEnd' ), onEvent );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [ 0 ] );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
+  function chainInArgs()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure.on( _.event.Chain( 'terminationBegin', 'terminationEnd' ), ( ... args ) => result.push( args ) );
+    _.procedure.terminationBegin();
+    _.procedure.terminationBegin();
+    console.log( result );
+  }
 
   /* */
 
-  test.case = 'call with options map';
-  var result = [];
-  var onEvent = () => result.push( result.length );
-  var got = _.procedure.on({ callbackMap : { terminationBegin : [ _.event.Name( 'terminationEnd' ), onEvent ] } });
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
-  test.identical( result, [] );
-  _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
-  test.identical( result, [ 0 ] );
-  test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
-  test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
-  _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
+  function chainInMap()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProcedure' );
+    const result = [];
+    _.procedure.on({ callbackMap : { 'terminationBegin' : [ _.event.Name( 'terminationEnd' ), ( ... args ) => result.push( args ) ] } });
+    _.procedure.terminationBegin();
+    _.procedure.terminationBegin();
+    console.log( result );
+  }
 }
+
+// //
+//
+// function onWithChain( test )
+// {
+//   var self = this;
+//
+//   /* */
+//
+//   test.case = 'call with arguments';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var got = _.procedure.on( _.event.Chain( 'terminationBegin', 'terminationEnd' ), onEvent );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [ 0 ] );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+//   _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
+//
+//   /* */
+//
+//   test.case = 'call with options map';
+//   var result = [];
+//   var onEvent = () => result.push( result.length );
+//   var got = _.procedure.on({ callbackMap : { terminationBegin : [ _.event.Name( 'terminationEnd' ), onEvent ] } });
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
+//   test.identical( result, [] );
+//   _.event.eventGive( _.procedure._edispatcher, 'terminationEnd' );
+//   test.identical( result, [ 0 ] );
+//   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
+//   test.true( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
+//   _.event.off( _.procedure._edispatcher, { callbackMap : { terminationEnd : null } } );
+// }
 
 //
 
