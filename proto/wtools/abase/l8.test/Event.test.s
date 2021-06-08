@@ -514,6 +514,8 @@ function onWithOptionsMap( test )
   }
 }
 
+onWithOptionsMap.timeOut = 10000;
+
 // //
 //
 // function onWithOptionsMap( test )
