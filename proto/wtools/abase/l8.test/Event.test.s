@@ -148,6 +148,8 @@ function onWithArguments( test )
   }
 }
 
+onWithArguments.timeOut = 30000;
+
 // function onWithArguments( test )
 // {
 //   var self = this;
@@ -514,7 +516,7 @@ function onWithOptionsMap( test )
   }
 }
 
-onWithOptionsMap.timeOut = 10000;
+onWithOptionsMap.timeOut = 30000;
 
 // //
 //
