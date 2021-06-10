@@ -2549,50 +2549,50 @@ function beginWithProcedure( test )
     });
   });
 
-  // qqq for Dmytro
-  // ready.then( () =>
-  // {
-  //   test.case = 'executes method cancel twice, should throw error';
-  //   var timer = _.time.begin( Infinity, onTime, onCancel );
-  //   timer.cancel();
-  //
-  //   return _.time.out( context.t1, () => timer.cancel() )
-  //   .finally( ( err, arg ) =>
-  //   {
-  //     if( arg )
-  //     {
-  //       test.true( false );
-  //     }
-  //     else
-  //     {
-  //       _.errAttend( err );
-  //       test.true( true );
-  //     }
-  //     return null;
-  //   });
-  // });
-  //
-  // ready.then( () =>
-  // {
-  //   test.case = 'executes method time and then method cancel, should throw error';
-  //   var timer = _.time.begin( Infinity, onTime, onCancel );
-  //   timer.time();
-  //
-  //   return _.time.out( context.t1, () => timer.cancel() )
-  //   .finally( ( err, arg ) =>
-  //   {
-  //     if( arg )
-  //     {
-  //       test.true( false );
-  //     }
-  //     else
-  //     {
-  //       _.errAttend( err );
-  //       test.true( true );
-  //     }
-  //     return null;
-  //   });
-  // });
+  /* qqq for Dmytro */ /* Dmytro : fixed */
+  ready.then( () =>
+  {
+    test.case = 'executes method cancel twice, should throw error';
+    var timer = _.time.begin( Infinity, onTime, onCancel );
+    timer.cancel();
+
+    return _.time.out( context.t1, () => timer.cancel() )
+    .finally( ( err, arg ) =>
+    {
+      if( arg )
+      {
+        test.true( false );
+      }
+      else
+      {
+        _.errAttend( err );
+        test.true( true );
+      }
+      return null;
+    });
+  });
+
+  ready.then( () =>
+  {
+    test.case = 'executes method time and then method cancel, should throw error';
+    var timer = _.time.begin( Infinity, onTime, onCancel );
+    timer.time();
+
+    return _.time.out( context.t1, () => timer.cancel() )
+    .finally( ( err, arg ) =>
+    {
+      if( arg )
+      {
+        test.true( false );
+      }
+      else
+      {
+        _.errAttend( err );
+        test.true( true );
+      }
+      return null;
+    });
+  });
 
   ready.then( () =>
   {
