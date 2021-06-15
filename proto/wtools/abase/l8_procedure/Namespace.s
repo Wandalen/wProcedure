@@ -349,11 +349,10 @@ function _timeBegin( o )
   function cancel()
   {
 
-    /* xxx qqq for Dmytro : look suspicious! */
-    if( timer.state !== 0 && o.method.name !== '_periodic' )
-    {
-      return;
-    }
+    /* xxx aaa for Dmytro : look suspicious! */ /* Dmytro : add conditions to fix behavior of routine */
+    // if( timer.state !== 0 && o.method.name !== '_periodic' )
+    if( timer.state !== 0 && timer.state !== -2 && timer.state !== 2 && o.method.name !== '_periodic' )
+    return;
 
     if( !o.procedure.use() && !o.procedure.isTopMost() )
     o.procedure.activate( true );
