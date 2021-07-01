@@ -1,22 +1,38 @@
 {
-  "name" : "wprocedure",
-  "version" : "0.3.234",
-  "description" : "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "license" : "MIT",
-  "main" : "proto/node_modules/wprocedure",
-  "files" : [ "proto/wtools/abase/l8_procedure", "out", "proto/node_modules", "proto/node_modules/Tools", "proto/node_modules/wprocedure" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Wandalen/wProcedure.git"
+  "name": "wprocedure",
+  "version": "0.3.235",
+  "description": "Minimal programming interface to launch, stop and track collection of asynchronous procedures. It prevents an application from termination waiting for the last procedure and helps to diagnose your system with many interdependent procedures",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "license": "MIT",
+  "main": "proto/node_modules/wprocedure",
+  "files": [
+    "proto/wtools/abase/l8_procedure",
+    "out",
+    "proto/node_modules",
+    "proto/node_modules/Tools",
+    "proto/node_modules/wprocedure"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-1",
+    "docgen": "wdocgen proto"
   },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wProcedure/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wProcedure.git"
   },
-  "dependencies" : { "wTools" : "gamma", "wCopyable" : "gamma", "wProto" : "gamma" },
-  "devDependencies" : { "eslint" : "7.1.0", "wTesting" : "gamma" },
-  "keywords" : [ "wTools" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wProcedure/issues"
+  },
+  "dependencies": {
+    "wTools": "gamma",
+    "wProto": "gamma",
+    "wCopyable": "gamma"
+  },
+  "devDependencies": {
+    "wTesting": "gamma",
+    "eslint": "7.1.0"
+  },
+  "keywords": [
+    "wTools"
+  ]
 }
