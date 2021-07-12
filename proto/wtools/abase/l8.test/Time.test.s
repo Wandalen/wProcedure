@@ -2621,6 +2621,8 @@ function beginWithProcedure( test )
   return ready;
 }
 
+beginWithProcedure.timeOut = 10000;
+
 //
 
 function beginTimerInsideOfCallback( test )
