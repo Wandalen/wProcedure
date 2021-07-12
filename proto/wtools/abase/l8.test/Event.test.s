@@ -716,6 +716,8 @@ function onWithChain( test )
   }
 }
 
+onWithChain.timeOut = 10000;
+
 // //
 //
 // function onWithChain( test )
