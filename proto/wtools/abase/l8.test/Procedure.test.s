@@ -127,7 +127,7 @@ function procedureSourcePath( test )
   function program()
   {
     let _ = require( toolsPath );
-    _.include( 'wFiles' );
+    _.include( 'wProcess' );
     _.include( 'wConsequence' );
 
     var con = _.Consequence();
@@ -208,7 +208,7 @@ function procedureStack( test )
   function program()
   {
     let _ = require( toolsPath );
-    _.include( 'wFiles' );
+    _.include( 'wProcess' );
     _.include( 'wConsequence' );
 
     var con = _.Consequence();
@@ -229,7 +229,7 @@ function procedureStack( test )
   function program2()
   {
     let _ = require( toolsPath );
-    _.include( 'wFiles' );
+    _.include( 'wProcess' );
     _.include( 'wConsequence' );
 
     console.log( 'stack::program ' + _.Procedure.ActiveProcedure._stack );
@@ -241,7 +241,7 @@ function procedureStack( test )
   function program3()
   {
     let _ = require( toolsPath );
-    _.include( 'wFiles' );
+    _.include( 'wProcess' );
     _.include( 'wConsequence' );
 
     /*  */
@@ -287,7 +287,7 @@ function activeProcedureSourcePath( test )
   function program()
   {
     const _ = require( toolsPath );
-    _.include( 'wFiles' );
+    _.include( 'wProcess' );
     _.include( 'wConsequence' );
 
     var con = _.Consequence()
@@ -498,7 +498,7 @@ function terminationEventsExplicitTermination( test )
     _.procedure.on( 'terminationBegin', () =>
     {
       console.log( 'terminationBegin1' );
-    });
+    });activeProcedureSourcePath
 
     _.procedure.on( 'terminationEnd', () =>
     {
