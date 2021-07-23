@@ -498,7 +498,7 @@ function terminationEventsExplicitTermination( test )
     _.procedure.on( 'terminationBegin', () =>
     {
       console.log( 'terminationBegin1' );
-    });activeProcedureSourcePath
+    });
 
     _.procedure.on( 'terminationEnd', () =>
     {
