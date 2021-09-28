@@ -709,7 +709,7 @@ function onWithChain( test )
     const _ = require( toolsPath );
     _.include( 'wProcedure' );
     const result = [];
-    _.procedure.on({ callbackMap : { 'terminationBegin' : [ _.event.Name( 'terminationEnd' ), ( ... args ) => result.push( args ) ] } });
+    _.procedure.on({ callbackMap : { 'terminationBegin' : [ 'terminationEnd', ( ... args ) => result.push( args ) ] } });
     _.procedure.terminationBegin();
     _.procedure.terminationBegin();
     console.log( result );
@@ -745,7 +745,7 @@ onWithChain.timeOut = 10000;
 //   test.case = 'call with options map';
 //   var result = [];
 //   var onEvent = () => result.push( result.length );
-//   var got = _.procedure.on({ callbackMap : { terminationBegin : [ _.event.Name( 'terminationEnd' ), onEvent ] } });
+//   var got = _.procedure.on({ callbackMap : { terminationBegin : [ 'terminationEnd', onEvent ] } });
 //   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationBegin', eventHandler : onEvent } ) );
 //   test.false( _.event.eventHasHandler( _.procedure._edispatcher, { eventName : 'terminationEnd', eventHandler : onEvent } ) );
 //   _.event.eventGive( _.procedure._edispatcher, 'terminationBegin' );
